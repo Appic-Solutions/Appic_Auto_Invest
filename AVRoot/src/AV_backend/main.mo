@@ -1,4 +1,5 @@
 import dcaTypes "dcaTypes";
+import utils "utils";
 import HashMap "mo:base/HashMap";
 import Nat "mo:base/Nat";
 import Nat64 "mo:base/Nat64";
@@ -10,6 +11,7 @@ import Buffer "mo:base/Buffer";
 import Iter "mo:base/Iter";
 import Array "mo:base/Array";
 import Time "mo:base/Time";
+import Int "mo:base/Int";
 
 actor AlphavaultRoot {
   //Types
@@ -182,11 +184,15 @@ actor AlphavaultRoot {
     return activePositions.get(userPrincipal);
   };
 
+  public func retreiveTime() : async Int {
+    return utils.nanoToSecond(Time.now());
+  };
+
   // Timer function for triggering the swap on time
   // Runs every one hour and checks the transactionTime value of each transaction
   // If current time in unix format is bigger than transactionTime and transactionStauts is #notTriggered, it will trigger a new swap transaction
 
-  private func _proccedTransaction(userPositions : [Position], position : Position, transaction : Transaction, positionId : PositionId, transactionId : Nat) : () {
+  private func _proccedTransaction(userPositions : [Position], position : Position, transaction : Transaction, positionId : PositionId, transactionId : Nat) : async () {
 
     // Convet positions to buffer
     let positionsBuffer = Buffer.fromArray<Position>(userPositions);
@@ -238,7 +244,7 @@ actor AlphavaultRoot {
 
   };
 
-  let Seconds = 3600; // Number of seconds in one hour
+  let Seconds = 60; // Number of seconds in one hour
 
   private func cronTimer() : async () {
     // Create a clone of Hashmap to iterate over to prevent errors while updating the main hashmap
@@ -258,7 +264,7 @@ actor AlphavaultRoot {
 
             // If the transaction has not been triggered and the unix time is less or equla to time.now() the transaction should be triggered
             case (#NotTriggered) {
-              if (transaction.transactionTime <= Time.now()) _proccedTransaction(userPositions, position, transaction, position.positionId, transaction.transactionId);
+              if (transaction.transactionTime <= utils.nanoToSecond(Time.now())) await _proccedTransaction(userPositions, position, transaction, position.positionId, transaction.transactionId);
             };
             case _ {};
           };
