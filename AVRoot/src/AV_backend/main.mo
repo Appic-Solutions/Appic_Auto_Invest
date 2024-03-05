@@ -9,6 +9,7 @@ import { recurringTimer } = "mo:base/Timer";
 import Buffer "mo:base/Buffer";
 import Iter "mo:base/Iter";
 import Array "mo:base/Array";
+import Time "mo:base/Time";
 
 actor AlphavaultRoot {
   //Types
@@ -128,13 +129,16 @@ actor AlphavaultRoot {
     // TODO : check if entered unix swap times are not in the past
 
     // Create [Transactions] Array for newPosition's swaps parameter
+    var nextTransactionid : Nat = 0;
     let transactionsArray = Array.map<Nat, Transaction>(
       createPositionArgs.swapsTime,
       func(swapTime : Nat) : Transaction {
+        nextTransactionid += 1;
         return {
+          transactionId = nextTransactionid - 1;
           transactionTime = swapTime; // UNIX format
           transactionStatus = #NotTriggered;
-          sellinngAmount = createPositionArgs.amountPerSwap;
+          sellingAmount = createPositionArgs.amountPerSwap;
           amountBought = null; // Before transactionTime the value will be null
         };
       },
@@ -182,20 +186,88 @@ actor AlphavaultRoot {
   // Runs every one hour and checks the transactionTime value of each transaction
   // If current time in unix format is bigger than transactionTime and transactionStauts is #notTriggered, it will trigger a new swap transaction
 
-  // let N = 3600; // Number of seconds in one hour
+  private func _proccedTransaction(userPositions : [Position], position : Position, transaction : Transaction, positionId : PositionId, transactionId : Nat) : () {
 
-  // private func cronTimer() : async () {
-  //   //Iterating over all active auto invest posittions
-  //   for ((userPrincipal, userAutoInvestmentPositions) in activePositions.entries()) {
+    // Convet positions to buffer
+    let positionsBuffer = Buffer.fromArray<Position>(userPositions);
+    // TODO: Trade logic
 
-  //     //Iterating over specific users' auto invest positions
-  //     for (Position in userAutoInvestmentPositions.vals()) {
+    // Save new user positions with updated transaction
 
-  //     };
-  //   };
-  // };
+    // Iterate over buffer to find the target transaction and update
+    let newPositionsBuffer = Buffer.map<Position, Position>(
+      positionsBuffer,
+      func updatePosition(oldPosition : Position) : Position {
 
-  // ignore recurringTimer(#seconds N, cronTimer);
+        // Update the target Position
+        if (oldPosition.positionId == positionId) {
+
+          // Update the target transaction in swaps array
+          let newSwaps = Array.map<Transaction, Transaction>(
+            oldPosition.swaps,
+            func(oldTransaction : Transaction) : Transaction {
+              if (oldTransaction.transactionId == transactionId) {
+                return {
+                  transactionId = transactionId;
+                  transactionStatus = #Successful;
+                  transactionTime = oldTransaction.transactionTime;
+                  sellingAmount = oldTransaction.sellingAmount;
+                  amountBought = null;
+                };
+              };
+              return oldTransaction;
+            },
+          );
+
+          return {
+            allowance = oldPosition.allowance;
+            destination = oldPosition.destination;
+            positionId = oldPosition.positionId;
+            // TODO : Write the logic for changing the position status to successful or faild
+            positionStatus = oldPosition.positionStatus;
+            tokens = oldPosition.tokens;
+            swaps = newSwaps;
+          };
+        };
+        return oldPosition;
+      },
+    );
+
+    // Save updated Positions into active position hashmap
+    activePositions.put(position.destination, Buffer.toArray(newPositionsBuffer))
+
+  };
+
+  let Seconds = 3600; // Number of seconds in one hour
+
+  private func cronTimer() : async () {
+    // Create a clone of Hashmap to iterate over to prevent errors while updating the main hashmap
+    let positionsToIteratreOver = HashMap.clone(activePositions, Principal.equal, Principal.hash);
+
+    // Iterating over all active posittions
+    for ((userPrincipal, userPositions) in positionsToIteratreOver.entries()) {
+
+      // Iterating over specific users' auto invest positions
+      for (position in userPositions.vals()) {
+
+        // Iterating over transactions of a poisition
+        for (transaction in position.swaps.vals()) {
+
+          // Checking the transaction status
+          switch (transaction.transactionStatus) {
+
+            // If the transaction has not been triggered and the unix time is less or equla to time.now() the transaction should be triggered
+            case (#NotTriggered) {
+              if (transaction.transactionTime <= Time.now()) _proccedTransaction(userPositions, position, transaction, position.positionId, transaction.transactionId);
+            };
+            case _ {};
+          };
+        };
+      };
+    };
+  };
+
+  ignore recurringTimer(#seconds Seconds, cronTimer);
 
   // Pre-upgrade logic
   stable var usersPositionsArray : [(Principal, [Position])] = [];

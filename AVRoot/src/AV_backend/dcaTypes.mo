@@ -27,9 +27,10 @@ module {
 
     //Public type for specifying the details of transaction
     public type Transaction = {
+        transactionId : Nat;
         transactionTime : Int; // UNIX format
         transactionStatus : TransactionStatus;
-        sellinngAmount : Nat; // Before transactionTime the value will be null
+        sellingAmount : Nat; // Before transactionTime the value will be null
         amountBought : ?Nat; // Before transactionTime the value will be null
     };
 
