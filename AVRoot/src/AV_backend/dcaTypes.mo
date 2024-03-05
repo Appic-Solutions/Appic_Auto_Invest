@@ -1,5 +1,6 @@
 import Text "mo:base/Text";
 import Principal "mo:base/Principal";
+import Result "mo:base/Result";
 module {
     public type PositionId = Nat64;
 
@@ -8,12 +9,14 @@ module {
         #Successful;
         #Failed;
         #Pending;
+        #NotTriggered;
     };
 
     //Public Type for specifying the status of Auto Invest Position
     public type PositionStatus = {
         #Open;
-        #Closed;
+        #Successful;
+        #Deleted;
     };
 
     //Public Type for setting the Principal-Id(canister-id) of tokens
@@ -26,17 +29,38 @@ module {
     public type Transaction = {
         transactionTime : Int; // UNIX format
         transactionStatus : TransactionStatus;
-        amountSold : ?Nat; // Before transactionTime the value will be null
+        sellinngAmount : Nat; // Before transactionTime the value will be null
         amountBought : ?Nat; // Before transactionTime the value will be null
     };
 
     //Position Type
-    public type AutoInvestPosition = {
+    public type Position = {
+        positionId : PositionId;
         tokens : PositionTokens;
         destination : Principal; // Bought tokens final destination
         swaps : [Transaction]; // Array that contains all swaps, each of them with specific time
         positionStatus : PositionStatus;
-        amountPerSwap : Nat; //Amount of sell token to be sold
-        noOfSwaps : Int; //Equals to swaps array size
+        allowance : Nat;
     };
+
+    //Create Position Args
+    public type CreatePositionsArgs = {
+        sellToken : Principal;
+        buyToken : Principal;
+        destination : Principal; // Bought tokens final destination
+        swapsTime : [Nat]; // Array that contains all swaps, each of them with specific time
+        allowance : Nat;
+        amountPerSwap : Nat;
+    };
+
+    public type PositionCreationError = {
+        #WronmgAlloance : { expectedAllowance : Nat; receivedAllowance : Nat };
+        #PositionInThePast;
+        #NotEnoughFee : { expectedFee : Nat; receivedFee : Nat };
+        #TokenNotFound;
+        #GenericError : { message : Text };
+    };
+
+    // AutoInvestPosition creation result
+    public type Result_1 = Result.Result<Nat, PositionCreationError>;
 };
