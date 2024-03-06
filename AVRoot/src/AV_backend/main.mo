@@ -24,7 +24,10 @@ actor AlphavaultRoot {
   type Position = dcaTypes.Position;
   type CreatePositionsArgs = dcaTypes.CreatePositionsArgs;
   type Result_1 = dcaTypes.Result_1;
-
+  type Result_2 = dcaTypes.Result_2;
+  type PositionCreationError = dcaTypes.PositionCreationError;
+  type AllowanceAmountResult = dcaTypes.AllowanceAmountResult;
+  type GetAllowanceArgs = dcaTypes.GetAllowanceArgs;
   // Token canister(ICRC2) types
   type ICRCTransferError = icrcTypes.ICRCTransferError;
   type ICRCTokenTxReceipt = icrcTypes.ICRCTokenTxReceipt;
@@ -36,6 +39,9 @@ actor AlphavaultRoot {
   type ICRC2TokenActor = icrcTypes.ICRC2TokenActor;
   type ICRC2AllowanceArgs = icrcTypes.ICRC2AllowanceArgs;
   type ICRC2Allowance = icrcTypes.ICRC2Allowance;
+
+  let platformFee : Nat = 2; //2
+  let cronInterval = 60; // 1 min
 
   // Buffer for keeping active positions
   let activePositions = Buffer.Buffer<Position>(0);
@@ -142,36 +148,16 @@ actor AlphavaultRoot {
     // TODO : check if input tokens are supported
     // TODO : Check to see if allowance covers all Fees
     // Check to see if allwance is valid
-    // Get users Allowance
-    let tokenCanister : ICRC2TokenActor = icrcTypes._getTokenActor(createPositionArgs.sellToken);
-    let allowanceArgs : ICRC2AllowanceArgs = {
-      account = {
-        owner = createPositionArgs.destination;
-        subaccount = null;
-      };
-      spender = {
-        owner = Principal.fromActor(AlphavaultRoot);
-        subaccount = null;
-      };
-    };
-    let userAllowance : ICRC2Allowance = await tokenCanister.icrc2_allowance(allowanceArgs);
+    switch (await _validateAllowance(createPositionArgs)) {
 
-    // Check to see if user has more than one transaction with the same selling token
-    let userAlreadyExsistingPositions : [Position] = _getPositionsFor(createPositionArgs.destination, ?createPositionArgs.sellToken, null);
-    var userMinExpectedAllowance = 0;
-    if (userAlreadyExsistingPositions.size() > 0) {
-      for (userPosition in userAlreadyExsistingPositions.vals()) {
-        userMinExpectedAllowance += userPosition.allowance;
+      case (#err(#WronmgAlloance { expectedAllowance; inputAllowance })) {
+        return (#err(#WronmgAlloance { expectedAllowance; inputAllowance }));
       };
-      userMinExpectedAllowance += createPositionArgs.allowance;
-    } else {
-      userMinExpectedAllowance += createPositionArgs.allowance;
+      case (#err(#AllowanceNotEnough { expectedAllowance; receivedAllowance })) {
+        return (#err(#AllowanceNotEnough { expectedAllowance; receivedAllowance }));
+      };
+      case _ {};
     };
-
-    if (userMinExpectedAllowance > userAllowance.allowance) {
-      return (#err(#WronmgAlloance { expectedAllowance = userMinExpectedAllowance; receivedAllowance = userAllowance.allowance }));
-    };
-
     // TODO : check if allowance is enough to cover fees
 
     // TODO : check if entered unix swap times are not in the past
@@ -210,6 +196,102 @@ actor AlphavaultRoot {
     activePositions.add(newPosition);
 
     return #ok(1);
+  };
+
+  // Validate allowance
+  // Part 1: Checks if privided allowance covers fees and platform fee
+  // Part 2: Checks if total allowance from token canister covers everything
+  private func _validateAllowance(createPositionArgs : CreatePositionsArgs) : async Result_2 {
+
+    // defining tokenCanister
+    let tokenCanister : ICRC2TokenActor = icrcTypes._getTokenActor(createPositionArgs.sellToken);
+    let allowanceArgs : ICRC2AllowanceArgs = {
+      account = {
+        owner = createPositionArgs.destination;
+        subaccount = null;
+      };
+      spender = {
+        owner = Principal.fromActor(AlphavaultRoot);
+        subaccount = null;
+      };
+    };
+    // part 1
+    let calculateMinAllowanceForPosition = await _calculateMinAllowanceForPosition(
+      createPositionArgs.destination,
+      createPositionArgs.sellToken,
+      createPositionArgs.amountPerSwap,
+      createPositionArgs.swapsTime.size(),
+      tokenCanister,
+    );
+    if (createPositionArgs.allowance < calculateMinAllowanceForPosition) {
+      return (#err(#WronmgAlloance { expectedAllowance = calculateMinAllowanceForPosition; inputAllowance = createPositionArgs.allowance }));
+    };
+
+    // part 2
+    let userAllowance : ICRC2Allowance = await tokenCanister.icrc2_allowance(allowanceArgs);
+
+    // Check to see if user has more than one transaction with the same selling token
+    let userAlreadyExsistingPositions : [Position] = _getPositionsFor(createPositionArgs.destination, ?createPositionArgs.sellToken, null);
+    var userMinExpectedAllowance = 0;
+    if (userAlreadyExsistingPositions.size() > 0) {
+      for (userPosition in userAlreadyExsistingPositions.vals()) {
+        userMinExpectedAllowance += userPosition.allowance;
+      };
+      userMinExpectedAllowance += createPositionArgs.allowance;
+    } else {
+      userMinExpectedAllowance += createPositionArgs.allowance;
+    };
+
+    if (userMinExpectedAllowance > userAllowance.allowance) {
+      return (#err(#AllowanceNotEnough { expectedAllowance = userMinExpectedAllowance; receivedAllowance = userAllowance.allowance }));
+    };
+
+    return (#ok);
+  };
+
+  // calculate minimum allowance for position to be created plus token fee and platofrm fee
+  private func _calculateMinAllowanceForPosition(
+    userPrincipal : Principal,
+    sellToken : Principal,
+    amountPerSwap : Nat,
+    noOfSwaps : Nat,
+    tokenCanister : ICRC2TokenActor,
+  ) : async Nat {
+    let totalAmountOfSellToken = amountPerSwap * noOfSwaps;
+    let tokenFee = await tokenCanister.icrc1_fee();
+    let totalTokenFee = tokenFee * 2 * noOfSwaps;
+    let calculatedPlatformFee = (totalTokenFee + totalAmountOfSellToken) * platformFee / 100;
+    return (totalAmountOfSellToken + tokenFee + calculatedPlatformFee); // MinAllowanceForPosition
+  };
+
+  // Get min allowance for a createPositionArg and approveFunctionAmount
+  public func getAllowanceForNewTrade(getAllowanceArgs : GetAllowanceArgs) : async AllowanceAmountResult {
+    // defining tokenCanister
+    let tokenCanister : ICRC2TokenActor = icrcTypes._getTokenActor(getAllowanceArgs.sellToken);
+
+    let minAllowanceForPosition = await _calculateMinAllowanceForPosition(
+      getAllowanceArgs.userPrincipal,
+      getAllowanceArgs.sellToken,
+      getAllowanceArgs.amountPerSwap,
+      getAllowanceArgs.noOfSwaps,
+      tokenCanister,
+    );
+
+    let userAlreadyExsistingPositions : [Position] = _getPositionsFor(getAllowanceArgs.userPrincipal, ?getAllowanceArgs.sellToken, null);
+    var userMinExpectedAllowance = 0;
+    if (userAlreadyExsistingPositions.size() > 0) {
+      for (userPosition in userAlreadyExsistingPositions.vals()) {
+        userMinExpectedAllowance += userPosition.allowance;
+      };
+      userMinExpectedAllowance += minAllowanceForPosition;
+    } else {
+      userMinExpectedAllowance += minAllowanceForPosition;
+    };
+
+    return {
+      minAllowanceForPositionCreation = minAllowanceForPosition;
+      minAllowanceForApproveFunction = userMinExpectedAllowance;
+    };
   };
 
   // Get all active positions
@@ -288,7 +370,6 @@ actor AlphavaultRoot {
   // Timer function for triggering the swap on time
   // Runs every one hour and checks the transactionTime value of each transaction
   // If current time in unix format is bigger than transactionTime and transactionStauts is #notTriggered, it will trigger a new swap transaction
-
   private func _proccedTransaction(
     userPosition : Position,
     transaction : Transaction,
@@ -328,8 +409,6 @@ actor AlphavaultRoot {
 
   };
 
-  let Seconds = 60; // Number of seconds in one hour
-
   private func cronTimer() : async () {
     // Create a clone of buffer to iterate over to prevent errors while updating the main buffer
     let positionsToIteratreOver = Buffer.clone(activePositions);
@@ -356,7 +435,7 @@ actor AlphavaultRoot {
     };
   };
 
-  ignore recurringTimer(#seconds Seconds, cronTimer);
+  ignore recurringTimer(#seconds cronInterval, cronTimer);
 
   // Pre-upgrade logic
   stable var usersPositionsArray : [Position] = [];

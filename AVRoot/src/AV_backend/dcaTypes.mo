@@ -55,13 +55,32 @@ module {
     };
 
     public type PositionCreationError = {
-        #WronmgAlloance : { expectedAllowance : Nat; receivedAllowance : Nat };
+        #WronmgAlloance : { expectedAllowance : Nat; inputAllowance : Nat };
+        #AllowanceNotEnough : {
+            expectedAllowance : Nat;
+            receivedAllowance : Nat;
+        };
         #PositionInThePast;
         #NotEnoughFee : { expectedFee : Nat; receivedFee : Nat };
         #TokenNotFound;
         #GenericError : { message : Text };
     };
 
+    public type AllowanceAmountResult = {
+        minAllowanceForApproveFunction : Nat;
+        minAllowanceForPositionCreation : Nat;
+    };
+
+    public type GetAllowanceArgs = {
+        userPrincipal : Principal;
+        sellToken : Principal;
+        amountPerSwap : Nat;
+        noOfSwaps : Nat;
+    };
+
     // AutoInvestPosition creation result
     public type Result_1 = Result.Result<Nat, PositionCreationError>;
+
+    // Allowance validator function result
+    public type Result_2 = Result.Result<(), PositionCreationError>;
 };

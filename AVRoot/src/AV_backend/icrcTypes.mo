@@ -61,6 +61,8 @@ module {
         icrc1_total_supply : () -> async Nat;
         icrc2_transfer_from : shared (ICRC2TransferArg) -> async ICRCTokenTxReceipt;
         icrc1_transfer : shared (ICRCTransferArg) -> async ICRCTokenTxReceipt;
+        icrc1_fee : query () -> async Nat;
+
     };
 
     public func _getTokenActor(tokenId : Principal) : ICRC2TokenActor {
