@@ -26,7 +26,8 @@ actor AlphavaultRoot {
 
   stable var nextPositionId : PositionId = 0;
 
-  let activePositions = HashMap.HashMap<Principal, [Position]>(0, Principal.equal, Principal.hash);
+  // let activePositions = HashMap.HashMap<Principal, [Position]>(0, Principal.equal, Principal.hash);
+  let activePositions = Buffer.Buffer<Position>(0);
 
   public type TxReceipt = Result.Result<Nat, Text>;
 
@@ -160,28 +161,31 @@ actor AlphavaultRoot {
     };
     // Save created new position arg
     // Check if user principal already existes in hashmap
-    let alreadyExisitngPositions = activePositions.get(createPositionArgs.destination);
-    switch (alreadyExisitngPositions) {
-      case (null) {
-        activePositions.put(createPositionArgs.destination, [newPosition]);
-      };
-      case (?position) {
-        let positions = Buffer.fromArray<Position>(position);
-        positions.add(newPosition);
-        activePositions.put(createPositionArgs.destination, Buffer.toArray(positions));
-      };
-    };
+
+    activePositions.add(newPosition);
+
     return #ok(1);
   };
 
   // Get all active positions
-  public shared query func getAllPositions() : async [(Principal, [Position])] {
-    return Iter.toArray(activePositions.entries());
+  public shared query func getAllPositions() : async [Position] {
+    return Buffer.toArray(activePositions);
   };
 
   // Get active positions by principal id of a specific user
-  public shared query func getPositionsFor(userPrincipal : Principal) : async ?[Position] {
-    return activePositions.get(userPrincipal);
+  public shared query func getPositionsFor(userPrincipal : Principal) : async [Position] {
+    let filteredPositions = Buffer.mapFilter<Position, Position>(
+      activePositions,
+      func(position : Position) {
+        if (position.destination == userPrincipal) {
+          return ?position;
+        } else {
+          return null;
+        };
+      },
+    );
+
+    return Buffer.toArray(filteredPositions);
   };
 
   public func retreiveTime() : async Int {
@@ -192,102 +196,88 @@ actor AlphavaultRoot {
   // Runs every one hour and checks the transactionTime value of each transaction
   // If current time in unix format is bigger than transactionTime and transactionStauts is #notTriggered, it will trigger a new swap transaction
 
-  private func _proccedTransaction(userPositions : [Position], position : Position, transaction : Transaction, positionId : PositionId, transactionId : Nat) : async () {
+  private func _proccedTransaction(
+    userPosition : Position,
+    transaction : Transaction,
+    positionIndex : Nat,
+    transactionIndex : Nat,
+  ) : async () {
 
-    // Convet positions to buffer
-    let positionsBuffer = Buffer.fromArray<Position>(userPositions);
     // TODO: Trade logic
 
     // Save new user positions with updated transaction
 
-    // Iterate over buffer to find the target transaction and update
-    let newPositionsBuffer = Buffer.map<Position, Position>(
-      positionsBuffer,
-      func updatePosition(oldPosition : Position) : Position {
+    // Generate the new transaction object
+    let newTransaction : Transaction = {
+      transactionId = transaction.transactionId;
+      transactionStatus = #Successful;
+      transactionTime = transaction.transactionTime;
+      sellingAmount = transaction.sellingAmount;
+      amountBought = null;
+    };
 
-        // Update the target Position
-        if (oldPosition.positionId == positionId) {
+    let newTransactionsArray = Buffer.fromArray<Transaction>(userPosition.swaps);
+    newTransactionsArray.put(transactionIndex, newTransaction);
 
-          // Update the target transaction in swaps array
-          let newSwaps = Array.map<Transaction, Transaction>(
-            oldPosition.swaps,
-            func(oldTransaction : Transaction) : Transaction {
-              if (oldTransaction.transactionId == transactionId) {
-                return {
-                  transactionId = transactionId;
-                  transactionStatus = #Successful;
-                  transactionTime = oldTransaction.transactionTime;
-                  sellingAmount = oldTransaction.sellingAmount;
-                  amountBought = null;
-                };
-              };
-              return oldTransaction;
-            },
-          );
+    //
+    let newPosition : Position = {
+      allowance = userPosition.allowance;
+      destination = userPosition.destination;
+      positionId = userPosition.positionId;
+      // TODO : Write the logic for changing the position status to successful or faild
+      positionStatus = userPosition.positionStatus;
+      tokens = userPosition.tokens;
+      swaps = Buffer.toArray(newTransactionsArray);
+    };
 
-          return {
-            allowance = oldPosition.allowance;
-            destination = oldPosition.destination;
-            positionId = oldPosition.positionId;
-            // TODO : Write the logic for changing the position status to successful or faild
-            positionStatus = oldPosition.positionStatus;
-            tokens = oldPosition.tokens;
-            swaps = newSwaps;
-          };
-        };
-        return oldPosition;
-      },
-    );
-
-    // Save updated Positions into active position hashmap
-    activePositions.put(position.destination, Buffer.toArray(newPositionsBuffer))
+    // Save updated Positions into active position buffer
+    activePositions.put(positionIndex, newPosition)
 
   };
 
   let Seconds = 60; // Number of seconds in one hour
 
   private func cronTimer() : async () {
-    // Create a clone of Hashmap to iterate over to prevent errors while updating the main hashmap
-    let positionsToIteratreOver = HashMap.clone(activePositions, Principal.equal, Principal.hash);
+    // Create a clone of buffer to iterate over to prevent errors while updating the main buffer
+    let positionsToIteratreOver = Buffer.clone(activePositions);
+    var positionIndex = 0;
 
     // Iterating over all active posittions
-    for ((userPrincipal, userPositions) in positionsToIteratreOver.entries()) {
-
-      // Iterating over specific users' auto invest positions
-      for (position in userPositions.vals()) {
-
-        // Iterating over transactions of a poisition
-        for (transaction in position.swaps.vals()) {
-
-          // Checking the transaction status
-          switch (transaction.transactionStatus) {
-
-            // If the transaction has not been triggered and the unix time is less or equla to time.now() the transaction should be triggered
-            case (#NotTriggered) {
-              if (transaction.transactionTime <= utils.nanoToSecond(Time.now())) await _proccedTransaction(userPositions, position, transaction, position.positionId, transaction.transactionId);
+    for (userPosition in positionsToIteratreOver.vals()) {
+      var transactionIndex = 0;
+      // Iterating over transactions of a poisition
+      for (transaction in userPosition.swaps.vals()) {
+        // Checking the transaction status
+        switch (transaction.transactionStatus) {
+          // If the transaction has not been triggered and the unix time is less or equla to time.now() the transaction should be triggered
+          case (#NotTriggered) {
+            if (transaction.transactionTime <= utils.nanoToSecond(Time.now())) {
+              await _proccedTransaction(userPosition, transaction, positionIndex, transactionIndex);
             };
-            case _ {};
           };
+          case _ {};
         };
+        transactionIndex += 1;
       };
+      positionIndex += 1;
     };
   };
 
   ignore recurringTimer(#seconds Seconds, cronTimer);
 
   // Pre-upgrade logic
-  stable var usersPositionsArray : [(Principal, [Position])] = [];
+  stable var usersPositionsArray : [Position] = [];
   system func preupgrade() {
 
     //saving active positions in a stable array
-    usersPositionsArray := Iter.toArray(activePositions.entries());
+    usersPositionsArray := Buffer.toArray(activePositions);
   };
   // Post-upgrade logic
   system func postupgrade() {
-    for ((userPrincipal, positions) in usersPositionsArray.vals()) {
+    for (userPosition in usersPositionsArray.vals()) {
       //putting active positions from a stable array
-      activePositions.put(userPrincipal, positions);
+      activePositions.add(userPosition);
     };
+    usersPositionsArray := [];
   };
-  usersPositionsArray := [];
 };
