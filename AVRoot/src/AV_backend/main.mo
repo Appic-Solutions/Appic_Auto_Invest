@@ -1,4 +1,5 @@
 import dcaTypes "dcaTypes";
+import icrcTypes "icrcTypes";
 import utils "utils";
 import HashMap "mo:base/HashMap";
 import Nat "mo:base/Nat";
@@ -14,7 +15,7 @@ import Time "mo:base/Time";
 import Int "mo:base/Int";
 
 actor AlphavaultRoot {
-  //Types
+  // Auto invest Types
   type PositionId = dcaTypes.PositionId;
   type TransactionStatus = dcaTypes.TransactionStatus;
   type PositionStatus = dcaTypes.PositionStatus;
@@ -24,18 +25,28 @@ actor AlphavaultRoot {
   type CreatePositionsArgs = dcaTypes.CreatePositionsArgs;
   type Result_1 = dcaTypes.Result_1;
 
-  stable var nextPositionId : PositionId = 0;
+  // Token canister(ICRC2) types
+  type ICRCTransferError = icrcTypes.ICRCTransferError;
+  type ICRCTokenTxReceipt = icrcTypes.ICRCTokenTxReceipt;
+  type ICRCMetaDataValue = icrcTypes.ICRCMetaDataValue;
+  type ICRCAccount = icrcTypes.ICRCAccount;
+  type Subaccount = icrcTypes.Subaccount;
+  type ICRC2TransferArg = icrcTypes.ICRC2TransferArg;
+  type ICRCTransferArg = icrcTypes.ICRCTransferArg;
+  type ICRC2TokenActor = icrcTypes.ICRC2TokenActor;
+  type ICRC2AllowanceArgs = icrcTypes.ICRC2AllowanceArgs;
+  type ICRC2Allowance = icrcTypes.ICRC2Allowance;
 
-  // let activePositions = HashMap.HashMap<Principal, [Position]>(0, Principal.equal, Principal.hash);
+  // Buffer for keeping active positions
   let activePositions = Buffer.Buffer<Position>(0);
 
-  public type TxReceipt = Result.Result<Nat, Text>;
+  // public type TxReceipt = Result.Result<Nat, Text>;
 
-  let SonicDex = actor ("3xwpq-ziaaa-aaaah-qcn4a-cai") : actor {
-    deposit : shared (Principal, Nat) -> async TxReceipt;
-    initiateICRC1Transfer : shared () -> async Blob;
+  // let SonicDex = actor ("3xwpq-ziaaa-aaaah-qcn4a-cai") : actor {
+  //   deposit : shared (Principal, Nat) -> async TxReceipt;
+  //   initiateICRC1Transfer : shared () -> async Blob;
 
-  };
+  // };
   // public type Result = { #Ok : Nat; #Err : TransferError };
   // public type Account = { owner : Principal; subaccount : ?Blob };
   // public type TransferError = {
@@ -122,12 +133,46 @@ actor AlphavaultRoot {
   // };
 
   // Add Auto invest position
+  stable var nextPositionId : PositionId = 0;
+  public func checkActor(canisterId : Principal) : async Text {
+    let tokenCanister : ICRC2TokenActor = icrcTypes._getTokenActor(canisterId);
+    return await tokenCanister.icrc1_name();
+  };
   public shared func createPosition(createPositionArgs : CreatePositionsArgs) : async Result_1 {
-    // TODO : check to see if allwance has been given to our canister
+    // TODO : check if input tokens are supported
+    // TODO : Check to see if allowance covers all Fees
+    // Check to see if allwance is valid
+    // Get users Allowance
+    let tokenCanister : ICRC2TokenActor = icrcTypes._getTokenActor(createPositionArgs.sellToken);
+    let allowanceArgs : ICRC2AllowanceArgs = {
+      account = {
+        owner = createPositionArgs.destination;
+        subaccount = null;
+      };
+      spender = {
+        owner = Principal.fromActor(AlphavaultRoot);
+        subaccount = null;
+      };
+    };
+    let userAllowance : ICRC2Allowance = await tokenCanister.icrc2_allowance(allowanceArgs);
+
+    // Check to see if user has more than one transaction with the same selling token
+    let userAlreadyExsistingPositions : [Position] = _getPositionsFor(createPositionArgs.destination, ?createPositionArgs.sellToken, null);
+    var userMinExpectedAllowance = 0;
+    if (userAlreadyExsistingPositions.size() > 0) {
+      for (userPosition in userAlreadyExsistingPositions.vals()) {
+        userMinExpectedAllowance += userPosition.allowance;
+      };
+      userMinExpectedAllowance += createPositionArgs.allowance;
+    } else {
+      userMinExpectedAllowance += createPositionArgs.allowance;
+    };
+
+    if (userMinExpectedAllowance > userAllowance.allowance) {
+      return (#err(#WronmgAlloance { expectedAllowance = userMinExpectedAllowance; receivedAllowance = userAllowance.allowance }));
+    };
 
     // TODO : check if allowance is enough to cover fees
-
-    // TODO : check if input tokens are supported
 
     // TODO : check if entered unix swap times are not in the past
 
@@ -172,9 +217,9 @@ actor AlphavaultRoot {
     return Buffer.toArray(activePositions);
   };
 
-  // Get active positions by principal id of a specific user
-  public shared query func getPositionsFor(userPrincipal : Principal) : async [Position] {
-    let filteredPositions = Buffer.mapFilter<Position, Position>(
+  // Get active positions by principal id of a specific user public
+  public shared query func getPositionsFor(userPrincipal : Principal, sellToken : ?Principal, buyToken : ?Principal) : async [Position] {
+    let filteredByPrincipal = Buffer.mapFilter<Position, Position>(
       activePositions,
       func(position : Position) {
         if (position.destination == userPrincipal) {
@@ -185,7 +230,55 @@ actor AlphavaultRoot {
       },
     );
 
-    return Buffer.toArray(filteredPositions);
+    // Filter by buying token
+    switch (sellToken) {
+      case (null) {};
+      case (?sellingToken) {
+        filteredByPrincipal.filterEntries(func(_, position : Position) { position.tokens.sellToken == sellingToken });
+      };
+    };
+
+    // Filter by selling token
+    switch (buyToken) {
+      case (null) {};
+      case (?buyingToken) {
+        filteredByPrincipal.filterEntries(func(_, position : Position) { position.tokens.buyToken == buyingToken });
+      };
+    };
+
+    return Buffer.toArray(filteredByPrincipal);
+  };
+
+  // Get active positions by principal id of a specific user and if token id is provided result should be filtered by token id
+  private func _getPositionsFor(userPrincipal : Principal, sellToken : ?Principal, buyToken : ?Principal) : [Position] {
+    let filteredByPrincipal = Buffer.mapFilter<Position, Position>(
+      activePositions,
+      func(position : Position) {
+        if (position.destination == userPrincipal) {
+          return ?position;
+        } else {
+          return null;
+        };
+      },
+    );
+
+    // Filter by buying token
+    switch (sellToken) {
+      case (null) {};
+      case (?sellingToken) {
+        filteredByPrincipal.filterEntries(func(_, position : Position) { position.tokens.sellToken == sellingToken });
+      };
+    };
+
+    // Filter by selling token
+    switch (buyToken) {
+      case (null) {};
+      case (?buyingToken) {
+        filteredByPrincipal.filterEntries(func(_, position : Position) { position.tokens.buyToken == buyingToken });
+      };
+    };
+
+    return Buffer.toArray(filteredByPrincipal);
   };
 
   public func retreiveTime() : async Int {
@@ -201,7 +294,7 @@ actor AlphavaultRoot {
     transaction : Transaction,
     positionIndex : Nat,
     transactionIndex : Nat,
-  ) : async () {
+  ) : () {
 
     // TODO: Trade logic
 
@@ -252,7 +345,7 @@ actor AlphavaultRoot {
           // If the transaction has not been triggered and the unix time is less or equla to time.now() the transaction should be triggered
           case (#NotTriggered) {
             if (transaction.transactionTime <= utils.nanoToSecond(Time.now())) {
-              await _proccedTransaction(userPosition, transaction, positionIndex, transactionIndex);
+              _proccedTransaction(userPosition, transaction, positionIndex, transactionIndex);
             };
           };
           case _ {};
