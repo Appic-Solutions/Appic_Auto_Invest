@@ -28,6 +28,7 @@ actor AlphavaultRoot {
   type PositionCreationError = dcaTypes.PositionCreationError;
   type AllowanceAmountResult = dcaTypes.AllowanceAmountResult;
   type GetAllowanceArgs = dcaTypes.GetAllowanceArgs;
+  type Pair = dcaTypes.Pair;
   // Token canister(ICRC2) types
   type ICRCTransferError = icrcTypes.ICRCTransferError;
   type ICRCTokenTxReceipt = icrcTypes.ICRCTokenTxReceipt;
@@ -42,7 +43,10 @@ actor AlphavaultRoot {
 
   let platformFee : Nat = 2; //2
   let cronInterval = 60; // 1 min
+  let admin : Principal = Principal.fromText("matbl-u2myk-jsllo-b5aw6-bxboq-7oon2-h6wmo-awsxf-pcebc-4wpgx-4qe");
 
+  // Buffer for supported pairs
+  let supportedPirs = Buffer.Buffer<Pair>(0);
   // Buffer for keeping active positions
   let activePositions = Buffer.Buffer<Position>(0);
 
@@ -140,13 +144,31 @@ actor AlphavaultRoot {
 
   // Add Auto invest position
   stable var nextPositionId : PositionId = 0;
-  public func checkActor(canisterId : Principal) : async Text {
-    let tokenCanister : ICRC2TokenActor = icrcTypes._getTokenActor(canisterId);
-    return await tokenCanister.icrc1_name();
-  };
+
   public shared func createPosition(createPositionArgs : CreatePositionsArgs) : async Result_1 {
-    // TODO : check if input tokens are supported
-    // TODO : Check to see if allowance covers all Fees
+
+    // Check if entered unix swap times are not in the past
+    for (swapTime in createPositionArgs.swapsTime.vals()) {
+      if (swapTime < utils.nanoToSecond(Time.now())) {
+        return (#err(#PositionInThePast));
+      };
+    };
+
+    // Check if input tokens are supported
+    let ifPairSupported = Buffer.forSome<Pair>(
+      supportedPirs,
+      func(pair : Pair) : Bool {
+        if (pair.sellToken == createPositionArgs.sellToken and pair.buyToken == createPositionArgs.buyToken) {
+          return true;
+        };
+        return false;
+      },
+    );
+    switch (ifPairSupported) {
+      case (true) {};
+      case (false) { return (#err(#TokenNotFound)) };
+    };
+
     // Check to see if allwance is valid
     switch (await _validateAllowance(createPositionArgs)) {
 
@@ -158,9 +180,6 @@ actor AlphavaultRoot {
       };
       case _ {};
     };
-    // TODO : check if allowance is enough to cover fees
-
-    // TODO : check if entered unix swap times are not in the past
 
     // Create [Transactions] Array for newPosition's swaps parameter
     var nextTransactionid : Nat = 0;
@@ -261,11 +280,11 @@ actor AlphavaultRoot {
     let tokenFee = await tokenCanister.icrc1_fee();
     let totalTokenFee = tokenFee * 2 * noOfSwaps;
     let calculatedPlatformFee = (totalTokenFee + totalAmountOfSellToken) * platformFee / 100;
-    return (totalAmountOfSellToken + tokenFee + calculatedPlatformFee); // MinAllowanceForPosition
+    return (totalAmountOfSellToken + totalTokenFee + calculatedPlatformFee + tokenFee); // MinAllowanceForPosition, the last tokenFee is for witdrwing platform Fee
   };
 
   // Get min allowance for a createPositionArg and approveFunctionAmount
-  public func getAllowanceForNewTrade(getAllowanceArgs : GetAllowanceArgs) : async AllowanceAmountResult {
+  public shared func getAllowanceForNewTrade(getAllowanceArgs : GetAllowanceArgs) : async AllowanceAmountResult {
     // defining tokenCanister
     let tokenCanister : ICRC2TokenActor = icrcTypes._getTokenActor(getAllowanceArgs.sellToken);
 
@@ -292,6 +311,18 @@ actor AlphavaultRoot {
       minAllowanceForPositionCreation = minAllowanceForPosition;
       minAllowanceForApproveFunction = userMinExpectedAllowance;
     };
+  };
+
+  // Calculate fee for showing in the frontend
+  public shared func calculateFee(getAllowanceArgs : GetAllowanceArgs) : async Nat {
+    // defining tokenCanister
+    let tokenCanister : ICRC2TokenActor = icrcTypes._getTokenActor(getAllowanceArgs.sellToken);
+    let totalAmountOfSellToken = getAllowanceArgs.amountPerSwap * getAllowanceArgs.noOfSwaps;
+    let tokenFee = await tokenCanister.icrc1_fee();
+    let totalTokenFee = tokenFee * 2 * getAllowanceArgs.noOfSwaps;
+    let calculatedPlatformFee = (totalTokenFee + totalAmountOfSellToken) * platformFee / 100;
+    return (totalTokenFee + calculatedPlatformFee + tokenFee);
+
   };
 
   // Get all active positions
@@ -362,8 +393,11 @@ actor AlphavaultRoot {
 
     return Buffer.toArray(filteredByPrincipal);
   };
-
-  public func retreiveTime() : async Int {
+  // Get all supported pairs
+  public shared func getAllPairs() : async [Pair] {
+    return Buffer.toArray(supportedPirs);
+  };
+  public shared func retreiveTime() : async Int {
     return utils.nanoToSecond(Time.now());
   };
 
@@ -437,6 +471,33 @@ actor AlphavaultRoot {
 
   ignore recurringTimer(#seconds cronInterval, cronTimer);
 
+  // Admin Function
+
+  public shared ({ caller }) func addPair(sellToken : Principal, buyToken : Principal) : async Text {
+    if (caller == admin) {
+      supportedPirs.add({
+        sellToken;
+        buyToken;
+      });
+      return "Pair Added";
+    };
+    return "You're not an admin";
+  };
+  public shared ({ caller }) func removePair(sellToken : Principal, buyToken : Principal) : async Text {
+    if (caller == admin) {
+      supportedPirs.filterEntries(
+        func(_, pair) : Bool {
+          if (pair.sellToken == sellToken and pair.buyToken == buyToken) {
+            return false;
+          };
+          return true;
+        }
+      );
+    };
+    return "You're not an admin";
+  };
+
+  // System Functions
   // Pre-upgrade logic
   stable var usersPositionsArray : [Position] = [];
   system func preupgrade() {

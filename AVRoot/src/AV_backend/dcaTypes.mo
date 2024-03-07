@@ -78,6 +78,11 @@ module {
         noOfSwaps : Nat;
     };
 
+    public type Pair = {
+        sellToken : Principal;
+        buyToken : Principal;
+    };
+
     // AutoInvestPosition creation result
     public type Result_1 = Result.Result<Nat, PositionCreationError>;
 
