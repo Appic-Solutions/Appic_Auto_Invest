@@ -7,9 +7,23 @@ module {
     //Public Type for specifying the status of each transaction after a swap has been completed at regular intervals
     public type TransactionStatus = {
         #Successful;
-        #Failed;
+        #Failed : TransactionFailureReason;
         #Pending;
         #NotTriggered;
+    };
+
+    public type TransactionFailureReason = {
+        #BadFee : { expected_fee : Nat };
+        #BadBurn : { min_burn_amount : Nat };
+        #InsufficientFunds : { balance : Nat };
+        #InsufficientAllowance : { allowance : Nat };
+        #TooOld;
+        #CreatedInFuture : { ledger_time : Nat64 };
+        #Duplicate : { duplicate_of : Nat };
+        #TemporarilyUnavailable;
+        #GenericError : { message : Text; error_code : Nat };
+        #Expired; //only for approve
+        #CustomError : Text; // custom error for sonic logic
     };
 
     //Public Type for specifying the status of Auto Invest Position
@@ -32,6 +46,12 @@ module {
         transactionStatus : TransactionStatus;
         sellingAmount : Nat; // Before transactionTime the value will be null
         amountBought : ?Nat; // Before transactionTime the value will be null
+        step1 : ?Text; // step one of execution (transfer funds from user wallet to wallet using allowance);
+        step2 : ?Text; // step two of execution (transfer funds from canister to sonic canister)
+        step3 : ?Text; // step three of execution (deposit funds into sonic canister)
+        step4 : ?Text; // step four of execution (execute the swap in sonic canister)
+        step5 : ?Text; // step five of execution (witdraw bought tokens from sonic canister to Alphavault canister)
+        step6 : ?Text; // step six of execution (transfer funds from alphavault canister to users principal(wallet))
     };
 
     //Position Type
@@ -42,6 +62,7 @@ module {
         swaps : [Transaction]; // Array that contains all swaps, each of them with specific time
         positionStatus : PositionStatus;
         allowance : Nat;
+        managerCanister : Principal; // AlpahvaultRoot canister id
     };
 
     //Create Position Args

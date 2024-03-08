@@ -1,18 +1,21 @@
+import Array "mo:base/Array";
+import Blob "mo:base/Blob";
+import Buffer "mo:base/Buffer";
+import HashMap "mo:base/HashMap";
+import Int "mo:base/Int";
+import Iter "mo:base/Iter";
+import Nat "mo:base/Nat";
+import Nat64 "mo:base/Nat64";
+import Principal "mo:base/Principal";
+import Result "mo:base/Result";
+import Time "mo:base/Time";
+import { recurringTimer } "mo:base/Timer";
+import Text "mo:base/Text";
+
 import dcaTypes "dcaTypes";
 import icrcTypes "icrcTypes";
 import utils "utils";
-import HashMap "mo:base/HashMap";
-import Nat "mo:base/Nat";
-import Nat64 "mo:base/Nat64";
-import Result "mo:base/Result";
-import Principal "mo:base/Principal";
-import Blob "mo:base/Blob";
-import { recurringTimer } = "mo:base/Timer";
-import Buffer "mo:base/Buffer";
-import Iter "mo:base/Iter";
-import Array "mo:base/Array";
-import Time "mo:base/Time";
-import Int "mo:base/Int";
+import sonicTypes "sonicTypes";
 
 actor AlphavaultRoot {
   // Auto invest Types
@@ -40,10 +43,13 @@ actor AlphavaultRoot {
   type ICRC2TokenActor = icrcTypes.ICRC2TokenActor;
   type ICRC2AllowanceArgs = icrcTypes.ICRC2AllowanceArgs;
   type ICRC2Allowance = icrcTypes.ICRC2Allowance;
+  // Sonic Canister types
+  type sonicActor = sonicTypes.sonicActor;
 
   let platformFee : Nat = 2; //2
   let cronInterval = 60; // 1 min
   let admin : Principal = Principal.fromText("matbl-u2myk-jsllo-b5aw6-bxboq-7oon2-h6wmo-awsxf-pcebc-4wpgx-4qe");
+  let sonicCanisterId : Principal = Principal.fromText("3xwpq-ziaaa-aaaah-qcn4a-cai");
 
   // Buffer for supported pairs
   let supportedPirs = Buffer.Buffer<Pair>(0);
@@ -193,6 +199,12 @@ actor AlphavaultRoot {
           transactionStatus = #NotTriggered;
           sellingAmount = createPositionArgs.amountPerSwap;
           amountBought = null; // Before transactionTime the value will be null
+          step1 = null;
+          step2 = null;
+          step3 = null;
+          step4 = null;
+          step5 = null;
+          step6 = null;
         };
       },
     );
@@ -208,6 +220,7 @@ actor AlphavaultRoot {
       swaps = transactionsArray; // Array that contains all swaps, each of them with specific time
       positionStatus = #Open;
       allowance = createPositionArgs.allowance;
+      managerCanister = Principal.fromActor(AlphavaultRoot);
     };
     // Save created new position arg
     // Check if user principal already existes in hashmap
@@ -409,20 +422,95 @@ actor AlphavaultRoot {
     transaction : Transaction,
     positionIndex : Nat,
     transactionIndex : Nat,
-  ) : () {
+
+  ) : async () {
+
+    let sellTokenCanister : ICRC2TokenActor = icrcTypes._getTokenActor(userPosition.tokens.sellToken); //Selling token actor
+
+    var transactionStatus : TransactionStatus = #Pending;
+    var step1 : ?Text = null;
+    var step2 : ?Text = null;
+    var step3 : ?Text = null;
+    var step4 : ?Text = null;
+    var step5 : ?Text = null;
+    var step6 : ?Text = null;
 
     // TODO: Trade logic
+    // Step1: Transfer from users wallet to canister
+    let icrc2TransferFromResult : ICRCTokenTxReceipt = await _transferFromUsetToCanister(userPosition, transaction);
+    switch (icrc2TransferFromResult) {
+      case (#Err transferError) {
+        transactionStatus := #Failed(transferError);
+        step1 := ?(
+          "Transaction faild. requested amount to transfer to our AV canister:" #
+          Nat.toText(transaction.sellingAmount + (transaction.sellingAmount * platformFee / 100) + (await sellTokenCanister.icrc1_fee()))
+        );
+      };
+      case (#Ok SuccessId) {
+        step1 := ?(
+          "Success code:" #
+          Nat.toText(SuccessId)
+        );
+      };
+    };
 
-    // Save new user positions with updated transaction
+    // Step2: ICRC1 transfer to sonic swap
+
+    switch (transactionStatus) {
+      case (#Pending) {
+
+        let icrc1TransferToSonicResult : ICRCTokenTxReceipt = await _transferFromCanisterToSonic(userPosition, transaction);
+        switch (icrc1TransferToSonicResult) {
+          case (#Err transferError) {
+            transactionStatus := #Failed(transferError);
+            step2 := ?(
+              "Transaction faild. requested amount to sonic canister:" #
+              Nat.toText(transaction.sellingAmount)
+            );
+            //sending funds back
+            ignore await _transferFundsBack(userPosition, transaction);
+          };
+          case (#Ok SuccessId) {
+            step2 := ?(
+              "Success code:" #
+              Nat.toText(SuccessId)
+            );
+          };
+        };
+      };
+      case _ {};
+    };
+
+    // Step3: Despoit to sonic account
+
+    switch (transactionStatus) {
+      case (#Pending) {
+
+      };
+      case _ {
+
+      };
+    };
+    // trigger the swap
+    // witdraw traded token from sonic
+    // transfer traded token to users wallet
 
     // Generate the new transaction object
-    let newTransaction : Transaction = {
+    var newTransaction : Transaction = {
       transactionId = transaction.transactionId;
-      transactionStatus = #Successful;
+      transactionStatus = #Pending;
       transactionTime = transaction.transactionTime;
       sellingAmount = transaction.sellingAmount;
       amountBought = null;
+      step1 = null;
+      step2 = null;
+      step3 = null;
+      step4 = null;
+      step5 = null;
+      step6 = null;
     };
+
+    // Save new user positions with updated transaction
 
     let newTransactionsArray = Buffer.fromArray<Transaction>(userPosition.swaps);
     newTransactionsArray.put(transactionIndex, newTransaction);
@@ -436,6 +524,7 @@ actor AlphavaultRoot {
       positionStatus = userPosition.positionStatus;
       tokens = userPosition.tokens;
       swaps = Buffer.toArray(newTransactionsArray);
+      managerCanister = userPosition.managerCanister;
     };
 
     // Save updated Positions into active position buffer
@@ -443,6 +532,63 @@ actor AlphavaultRoot {
 
   };
 
+  // Transfer from users wallet to canister
+  private func _transferFromUsetToCanister(userPosition : Position, transaction : Transaction) : async ICRCTokenTxReceipt {
+    let sellTokenCanister : ICRC2TokenActor = icrcTypes._getTokenActor(userPosition.tokens.sellToken); //Selling token actor
+    let calculatedPlatformFee = transaction.sellingAmount * platformFee / 100;
+    let tokenTransferFee = await sellTokenCanister.icrc1_fee();
+    let transferFromArgs : ICRC2TransferArg = {
+      from : ICRCAccount = {
+        owner = userPosition.destination;
+        subaccount = null;
+      };
+      to : ICRCAccount = {
+        owner = userPosition.managerCanister;
+        subaccount = null;
+      };
+      amount = transaction.sellingAmount + platformFee + tokenTransferFee;
+    };
+    let result = await sellTokenCanister.icrc2_transfer_from(transferFromArgs);
+  };
+
+  // Transfer from our canister to sonic's canister
+  private func _transferFromCanisterToSonic(userPosition : Position, transaction : Transaction) : async ICRCTokenTxReceipt {
+    let sonicCanister : sonicActor = sonicTypes._getSonicActor(sonicCanisterId);
+    let sellTokenCanister : ICRC2TokenActor = icrcTypes._getTokenActor(userPosition.tokens.sellToken); //Selling token actor
+    let getSubbaccount : Blob = await sonicCanister.initiateICRC1Transfer();
+    let transferFromArgs : ICRCTransferArg = {
+      from_subaccount = null;
+      to : ICRCAccount = {
+        owner = sonicCanisterId;
+        subaccount = ?getSubbaccount;
+      };
+      amount = transaction.sellingAmount;
+    };
+    let result = await sellTokenCanister.icrc1_transfer(transferFromArgs);
+    return (result);
+  };
+
+  // Transfer Funds back becasue of Error during transaction execution
+  private func _transferFundsBack(userPosition : Position, transaction : Transaction) : async ICRCTokenTxReceipt {
+    let sellTokenCanister : ICRC2TokenActor = icrcTypes._getTokenActor(userPosition.tokens.sellToken); //Selling token actor
+    let transferFromArgs : ICRCTransferArg = {
+      from_subaccount = null;
+      to : ICRCAccount = {
+        owner = userPosition.destination;
+        subaccount = null;
+      };
+      amount = transaction.sellingAmount;
+    };
+    let result = await sellTokenCanister.icrc1_transfer(transferFromArgs);
+    return (result);
+  };
+
+  // Deposit funds to sonic to be able to use swap function
+  private func _depositFundsToSonic(userPosition : Position, transaction : Transaction) : async () {
+
+  };
+
+  // Cron timer function
   private func cronTimer() : async () {
     // Create a clone of buffer to iterate over to prevent errors while updating the main buffer
     let positionsToIteratreOver = Buffer.clone(activePositions);
@@ -458,7 +604,7 @@ actor AlphavaultRoot {
           // If the transaction has not been triggered and the unix time is less or equla to time.now() the transaction should be triggered
           case (#NotTriggered) {
             if (transaction.transactionTime <= utils.nanoToSecond(Time.now())) {
-              _proccedTransaction(userPosition, transaction, positionIndex, transactionIndex);
+              await _proccedTransaction(userPosition, transaction, positionIndex, transactionIndex);
             };
           };
           case _ {};
@@ -467,6 +613,7 @@ actor AlphavaultRoot {
       };
       positionIndex += 1;
     };
+    return ();
   };
 
   ignore recurringTimer(#seconds cronInterval, cronTimer);
