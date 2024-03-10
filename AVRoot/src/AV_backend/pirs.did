@@ -3,85 +3,66 @@
         record {
             destination = principal "matbl-u2myk-jsllo-b5aw6-bxboq-7oon2-h6wmo-awsxf-pcebc-4wpgx-4qe";
             managerCanister = principal "vd7yn-iqaaa-aaaak-qdbxq-cai";
-            positionStatus = variant { Open };
+            positionStatus = variant { InActive };
             positionId = 0;
             swaps = vec {
                 record {
-                    transactionTime = 1710098100;
-                    step1 = opt "Transaction faild. requested amount to transfer to our AV canister:10220000";
-                    step2 = null;
+                    transactionTime = 1710106800;
+                    step1 = opt "Success code:1291660";
+                    step2 = opt "Transaction faild. requested amount to sonic canister:5000Funds were sent back to user wallet addreess";
                     step3 = null;
                     step4 = null;
                     step5 = null;
                     step6 = null;
                     amountBought = opt 0;
-                    sellingAmount = 10000000;
+                    sellingAmount = 5000;
                     transactionStatus = variant {
                         Failed = variant {
-                            InsufficientAllowance = record {
-                                allowance = 852392;
-                            };
+                            InsufficientFunds = record { balance = 5012 };
                         };
                     };
                     transactionId = 0;
                 };
                 record {
-                    transactionTime = 1710098280;
-                    step1 = opt "Success code:10813731";
-                    step2 = opt "Success code:10813734";
-                    step3 = opt "Successfully deposited 10000000 to sonic canister ";
-                    step4 = opt "Successfully Swapped10000000For2025Of buy token";
-                    step5 = opt "Successfully Withdrew2015";
-                    step6 = opt "Transfer was successful";
-                    amountBought = opt 2025;
-                    sellingAmount = 10000000;
-                    transactionStatus = variant { Pending };
-                    transactionId = 1;
-                };
-                record {
-                    transactionTime = 1710098460;
-                    step1 = opt "Transaction faild. requested amount to transfer to our AV canister:10220000";
-                    step2 = null;
+                    transactionTime = 1710106980;
+                    step1 = opt "Success code:1291668";
+                    step2 = opt "Transaction faild. requested amount to sonic canister:5000Funds were sent back to user wallet addreess";
                     step3 = null;
                     step4 = null;
                     step5 = null;
                     step6 = null;
                     amountBought = opt 0;
-                    sellingAmount = 10000000;
+                    sellingAmount = 5000;
                     transactionStatus = variant {
                         Failed = variant {
-                            InsufficientAllowance = record {
-                                allowance = 852392;
-                            };
+                            InsufficientFunds = record { balance = 5014 };
+                        };
+                    };
+                    transactionId = 1;
+                };
+                record {
+                    transactionTime = 1710107160;
+                    step1 = opt "Success code:1291674";
+                    step2 = opt "Transaction faild. requested amount to sonic canister:5000Funds were sent back to user wallet addreess";
+                    step3 = null;
+                    step4 = null;
+                    step5 = null;
+                    step6 = null;
+                    amountBought = opt 0;
+                    sellingAmount = 5000;
+                    transactionStatus = variant {
+                        Failed = variant {
+                            InsufficientFunds = record { balance = 5016 };
                         };
                     };
                     transactionId = 2;
                 };
-                record {
-                    transactionTime = 1710098640;
-                    step1 = opt "Transaction faild. requested amount to transfer to our AV canister:10220000";
-                    step2 = null;
-                    step3 = null;
-                    step4 = null;
-                    step5 = null;
-                    step6 = null;
-                    amountBought = opt 0;
-                    sellingAmount = 10000000;
-                    transactionStatus = variant {
-                        Failed = variant {
-                            InsufficientAllowance = record {
-                                allowance = 852392;
-                            };
-                        };
-                    };
-                    transactionId = 3;
-                };
             };
             tokens = record {
-                sellToken = principal "ryjl3-tyaaa-aaaaa-aaaba-cai";
-                buyToken = principal "mxzaz-hqaaa-aaaar-qaada-cai";
+                sellToken = principal "mxzaz-hqaaa-aaaar-qaada-cai";
+                buyToken = principal "ryjl3-tyaaa-aaaaa-aaaba-cai";
             };
-            allowance = 40932400;
+            allowance = 15401;
         };
     }
 );

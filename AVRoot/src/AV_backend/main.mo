@@ -591,7 +591,7 @@ actor AlphavaultRoot {
         owner = userPosition.managerCanister;
         subaccount = null;
       };
-      amount = transaction.sellingAmount + platformFee + sellTokenFee;
+      amount = transaction.sellingAmount + platformFee + (sellTokenFee * 2);
     };
     let result = await sellTokenCanister.icrc2_transfer_from(transferFromArgs);
   };
