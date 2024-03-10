@@ -8,7 +8,7 @@ module {
         deposit : shared (Principal, Nat) -> async TxReceipt;
         swapExactTokensForTokens : shared (Nat, Nat, [Text], Principal, Int) -> async TxReceipt;
         withdraw : shared (Principal, Nat) -> async TxReceipt;
-
+        balanceOf : shared query (Text, Principal) -> async Nat;
     };
     public func _getSonicActor(sonicCanisterId : Principal) : sonicActor {
 

@@ -337,8 +337,15 @@ actor AlphavaultRoot {
     // Actors
     let sonicCanister : sonicActor = sonicTypes._getSonicActor(sonicCanisterId); // Sonic canister
     let sellTokenCanister : ICRC2TokenActor = icrcTypes._getTokenActor(userPosition.tokens.sellToken); //Selling token actor
+    let buyTokenCanister : ICRC2TokenActor = icrcTypes._getTokenActor(userPosition.tokens.buyToken); //Buy token actor token actor
+
     let sellTokenFee : Nat = await sellTokenCanister.icrc1_fee();
+    let buyTokenFee : Nat = await buyTokenCanister.icrc1_fee();
+
     var transactionStatus : TransactionStatus = #Pending;
+    var sonicBalanceOfBuyTokenBeforeTrade : Nat = await sonicCanister.balanceOf(Principal.toText(userPosition.tokens.buyToken), userPosition.managerCanister);
+    var sonicBalanceOfSellTokenAfterTrade : Nat = 0;
+    var amountOfBoughtToken : Nat = 0;
     var step1 : ?Text = null;
     var step2 : ?Text = null;
     var step3 : ?Text = null;
@@ -369,7 +376,6 @@ actor AlphavaultRoot {
 
     switch (transactionStatus) {
       case (#Pending) {
-
         let icrc1TransferToSonicResult : ICRCTokenTxReceipt = await _transferFromCanisterToSonic(
           userPosition,
           transaction,
@@ -435,12 +441,13 @@ actor AlphavaultRoot {
 
     // Step4: Trigger the swap
     switch (transactionStatus) {
-      case (#Pending) {};
-      case _ {
+      case (#Pending) {
         let swapResult = await _SwapExactTokensForTokens(userPosition, transaction, sonicCanister);
         switch (swapResult) {
           case (#ok successId) {
-            step4 := ?("Successfully Swapped" # Nat.toText(transaction.sellingAmount));
+            sonicBalanceOfSellTokenAfterTrade := await sonicCanister.balanceOf(Principal.toText(userPosition.tokens.buyToken), userPosition.managerCanister);
+            amountOfBoughtToken := sonicBalanceOfSellTokenAfterTrade - sonicBalanceOfBuyTokenBeforeTrade;
+            step4 := ?("Successfully Swapped" # Nat.toText(transaction.sellingAmount) # "For" # Nat.toText(amountOfBoughtToken) # "Of buy token");
           };
           case (#err reason) {
             transactionStatus := #Failed(#CustomError(reason));
@@ -449,37 +456,60 @@ actor AlphavaultRoot {
           };
         };
       };
+      case _ {};
     };
 
     // Step5: Withdraw traded token from sonic
     switch (transactionStatus) {
-      case (#Pending) {};
-      case _ {
+      case (#Pending) {
+        let withdrawResult = await _WinthdrawFromSonic(userPosition, transaction, sonicCanister, amountOfBoughtToken);
+        switch (withdrawResult) {
+          case (#ok successId) {
+            step5 := ?("Successfully Withdrew" # Nat.toText(amountOfBoughtToken - buyTokenFee));
+          };
+          case (#err reason) {
+            transactionStatus := #Failed(#CustomError(reason));
+            step5 := ?("Failed to withdraw" # Nat.toText(amountOfBoughtToken) # "from sonic for:" # reason);
 
+          };
+        };
       };
+      case _ {};
     };
 
     // Step6: Transfer traded token to users wallet
     switch (transactionStatus) {
-      case (#Pending) {};
-      case _ {
-
+      case (#Pending) {
+        let transferResult = await _TransferBoughtTokenToUserWallet(userPosition, buyTokenCanister, amountOfBoughtToken, buyTokenFee);
+        switch (transferResult) {
+          case (#Ok SuccessId) {
+            step6 := ?"Transfer was successful";
+          };
+          case (#Err transferError) {
+            transactionStatus := #Failed(transferError);
+            step6 := ?(
+              "Transaction faild. requested amount to transfer to our User wallet:" #
+              Nat.toText(amountOfBoughtToken - buyTokenFee)
+            );
+          };
+        };
       };
+      case _ {};
     };
 
     // Generate the new transaction object
     var newTransaction : Transaction = {
       transactionId = transaction.transactionId;
-      transactionStatus = #Pending;
+      transactionStatus = transactionStatus;
       transactionTime = transaction.transactionTime;
       sellingAmount = transaction.sellingAmount;
-      amountBought = null;
-      step1 = null;
-      step2 = null;
-      step3 = null;
-      step4 = null;
-      step5 = null;
-      step6 = null;
+      amountBought = ?amountOfBoughtToken;
+      step1 = step1;
+      step2 = step2;
+      step3 = step3;
+      step4 = step4;
+      step5 = step5;
+      step6 = step6;
     };
 
     // Save new user positions with updated transaction
@@ -585,6 +615,37 @@ actor AlphavaultRoot {
     let buyToken = Principal.toText(userPosition.tokens.buyToken);
     let swapResult : TxReceipt = await sonicCanister.swapExactTokensForTokens(transaction.sellingAmount, 0, [sellToken, buyToken], userPosition.managerCanister, Time.now() + 300000000000);
     return swapResult;
+  };
+
+  // Withdraw swapped funds from sonic
+  private func _WinthdrawFromSonic(
+    userPosition : Position,
+    transaction : Transaction,
+    sonicCanister : sonicActor,
+    amountToWithdraw : Nat,
+  ) : async TxReceipt {
+    let buyToken = userPosition.tokens.buyToken;
+    let withdrawResult : TxReceipt = await sonicCanister.withdraw(buyToken, amountToWithdraw);
+    return withdrawResult;
+  };
+
+  // Transfer Bought tokens back to users wallet
+  private func _TransferBoughtTokenToUserWallet(
+    userPosition : Position,
+    buyTokenCanister : ICRC2TokenActor,
+    amount : Nat,
+    buyTokenFee : Nat,
+  ) : async ICRCTokenTxReceipt {
+    let transferFromArgs : ICRCTransferArg = {
+      from_subaccount = null;
+      to : ICRCAccount = {
+        owner = userPosition.destination;
+        subaccount = null;
+      };
+      amount = amount - buyTokenFee;
+    };
+    let result = await buyTokenCanister.icrc1_transfer(transferFromArgs);
+    return (result);
   };
 
   // Cron timer function
