@@ -49,7 +49,7 @@ actor AlphavaultRoot {
 
   let platformFee : Nat = 2; //2 percent
   let noOfTransferFees = 3; // how many time do we have to pay transfer fee for a single swap
-  let cronInterval = 60; // 1 min
+  let cronInterval = 3600; // 60 min
   let admin : Principal = Principal.fromText("matbl-u2myk-jsllo-b5aw6-bxboq-7oon2-h6wmo-awsxf-pcebc-4wpgx-4qe");
   let sonicCanisterId : Principal = Principal.fromText("3xwpq-ziaaa-aaaah-qcn4a-cai");
 
@@ -173,7 +173,7 @@ actor AlphavaultRoot {
     let userAllowance : ICRC2Allowance = await tokenCanister.icrc2_allowance(allowanceArgs);
 
     // Check to see if user has more than one transaction with the same selling token
-    let userAlreadyExsistingPositions : [Position] = _getPositionsFor(createPositionArgs.destination, ?createPositionArgs.sellToken, null);
+    let userAlreadyExsistingPositions : [Position] = _getPositionsFor(createPositionArgs.destination, ?createPositionArgs.sellToken, null, ?true);
     var userMinExpectedAllowance = 0;
     if (userAlreadyExsistingPositions.size() > 0) {
       for (userPosition in userAlreadyExsistingPositions.vals()) {
@@ -202,8 +202,8 @@ actor AlphavaultRoot {
     let totalAmountOfSellToken = amountPerSwap * noOfSwaps;
     let tokenFee = await tokenCanister.icrc1_fee();
     let totalTokenFee = tokenFee * noOfTransferFees * noOfSwaps;
-    let calculatedPlatformFee = (totalTokenFee + totalAmountOfSellToken) * platformFee / 100;
-    return (totalAmountOfSellToken + totalTokenFee + calculatedPlatformFee + tokenFee); // MinAllowanceForPosition, the last tokenFee is for witdrwing platform Fee
+    let calculatedPlatformFee = totalAmountOfSellToken * platformFee / 100;
+    return (totalAmountOfSellToken + totalTokenFee + calculatedPlatformFee); // MinAllowanceForPosition
   };
 
   // Get min allowance for a createPositionArg and approveFunctionAmount
@@ -219,7 +219,7 @@ actor AlphavaultRoot {
       tokenCanister,
     );
 
-    let userAlreadyExsistingPositions : [Position] = _getPositionsFor(getAllowanceArgs.userPrincipal, ?getAllowanceArgs.sellToken, null);
+    let userAlreadyExsistingPositions : [Position] = _getPositionsFor(getAllowanceArgs.userPrincipal, ?getAllowanceArgs.sellToken, null, ?true);
     var userMinExpectedAllowance = 0;
     if (userAlreadyExsistingPositions.size() > 0) {
       for (userPosition in userAlreadyExsistingPositions.vals()) {
@@ -243,8 +243,8 @@ actor AlphavaultRoot {
     let totalAmountOfSellToken = getAllowanceArgs.amountPerSwap * getAllowanceArgs.noOfSwaps;
     let tokenFee = await tokenCanister.icrc1_fee();
     let totalTokenFee = tokenFee * noOfTransferFees * getAllowanceArgs.noOfSwaps;
-    let calculatedPlatformFee = (totalTokenFee + totalAmountOfSellToken) * platformFee / 100;
-    return (totalTokenFee + calculatedPlatformFee + tokenFee);
+    let calculatedPlatformFee = totalAmountOfSellToken * platformFee / 100;
+    return (totalTokenFee + calculatedPlatformFee);
 
   };
 
@@ -254,7 +254,7 @@ actor AlphavaultRoot {
   };
 
   // Get active positions by principal id of a specific user public
-  public shared query func getPositionsFor(userPrincipal : Principal, sellToken : ?Principal, buyToken : ?Principal) : async [Position] {
+  public shared query func getPositionsFor(userPrincipal : Principal, sellToken : ?Principal, buyToken : ?Principal, active : ?Bool) : async [Position] {
     let filteredByPrincipal = Buffer.mapFilter<Position, Position>(
       activePositions,
       func(position : Position) {
@@ -280,13 +280,24 @@ actor AlphavaultRoot {
       case (?buyingToken) {
         filteredByPrincipal.filterEntries(func(_, position : Position) { position.tokens.buyToken == buyingToken });
       };
+    };
+
+    // Filter Only active positions
+    switch (active) {
+      case (?true) {
+        filteredByPrincipal.filterEntries(func(_, position : Position) { position.positionStatus == #Active });
+      };
+      case (?false) {
+        filteredByPrincipal.filterEntries(func(_, position : Position) { position.positionStatus == #InActive });
+      };
+      case (null) {};
     };
 
     return Buffer.toArray(filteredByPrincipal);
   };
 
   // Get active positions by principal id of a specific user and if token id is provided result should be filtered by token id
-  private func _getPositionsFor(userPrincipal : Principal, sellToken : ?Principal, buyToken : ?Principal) : [Position] {
+  private func _getPositionsFor(userPrincipal : Principal, sellToken : ?Principal, buyToken : ?Principal, active : ?Bool) : [Position] {
     let filteredByPrincipal = Buffer.mapFilter<Position, Position>(
       activePositions,
       func(position : Position) {
@@ -312,6 +323,17 @@ actor AlphavaultRoot {
       case (?buyingToken) {
         filteredByPrincipal.filterEntries(func(_, position : Position) { position.tokens.buyToken == buyingToken });
       };
+    };
+
+    // Filter Only active positions
+    switch (active) {
+      case (?true) {
+        filteredByPrincipal.filterEntries(func(_, position : Position) { position.positionStatus == #Active });
+      };
+      case (?false) {
+        filteredByPrincipal.filterEntries(func(_, position : Position) { position.positionStatus == #InActive });
+      };
+      case (null) {};
     };
 
     return Buffer.toArray(filteredByPrincipal);
@@ -523,7 +545,8 @@ actor AlphavaultRoot {
         let transferResult = await _TransferBoughtTokenToUserWallet(userPosition, buyTokenCanister, amountOfBoughtToken, buyTokenFee);
         switch (transferResult) {
           case (#Ok SuccessId) {
-            step6 := ?"Transfer was successful";
+            step6 := ?("Transfer was successful, Amount sent to user's wallet: " # Nat.toText(amountOfBoughtToken - (buyTokenFee * 2)));
+            transactionStatus := #Successful;
           };
           case (#Err transferError) {
             transactionStatus := #Failed(transferError);
@@ -817,10 +840,15 @@ actor AlphavaultRoot {
   // System Functions
   // Pre-upgrade logic
   stable var usersPositionsArray : [Position] = [];
+  stable var pairsArray : [Pair] = [];
+
   system func preupgrade() {
 
     //saving active positions in a stable array
     usersPositionsArray := Buffer.toArray(activePositions);
+
+    //saving pairs in stable array
+    pairsArray := Buffer.toArray(supportedPirs);
   };
   // Post-upgrade logic
   system func postupgrade() {
@@ -829,5 +857,10 @@ actor AlphavaultRoot {
       activePositions.add(userPosition);
     };
     usersPositionsArray := [];
+
+    for (pair in pairsArray.vals()) {
+      supportedPirs.add(pair);
+    };
+    pairsArray := [];
   };
 };
