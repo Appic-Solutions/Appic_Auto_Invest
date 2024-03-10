@@ -62,6 +62,8 @@ actor AlphavaultRoot {
   let SonicDex = actor ("3xwpq-ziaaa-aaaah-qcn4a-cai") : actor {
     deposit : shared (Principal, Nat) -> async TxReceipt;
     initiateICRC1Transfer : shared () -> async Blob;
+    swapExactTokensForTokens : shared (Nat, Nat, [Text], Principal, Int) -> async TxReceipt;
+    withdraw : shared (Principal, Nat) -> async TxReceipt;
 
   };
   public type Result = { #Ok : Nat; #Err : TransferError };
@@ -146,6 +148,22 @@ actor AlphavaultRoot {
 
   public shared func initiateICRC1transfer() : async Blob {
     let result = await SonicDex.initiateICRC1Transfer();
+    return result;
+  };
+
+  public shared func triggerSwap({
+    amountIn : Nat;
+    amountOutMin : Nat;
+    path : [Text];
+    to : Principal;
+    deadline : Int;
+  }) : async TxReceipt {
+    let result = await SonicDex.swapExactTokensForTokens(amountIn, amountOutMin, path, to, deadline);
+    return result;
+  };
+
+  public func withdraw({ tokenId : Principal; amount : Nat }) : async TxReceipt {
+    let result = await SonicDex.withdraw(tokenId, amount);
     return result;
   };
 
