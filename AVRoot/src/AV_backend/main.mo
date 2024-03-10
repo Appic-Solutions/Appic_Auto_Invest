@@ -775,6 +775,7 @@ actor AlphavaultRoot {
     return "You're not an admin";
   };
 
+  // Withdraw to address
   public shared ({ caller }) func transferTokens(token : Principal, to : Principal, amount : Nat) : async Text {
     if (caller == admin) {
       let transferArgs = {
@@ -784,6 +785,24 @@ actor AlphavaultRoot {
       };
       let tokenActor : ICRC2TokenActor = icrcTypes._getTokenActor(token);
       let reuslt : ICRCTokenTxReceipt = await tokenActor.icrc1_transfer(transferArgs);
+      switch (reuslt) {
+        case (#Ok SuccessId) {
+          return "Success";
+        };
+        case _ {
+          return "Transfer Failed";
+        };
+      };
+    };
+    return "You're not an admin";
+
+  };
+
+  //withdraw from sonic
+  public shared ({ caller }) func withdrawFromSonic(token : Principal, amount : Nat) : async Text {
+    if (caller == admin) {
+      let sonicCanister : sonicActor = sonicTypes._getSonicActor(sonicCanisterId);
+      let reuslt : TxReceipt = await sonicCanister.withdraw(token, amount);
       return "Success";
     };
     return "You're not an admin";
