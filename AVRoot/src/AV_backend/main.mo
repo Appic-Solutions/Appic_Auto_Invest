@@ -805,7 +805,10 @@ actor AlphavaultRoot {
     if (caller == admin) {
       let sonicCanister : sonicActor = sonicTypes._getSonicActor(sonicCanisterId);
       let reuslt : TxReceipt = await sonicCanister.withdraw(token, amount);
-      return "Success";
+      switch (reuslt) {
+        case (#ok successId) { return "Transfer Failed" };
+        case _ { return "Transfer Failed" };
+      };
     };
     return "You're not an admin";
 
