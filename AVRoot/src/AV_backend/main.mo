@@ -128,7 +128,7 @@ actor AlphavaultRoot {
       };
       destination = createPositionArgs.destination; // Bought tokens final destination
       swaps = transactionsArray; // Array that contains all swaps, each of them with specific time
-      positionStatus = #Open;
+      positionStatus = #Active;
       allowance = createPositionArgs.allowance;
       managerCanister = Principal.fromActor(AlphavaultRoot);
     };
@@ -334,6 +334,44 @@ actor AlphavaultRoot {
     transactionIndex : Nat,
 
   ) : async () {
+    // Set the status to pending
+    // Generate the new transaction object
+    var newTransactionForPending : Transaction = {
+      transactionId = transaction.transactionId;
+      transactionStatus = #Pending;
+      transactionTime = transaction.transactionTime;
+      sellingAmount = transaction.sellingAmount;
+      amountBought = ?0;
+      step1 = null;
+      step2 = null;
+      step3 = null;
+      step4 = null;
+      step5 = null;
+      step6 = null;
+    };
+
+    // Save new user positions with updated transaction
+
+    let newTransactionsArrayForPending = Buffer.fromArray<Transaction>(userPosition.swaps);
+    newTransactionsArrayForPending.put(transactionIndex, newTransactionForPending);
+
+    // Generate new Position
+    let newPositionForPending : Position = {
+      allowance = userPosition.allowance;
+      destination = userPosition.destination;
+      positionId = userPosition.positionId;
+      // TODO : Write the logic for changing the position status to successful or faild
+      positionStatus = userPosition.positionStatus;
+      tokens = userPosition.tokens;
+      swaps = Buffer.toArray(newTransactionsArrayForPending);
+      managerCanister = userPosition.managerCanister;
+    };
+
+    // Save updated Positions into active position buffer
+    activePositions.put(positionIndex, newPositionForPending);
+
+    // Starting the swap process
+
     // Actors
     let sonicCanister : sonicActor = sonicTypes._getSonicActor(sonicCanisterId); // Sonic canister
     let sellTokenCanister : ICRC2TokenActor = icrcTypes._getTokenActor(userPosition.tokens.sellToken); //Selling token actor
@@ -517,7 +555,7 @@ actor AlphavaultRoot {
     let newTransactionsArray = Buffer.fromArray<Transaction>(userPosition.swaps);
     newTransactionsArray.put(transactionIndex, newTransaction);
 
-    //
+    // Generate new Position
     let newPosition : Position = {
       allowance = userPosition.allowance;
       destination = userPosition.destination;
@@ -656,21 +694,53 @@ actor AlphavaultRoot {
 
     // Iterating over all active posittions
     for (userPosition in positionsToIteratreOver.vals()) {
-      var transactionIndex = 0;
-      // Iterating over transactions of a poisition
-      for (transaction in userPosition.swaps.vals()) {
-        // Checking the transaction status
-        switch (transaction.transactionStatus) {
-          // If the transaction has not been triggered and the unix time is less or equla to time.now() the transaction should be triggered
-          case (#NotTriggered) {
-            if (transaction.transactionTime <= utils.nanoToSecond(Time.now())) {
-              await _proccedTransaction(userPosition, transaction, positionIndex, transactionIndex);
+      // Check if the position is active
+      switch (userPosition.positionStatus) {
+        case (#Active) {
+          var markAsInActive = true;
+          var transactionIndex = 0;
+          // Iterating over transactions of a poisition
+          for (transaction in userPosition.swaps.vals()) {
+            // Checking the transaction status
+            switch (transaction.transactionStatus) {
+              // If the transaction has not been triggered and the unix time is less or equla to time.now() the transaction should be triggered
+              case (#Pending) {
+                markAsInActive := false;
+              };
+              case (#NotTriggered) {
+                markAsInActive := false;
+                if (transaction.transactionTime <= utils.nanoToSecond(Time.now())) {
+                  await _proccedTransaction(userPosition, transaction, positionIndex, transactionIndex);
+                };
+              };
+              case _ {};
             };
+            transactionIndex += 1;
           };
-          case _ {};
+
+          //If all the transactions are triggered put the position status as #InActive
+          switch (markAsInActive) {
+            case (true) {
+              let newPosition : Position = {
+                allowance = userPosition.allowance;
+                destination = userPosition.destination;
+                positionId = userPosition.positionId;
+                // TODO : Write the logic for changing the position status to successful or faild
+                positionStatus = #InActive;
+                tokens = userPosition.tokens;
+                swaps = userPosition.swaps;
+                managerCanister = userPosition.managerCanister;
+              };
+              activePositions.put(positionIndex, newPosition);
+            };
+            case (false) {};
+          };
         };
-        transactionIndex += 1;
+        case _ {
+
+        };
       };
+
       positionIndex += 1;
     };
     return ();
@@ -690,6 +760,7 @@ actor AlphavaultRoot {
     };
     return "You're not an admin";
   };
+
   public shared ({ caller }) func removePair(sellToken : Principal, buyToken : Principal) : async Text {
     if (caller == admin) {
       supportedPirs.filterEntries(
@@ -702,6 +773,21 @@ actor AlphavaultRoot {
       );
     };
     return "You're not an admin";
+  };
+
+  public shared ({ caller }) func transferTokens(token : Principal, to : Principal, amount : Nat) : async Text {
+    if (caller == admin) {
+      let transferArgs = {
+        from_subaccount = null;
+        to : ICRCAccount = { owner = to; subaccount = null };
+        amount;
+      };
+      let tokenActor : ICRC2TokenActor = icrcTypes._getTokenActor(token);
+      let reuslt : ICRCTokenTxReceipt = await tokenActor.icrc1_transfer(transferArgs);
+      return "Success";
+    };
+    return "You're not an admin";
+
   };
 
   // System Functions
