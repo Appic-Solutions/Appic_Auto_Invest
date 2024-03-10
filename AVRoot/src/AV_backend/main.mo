@@ -504,6 +504,8 @@ actor AlphavaultRoot {
         switch (withdrawResult) {
           case (#ok successId) {
             step5 := ?("Successfully Withdrew" # Nat.toText(amountOfBoughtToken - buyTokenFee));
+            // Deduct withdraw fee
+            amountOfBoughtToken -= buyTokenFee;
           };
           case (#err reason) {
             transactionStatus := #Failed(#CustomError(reason));
