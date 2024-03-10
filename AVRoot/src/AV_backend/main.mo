@@ -58,96 +58,6 @@ actor AlphavaultRoot {
   // Buffer for keeping active positions
   let activePositions = Buffer.Buffer<Position>(0);
 
-  // let SonicDex = actor ("3xwpq-ziaaa-aaaah-qcn4a-cai") : actor {
-  //   deposit : shared (Principal, Nat) -> async TxReceipt;
-  //   initiateICRC1Transfer : shared () -> async Blob;
-
-  // };
-  // public type Result = { #Ok : Nat; #Err : TransferError };
-  // public type Account = { owner : Principal; subaccount : ?Blob };
-  // public type TransferError = {
-  //   #GenericError : { message : Text; error_code : Nat };
-  //   #TemporarilyUnavailable;
-  //   #BadBurn : { min_burn_amount : Nat };
-  //   #Duplicate : { duplicate_of : Nat };
-  //   #BadFee : { expected_fee : Nat };
-  //   #CreatedInFuture : { ledger_time : Nat64 };
-  //   #TooOld;
-  //   #InsufficientFunds : { balance : Nat };
-  // };
-  // public type TransferArg = {
-  //   to : Account;
-  //   fee : ?Nat;
-  //   memo : ?Blob;
-  //   from_subaccount : ?Blob;
-  //   created_at_time : ?Nat64;
-  //   amount : Nat;
-  // };
-  // let ICP_Ledger = actor ("ryjl3-tyaaa-aaaaa-aaaba-cai") : actor {
-  //   icrc1_transfer : shared TransferArg -> async Result;
-
-  // };
-
-  // public shared func depositToSonic(amount : Nat) : async TxReceipt {
-  //   let result = await SonicDex.deposit(Principal.fromText("ryjl3-tyaaa-aaaaa-aaaba-cai"), amount);
-  //   return result;
-  // };
-
-  // public shared func transferToSonic(amount : Nat) : async Text {
-  //   let toSubAccount = await SonicDex.initiateICRC1Transfer();
-  //   let transferResult = await ICP_Ledger.icrc1_transfer({
-  //     to = {
-  //       owner = Principal.fromText("3xwpq-ziaaa-aaaah-qcn4a-cai");
-  //       subaccount = ?toSubAccount;
-  //     };
-  //     fee = null;
-  //     memo = null;
-  //     created_at_time = null;
-  //     amount;
-  //     from_subaccount = null;
-  //   });
-  //   switch (transferResult) {
-  //     case (#Err error) {
-  //       switch (error) {
-  //         case (#BadFee { expected_fee }) {
-  //           return "Bad fee" # Nat.toText(expected_fee);
-  //         };
-  //         case (#BadBurn { min_burn_amount }) {
-  //           return "Bad Burn min burn amount :" # Nat.toText(min_burn_amount);
-  //         };
-  //         case (#InsufficientFunds { balance }) {
-  //           return "Insufficient Funds Balance: " # Nat.toText(balance);
-  //         };
-
-  //         case (#TooOld) {
-  //           return "Too old";
-  //         };
-  //         case (#CreatedInFuture { ledger_time }) {
-  //           return "CreatedInFuture" # Nat64.toText(ledger_time);
-  //         };
-  //         case (#Duplicate { duplicate_of }) {
-  //           return "Duplicate" # Nat.toText(duplicate_of);
-  //         };
-  //         case (#TemporarilyUnavailable) {
-  //           return "TemporarilyUnavailable";
-  //         };
-  //         case (#GenericError { error_code; message }) {
-  //           return "GenericError" # message;
-  //         };
-  //         case _ { return "Unknow Error" };
-  //       };
-  //     };
-  //     case (#Ok BlockNumber) {
-  //       return "Successful" # Nat.toText(BlockNumber);
-  //     };
-  //   };
-  // };
-
-  // public shared func initiateICRC1transfer() : async Blob {
-  //   let result = await SonicDex.initiateICRC1Transfer();
-  //   return result;
-  // };
-
   // Add Auto invest position
   stable var nextPositionId : PositionId = 0;
 
@@ -510,7 +420,7 @@ actor AlphavaultRoot {
         let depositResult = await _depositFundsToSonic(userPosition, transaction, sonicCanister);
         switch (depositResult) {
           case (#ok successId) {
-            step3 := ?("Successfuly deposited " # Nat.toText(transaction.sellingAmount) # " to sonic canister ");
+            step3 := ?("Successfully deposited " # Nat.toText(transaction.sellingAmount) # " to sonic canister ");
           };
           case (#err reason) {
             transactionStatus := #Failed(#CustomError(reason));
@@ -522,9 +432,40 @@ actor AlphavaultRoot {
 
       };
     };
-    // trigger the swap
-    // witdraw traded token from sonic
-    // transfer traded token to users wallet
+
+    // Step4: Trigger the swap
+    switch (transactionStatus) {
+      case (#Pending) {};
+      case _ {
+        let swapResult = await _SwapExactTokensForTokens(userPosition, transaction, sonicCanister);
+        switch (swapResult) {
+          case (#ok successId) {
+            step4 := ?("Successfully Swapped" # Nat.toText(transaction.sellingAmount));
+          };
+          case (#err reason) {
+            transactionStatus := #Failed(#CustomError(reason));
+            step4 := ?("Failed to swap" # Nat.toText(transaction.sellingAmount) # "in sonic" # reason);
+
+          };
+        };
+      };
+    };
+
+    // Step5: Withdraw traded token from sonic
+    switch (transactionStatus) {
+      case (#Pending) {};
+      case _ {
+
+      };
+    };
+
+    // Step6: Transfer traded token to users wallet
+    switch (transactionStatus) {
+      case (#Pending) {};
+      case _ {
+
+      };
+    };
 
     // Generate the new transaction object
     var newTransaction : Transaction = {
@@ -632,6 +573,18 @@ actor AlphavaultRoot {
   ) : async TxReceipt {
     let depositResult : TxReceipt = await sonicCanister.deposit(userPosition.tokens.sellToken, transaction.sellingAmount);
     return depositResult;
+  };
+
+  // Deposit funds to sonic to be able to use swap function
+  private func _SwapExactTokensForTokens(
+    userPosition : Position,
+    transaction : Transaction,
+    sonicCanister : sonicActor,
+  ) : async TxReceipt {
+    let sellToken = Principal.toText(userPosition.tokens.sellToken);
+    let buyToken = Principal.toText(userPosition.tokens.buyToken);
+    let swapResult : TxReceipt = await sonicCanister.swapExactTokensForTokens(transaction.sellingAmount, 0, [sellToken, buyToken], userPosition.managerCanister, Time.now() + 300000000000);
+    return swapResult;
   };
 
   // Cron timer function

@@ -6,6 +6,8 @@ module {
     public type sonicActor = actor {
         initiateICRC1Transfer : shared () -> async Blob;
         deposit : shared (Principal, Nat) -> async TxReceipt;
+        swapExactTokensForTokens : shared (Nat, Nat, [Text], Principal, Int) -> async TxReceipt;
+        withdraw : shared (Principal, Nat) -> async TxReceipt;
 
     };
     public func _getSonicActor(sonicCanisterId : Principal) : sonicActor {
