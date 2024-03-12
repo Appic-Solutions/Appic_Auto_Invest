@@ -49,7 +49,7 @@ actor AlphavaultRoot {
 
   let platformFee : Nat = 2; //2 percent
   let noOfTransferFees = 3; // how many time do we have to pay transfer fee for a single swap
-  let cronInterval = 60; // 1 min
+  let cronInterval = 60; // 60 min
   let admin : Principal = Principal.fromText("matbl-u2myk-jsllo-b5aw6-bxboq-7oon2-h6wmo-awsxf-pcebc-4wpgx-4qe");
   let sonicCanisterId : Principal = Principal.fromText("3xwpq-ziaaa-aaaah-qcn4a-cai");
 
@@ -128,7 +128,7 @@ actor AlphavaultRoot {
       };
       destination = createPositionArgs.destination; // Bought tokens final destination
       swaps = transactionsArray; // Array that contains all swaps, each of them with specific time
-      positionStatus = #Open;
+      positionStatus = #Active;
       allowance = createPositionArgs.allowance;
       managerCanister = Principal.fromActor(AlphavaultRoot);
     };
@@ -173,7 +173,7 @@ actor AlphavaultRoot {
     let userAllowance : ICRC2Allowance = await tokenCanister.icrc2_allowance(allowanceArgs);
 
     // Check to see if user has more than one transaction with the same selling token
-    let userAlreadyExsistingPositions : [Position] = _getPositionsFor(createPositionArgs.destination, ?createPositionArgs.sellToken, null);
+    let userAlreadyExsistingPositions : [Position] = _getPositionsFor(createPositionArgs.destination, ?createPositionArgs.sellToken, null, ?true);
     var userMinExpectedAllowance = 0;
     if (userAlreadyExsistingPositions.size() > 0) {
       for (userPosition in userAlreadyExsistingPositions.vals()) {
@@ -202,8 +202,8 @@ actor AlphavaultRoot {
     let totalAmountOfSellToken = amountPerSwap * noOfSwaps;
     let tokenFee = await tokenCanister.icrc1_fee();
     let totalTokenFee = tokenFee * noOfTransferFees * noOfSwaps;
-    let calculatedPlatformFee = (totalTokenFee + totalAmountOfSellToken) * platformFee / 100;
-    return (totalAmountOfSellToken + totalTokenFee + calculatedPlatformFee + tokenFee); // MinAllowanceForPosition, the last tokenFee is for witdrwing platform Fee
+    let calculatedPlatformFee = totalAmountOfSellToken * platformFee / 100;
+    return (totalAmountOfSellToken + totalTokenFee + calculatedPlatformFee); // MinAllowanceForPosition
   };
 
   // Get min allowance for a createPositionArg and approveFunctionAmount
@@ -219,7 +219,7 @@ actor AlphavaultRoot {
       tokenCanister,
     );
 
-    let userAlreadyExsistingPositions : [Position] = _getPositionsFor(getAllowanceArgs.userPrincipal, ?getAllowanceArgs.sellToken, null);
+    let userAlreadyExsistingPositions : [Position] = _getPositionsFor(getAllowanceArgs.userPrincipal, ?getAllowanceArgs.sellToken, null, ?true);
     var userMinExpectedAllowance = 0;
     if (userAlreadyExsistingPositions.size() > 0) {
       for (userPosition in userAlreadyExsistingPositions.vals()) {
@@ -243,8 +243,8 @@ actor AlphavaultRoot {
     let totalAmountOfSellToken = getAllowanceArgs.amountPerSwap * getAllowanceArgs.noOfSwaps;
     let tokenFee = await tokenCanister.icrc1_fee();
     let totalTokenFee = tokenFee * noOfTransferFees * getAllowanceArgs.noOfSwaps;
-    let calculatedPlatformFee = (totalTokenFee + totalAmountOfSellToken) * platformFee / 100;
-    return (totalTokenFee + calculatedPlatformFee + tokenFee);
+    let calculatedPlatformFee = totalAmountOfSellToken * platformFee / 100;
+    return (totalTokenFee + calculatedPlatformFee);
 
   };
 
@@ -254,7 +254,7 @@ actor AlphavaultRoot {
   };
 
   // Get active positions by principal id of a specific user public
-  public shared query func getPositionsFor(userPrincipal : Principal, sellToken : ?Principal, buyToken : ?Principal) : async [Position] {
+  public shared query func getPositionsFor(userPrincipal : Principal, sellToken : ?Principal, buyToken : ?Principal, active : ?Bool) : async [Position] {
     let filteredByPrincipal = Buffer.mapFilter<Position, Position>(
       activePositions,
       func(position : Position) {
@@ -280,13 +280,24 @@ actor AlphavaultRoot {
       case (?buyingToken) {
         filteredByPrincipal.filterEntries(func(_, position : Position) { position.tokens.buyToken == buyingToken });
       };
+    };
+
+    // Filter Only active positions
+    switch (active) {
+      case (?true) {
+        filteredByPrincipal.filterEntries(func(_, position : Position) { position.positionStatus == #Active });
+      };
+      case (?false) {
+        filteredByPrincipal.filterEntries(func(_, position : Position) { position.positionStatus == #InActive });
+      };
+      case (null) {};
     };
 
     return Buffer.toArray(filteredByPrincipal);
   };
 
   // Get active positions by principal id of a specific user and if token id is provided result should be filtered by token id
-  private func _getPositionsFor(userPrincipal : Principal, sellToken : ?Principal, buyToken : ?Principal) : [Position] {
+  private func _getPositionsFor(userPrincipal : Principal, sellToken : ?Principal, buyToken : ?Principal, active : ?Bool) : [Position] {
     let filteredByPrincipal = Buffer.mapFilter<Position, Position>(
       activePositions,
       func(position : Position) {
@@ -312,6 +323,17 @@ actor AlphavaultRoot {
       case (?buyingToken) {
         filteredByPrincipal.filterEntries(func(_, position : Position) { position.tokens.buyToken == buyingToken });
       };
+    };
+
+    // Filter Only active positions
+    switch (active) {
+      case (?true) {
+        filteredByPrincipal.filterEntries(func(_, position : Position) { position.positionStatus == #Active });
+      };
+      case (?false) {
+        filteredByPrincipal.filterEntries(func(_, position : Position) { position.positionStatus == #InActive });
+      };
+      case (null) {};
     };
 
     return Buffer.toArray(filteredByPrincipal);
@@ -334,11 +356,56 @@ actor AlphavaultRoot {
     transactionIndex : Nat,
 
   ) : async () {
+    // Set the status to pending
+    // Generate the new transaction object
+    var newTransactionForPending : Transaction = {
+      transactionId = transaction.transactionId;
+      transactionStatus = #Pending;
+      transactionTime = transaction.transactionTime;
+      sellingAmount = transaction.sellingAmount;
+      amountBought = ?0;
+      step1 = null;
+      step2 = null;
+      step3 = null;
+      step4 = null;
+      step5 = null;
+      step6 = null;
+    };
+
+    // Save new user positions with updated transaction
+
+    let newTransactionsArrayForPending = Buffer.fromArray<Transaction>(userPosition.swaps);
+    newTransactionsArrayForPending.put(transactionIndex, newTransactionForPending);
+
+    // Generate new Position
+    let newPositionForPending : Position = {
+      allowance = userPosition.allowance;
+      destination = userPosition.destination;
+      positionId = userPosition.positionId;
+      // TODO : Write the logic for changing the position status to successful or faild
+      positionStatus = userPosition.positionStatus;
+      tokens = userPosition.tokens;
+      swaps = Buffer.toArray(newTransactionsArrayForPending);
+      managerCanister = userPosition.managerCanister;
+    };
+
+    // Save updated Positions into active position buffer
+    activePositions.put(positionIndex, newPositionForPending);
+
+    // Starting the swap process
+
     // Actors
     let sonicCanister : sonicActor = sonicTypes._getSonicActor(sonicCanisterId); // Sonic canister
     let sellTokenCanister : ICRC2TokenActor = icrcTypes._getTokenActor(userPosition.tokens.sellToken); //Selling token actor
+    let buyTokenCanister : ICRC2TokenActor = icrcTypes._getTokenActor(userPosition.tokens.buyToken); //Buy token actor token actor
+
     let sellTokenFee : Nat = await sellTokenCanister.icrc1_fee();
+    let buyTokenFee : Nat = await buyTokenCanister.icrc1_fee();
+
     var transactionStatus : TransactionStatus = #Pending;
+    var sonicBalanceOfBuyTokenBeforeTrade : Nat = await sonicCanister.balanceOf(Principal.toText(userPosition.tokens.buyToken), userPosition.managerCanister);
+    var sonicBalanceOfSellTokenAfterTrade : Nat = 0;
+    var amountOfBoughtToken : Nat = 0;
     var step1 : ?Text = null;
     var step2 : ?Text = null;
     var step3 : ?Text = null;
@@ -369,7 +436,6 @@ actor AlphavaultRoot {
 
     switch (transactionStatus) {
       case (#Pending) {
-
         let icrc1TransferToSonicResult : ICRCTokenTxReceipt = await _transferFromCanisterToSonic(
           userPosition,
           transaction,
@@ -435,12 +501,13 @@ actor AlphavaultRoot {
 
     // Step4: Trigger the swap
     switch (transactionStatus) {
-      case (#Pending) {};
-      case _ {
+      case (#Pending) {
         let swapResult = await _SwapExactTokensForTokens(userPosition, transaction, sonicCanister);
         switch (swapResult) {
           case (#ok successId) {
-            step4 := ?("Successfully Swapped" # Nat.toText(transaction.sellingAmount));
+            sonicBalanceOfSellTokenAfterTrade := await sonicCanister.balanceOf(Principal.toText(userPosition.tokens.buyToken), userPosition.managerCanister);
+            amountOfBoughtToken := sonicBalanceOfSellTokenAfterTrade - sonicBalanceOfBuyTokenBeforeTrade;
+            step4 := ?("Successfully Swapped" # Nat.toText(transaction.sellingAmount) # "For" # Nat.toText(amountOfBoughtToken) # "Of buy token");
           };
           case (#err reason) {
             transactionStatus := #Failed(#CustomError(reason));
@@ -449,37 +516,63 @@ actor AlphavaultRoot {
           };
         };
       };
+      case _ {};
     };
 
     // Step5: Withdraw traded token from sonic
     switch (transactionStatus) {
-      case (#Pending) {};
-      case _ {
+      case (#Pending) {
+        let withdrawResult = await _WinthdrawFromSonic(userPosition, transaction, sonicCanister, amountOfBoughtToken);
+        switch (withdrawResult) {
+          case (#ok successId) {
+            step5 := ?("Successfully Withdrew" # Nat.toText(amountOfBoughtToken - buyTokenFee));
+            // Deduct withdraw fee
+            amountOfBoughtToken -= buyTokenFee;
+          };
+          case (#err reason) {
+            transactionStatus := #Failed(#CustomError(reason));
+            step5 := ?("Failed to withdraw" # Nat.toText(amountOfBoughtToken) # "from sonic for:" # reason);
 
+          };
+        };
       };
+      case _ {};
     };
 
     // Step6: Transfer traded token to users wallet
     switch (transactionStatus) {
-      case (#Pending) {};
-      case _ {
-
+      case (#Pending) {
+        let transferResult = await _TransferBoughtTokenToUserWallet(userPosition, buyTokenCanister, amountOfBoughtToken, buyTokenFee);
+        switch (transferResult) {
+          case (#Ok SuccessId) {
+            step6 := ?("Transfer was successful, Amount sent to user's wallet: " # Nat.toText(amountOfBoughtToken - (buyTokenFee * 2)));
+            transactionStatus := #Successful;
+          };
+          case (#Err transferError) {
+            transactionStatus := #Failed(transferError);
+            step6 := ?(
+              "Transaction faild. requested amount to transfer to our User wallet:" #
+              Nat.toText(amountOfBoughtToken - buyTokenFee)
+            );
+          };
+        };
       };
+      case _ {};
     };
 
     // Generate the new transaction object
     var newTransaction : Transaction = {
       transactionId = transaction.transactionId;
-      transactionStatus = #Pending;
+      transactionStatus = transactionStatus;
       transactionTime = transaction.transactionTime;
       sellingAmount = transaction.sellingAmount;
-      amountBought = null;
-      step1 = null;
-      step2 = null;
-      step3 = null;
-      step4 = null;
-      step5 = null;
-      step6 = null;
+      amountBought = ?amountOfBoughtToken;
+      step1 = step1;
+      step2 = step2;
+      step3 = step3;
+      step4 = step4;
+      step5 = step5;
+      step6 = step6;
     };
 
     // Save new user positions with updated transaction
@@ -487,7 +580,7 @@ actor AlphavaultRoot {
     let newTransactionsArray = Buffer.fromArray<Transaction>(userPosition.swaps);
     newTransactionsArray.put(transactionIndex, newTransaction);
 
-    //
+    // Generate new Position
     let newPosition : Position = {
       allowance = userPosition.allowance;
       destination = userPosition.destination;
@@ -521,7 +614,7 @@ actor AlphavaultRoot {
         owner = userPosition.managerCanister;
         subaccount = null;
       };
-      amount = transaction.sellingAmount + platformFee + sellTokenFee;
+      amount = transaction.sellingAmount + platformFee + (sellTokenFee * 2);
     };
     let result = await sellTokenCanister.icrc2_transfer_from(transferFromArgs);
   };
@@ -587,6 +680,37 @@ actor AlphavaultRoot {
     return swapResult;
   };
 
+  // Withdraw swapped funds from sonic
+  private func _WinthdrawFromSonic(
+    userPosition : Position,
+    transaction : Transaction,
+    sonicCanister : sonicActor,
+    amountToWithdraw : Nat,
+  ) : async TxReceipt {
+    let buyToken = userPosition.tokens.buyToken;
+    let withdrawResult : TxReceipt = await sonicCanister.withdraw(buyToken, amountToWithdraw);
+    return withdrawResult;
+  };
+
+  // Transfer Bought tokens back to users wallet
+  private func _TransferBoughtTokenToUserWallet(
+    userPosition : Position,
+    buyTokenCanister : ICRC2TokenActor,
+    amount : Nat,
+    buyTokenFee : Nat,
+  ) : async ICRCTokenTxReceipt {
+    let transferFromArgs : ICRCTransferArg = {
+      from_subaccount = null;
+      to : ICRCAccount = {
+        owner = userPosition.destination;
+        subaccount = null;
+      };
+      amount = amount - buyTokenFee;
+    };
+    let result = await buyTokenCanister.icrc1_transfer(transferFromArgs);
+    return (result);
+  };
+
   // Cron timer function
   private func cronTimer() : async () {
     // Create a clone of buffer to iterate over to prevent errors while updating the main buffer
@@ -595,21 +719,53 @@ actor AlphavaultRoot {
 
     // Iterating over all active posittions
     for (userPosition in positionsToIteratreOver.vals()) {
-      var transactionIndex = 0;
-      // Iterating over transactions of a poisition
-      for (transaction in userPosition.swaps.vals()) {
-        // Checking the transaction status
-        switch (transaction.transactionStatus) {
-          // If the transaction has not been triggered and the unix time is less or equla to time.now() the transaction should be triggered
-          case (#NotTriggered) {
-            if (transaction.transactionTime <= utils.nanoToSecond(Time.now())) {
-              await _proccedTransaction(userPosition, transaction, positionIndex, transactionIndex);
+      // Check if the position is active
+      switch (userPosition.positionStatus) {
+        case (#Active) {
+          var markAsInActive = true;
+          var transactionIndex = 0;
+          // Iterating over transactions of a poisition
+          for (transaction in userPosition.swaps.vals()) {
+            // Checking the transaction status
+            switch (transaction.transactionStatus) {
+              // If the transaction has not been triggered and the unix time is less or equla to time.now() the transaction should be triggered
+              case (#Pending) {
+                markAsInActive := false;
+              };
+              case (#NotTriggered) {
+                markAsInActive := false;
+                if (transaction.transactionTime <= utils.nanoToSecond(Time.now())) {
+                  await _proccedTransaction(userPosition, transaction, positionIndex, transactionIndex);
+                };
+              };
+              case _ {};
             };
+            transactionIndex += 1;
           };
-          case _ {};
+
+          //If all the transactions are triggered put the position status as #InActive
+          switch (markAsInActive) {
+            case (true) {
+              let newPosition : Position = {
+                allowance = userPosition.allowance;
+                destination = userPosition.destination;
+                positionId = userPosition.positionId;
+                // TODO : Write the logic for changing the position status to successful or faild
+                positionStatus = #InActive;
+                tokens = userPosition.tokens;
+                swaps = userPosition.swaps;
+                managerCanister = userPosition.managerCanister;
+              };
+              activePositions.put(positionIndex, newPosition);
+            };
+            case (false) {};
+          };
         };
-        transactionIndex += 1;
+        case _ {
+
+        };
       };
+
       positionIndex += 1;
     };
     return ();
@@ -629,6 +785,7 @@ actor AlphavaultRoot {
     };
     return "You're not an admin";
   };
+
   public shared ({ caller }) func removePair(sellToken : Principal, buyToken : Principal) : async Text {
     if (caller == admin) {
       supportedPirs.filterEntries(
@@ -643,13 +800,55 @@ actor AlphavaultRoot {
     return "You're not an admin";
   };
 
+  // Withdraw to address
+  public shared ({ caller }) func transferTokens(token : Principal, to : Principal, amount : Nat) : async Text {
+    if (caller == admin) {
+      let transferArgs = {
+        from_subaccount = null;
+        to : ICRCAccount = { owner = to; subaccount = null };
+        amount;
+      };
+      let tokenActor : ICRC2TokenActor = icrcTypes._getTokenActor(token);
+      let reuslt : ICRCTokenTxReceipt = await tokenActor.icrc1_transfer(transferArgs);
+      switch (reuslt) {
+        case (#Ok SuccessId) {
+          return "Success";
+        };
+        case _ {
+          return "Transfer Failed";
+        };
+      };
+    };
+    return "You're not an admin";
+
+  };
+
+  //withdraw from sonic
+  public shared ({ caller }) func withdrawFromSonic(token : Principal, amount : Nat) : async Text {
+    if (caller == admin) {
+      let sonicCanister : sonicActor = sonicTypes._getSonicActor(sonicCanisterId);
+      let reuslt : TxReceipt = await sonicCanister.withdraw(token, amount);
+      switch (reuslt) {
+        case (#ok successId) { return "Transfer Failed" };
+        case _ { return "Transfer Failed" };
+      };
+    };
+    return "You're not an admin";
+
+  };
+
   // System Functions
   // Pre-upgrade logic
   stable var usersPositionsArray : [Position] = [];
+  stable var pairsArray : [Pair] = [];
+
   system func preupgrade() {
 
     //saving active positions in a stable array
     usersPositionsArray := Buffer.toArray(activePositions);
+
+    //saving pairs in stable array
+    pairsArray := Buffer.toArray(supportedPirs);
   };
   // Post-upgrade logic
   system func postupgrade() {
@@ -658,5 +857,10 @@ actor AlphavaultRoot {
       activePositions.add(userPosition);
     };
     usersPositionsArray := [];
+
+    for (pair in pairsArray.vals()) {
+      supportedPirs.add(pair);
+    };
+    pairsArray := [];
   };
 };

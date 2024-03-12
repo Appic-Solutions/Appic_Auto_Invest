@@ -28,8 +28,8 @@ module {
 
     //Public Type for specifying the status of Auto Invest Position
     public type PositionStatus = {
-        #Open;
-        #Successful;
+        #Active;
+        #InActive;
         #Deleted;
     };
 
