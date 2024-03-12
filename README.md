@@ -1,8 +1,8 @@
 # Alphavault auto investment for IC (Under development)
 
+<img src="https://github.com/AlphaVault-Org/Alphavault_Icp/blob/main/images/icpDigram%20(2).svg?raw=true">
 <img src="https://github.com/AlphaVault-Org/Alphavault_Icp/blob/main/images/icp%20screenshot%20for%20auto%20investment%20.png?raw=true"/>
 <img src="https://github.com/AlphaVault-Org/Alphavault_Icp/blob/main/images/Add%20token%20black.png?raw=true"/>
-<img src="https://github.com/AlphaVault-Org/Alphavault_Icp/blob/main/images/icpDigram%20(2).svg?raw=true">
 
 ## Components
 
