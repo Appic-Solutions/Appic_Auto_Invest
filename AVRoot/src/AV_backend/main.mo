@@ -49,7 +49,7 @@ actor AlphavaultRoot {
 
   let platformFee : Nat = 2; //2 percent
   let noOfTransferFees = 3; // how many time do we have to pay transfer fee for a single swap
-  let cronInterval = 3600; // 60 min
+  let cronInterval = 60; // 60 min
   let admin : Principal = Principal.fromText("matbl-u2myk-jsllo-b5aw6-bxboq-7oon2-h6wmo-awsxf-pcebc-4wpgx-4qe");
   let sonicCanisterId : Principal = Principal.fromText("3xwpq-ziaaa-aaaah-qcn4a-cai");
 

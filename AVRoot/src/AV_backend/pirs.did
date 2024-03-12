@@ -16,7 +16,7 @@
                     step6 = opt "Transfer was successful";
                     amountBought = opt 24527141;
                     sellingAmount = 5000;
-                    transactionStatus = variant { Successful };
+                    transactionStatus = variant { Pending };
                     transactionId = 0;
                 };
                 record {
@@ -46,7 +46,7 @@
                     step6 = opt "Transfer was successful";
                     amountBought = opt 24526423;
                     sellingAmount = 5000;
-                    transactionStatus = variant { Successful };
+                    transactionStatus = variant { Pending };
                     transactionId = 2;
                 };
             };
@@ -63,50 +63,50 @@
             positionId = 0;
             swaps = vec {
                 record {
-                    transactionTime = 1710111360;
-                    step1 = opt "Success code:10815941";
-                    step2 = opt "Success code:10815943";
-                    step3 = opt "Successfully deposited 24000000 to sonic canister ";
-                    step4 = opt "Successfully Swapped24000000For4861Of buy token";
-                    step5 = opt "Successfully Withdrew4851";
-                    step6 = opt "Transfer was successful, Amount sent to user's wallet: 4831";
-                    amountBought = opt 4851;
-                    sellingAmount = 24000000;
+                    transactionTime = 1710162900;
+                    step1 = opt "Success code:1292596";
+                    step2 = opt "Success code:1292597";
+                    step3 = opt "Successfully deposited 5500 to sonic canister ";
+                    step4 = opt "Successfully Swapped5500For27579012Of buy token";
+                    step5 = opt "Successfully Withdrew27569012";
+                    step6 = opt "Transfer was successful, Amount sent to user's wallet: 27549012";
+                    amountBought = opt 27569012;
+                    sellingAmount = 5500;
                     transactionStatus = variant { Successful };
                     transactionId = 0;
                 };
                 record {
-                    transactionTime = 1710111480;
-                    step1 = opt "Success code:10815954";
-                    step2 = opt "Success code:10815956";
-                    step3 = opt "Successfully deposited 24000000 to sonic canister ";
-                    step4 = opt "Successfully Swapped24000000For4837Of buy token";
-                    step5 = opt "Successfully Withdrew4827";
-                    step6 = opt "Transfer was successful, Amount sent to user's wallet: 4807";
-                    amountBought = opt 4827;
-                    sellingAmount = 24000000;
+                    transactionTime = 1710163200;
+                    step1 = opt "Success code:1292602";
+                    step2 = opt "Success code:1292603";
+                    step3 = opt "Successfully deposited 5500 to sonic canister ";
+                    step4 = opt "Successfully Swapped5500For27577335Of buy token";
+                    step5 = opt "Successfully Withdrew27567335";
+                    step6 = opt "Transfer was successful, Amount sent to user's wallet: 27547335";
+                    amountBought = opt 27567335;
+                    sellingAmount = 5500;
                     transactionStatus = variant { Successful };
                     transactionId = 1;
                 };
                 record {
-                    transactionTime = 1710111600;
-                    step1 = opt "Success code:10815979";
-                    step2 = opt "Success code:10815980";
-                    step3 = opt "Successfully deposited 24000000 to sonic canister ";
-                    step4 = opt "Successfully Swapped24000000For4836Of buy token";
-                    step5 = opt "Successfully Withdrew4826";
-                    step6 = opt "Transfer was successful, Amount sent to user's wallet: 4806";
-                    amountBought = opt 4826;
-                    sellingAmount = 24000000;
-                    transactionStatus = variant { Successful };
+                    transactionTime = 1710163380;
+                    step1 = null;
+                    step2 = null;
+                    step3 = null;
+                    step4 = null;
+                    step5 = null;
+                    step6 = null;
+                    amountBought = null;
+                    sellingAmount = 5500;
+                    transactionStatus = variant { NotTriggered };
                     transactionId = 2;
                 };
             };
             tokens = record {
-                sellToken = principal "ryjl3-tyaaa-aaaaa-aaaba-cai";
-                buyToken = principal "mxzaz-hqaaa-aaaar-qaada-cai";
+                sellToken = principal "mxzaz-hqaaa-aaaar-qaada-cai";
+                buyToken = principal "ryjl3-tyaaa-aaaaa-aaaba-cai";
             };
-            allowance = 73530000;
+            allowance = 16920;
         };
     }
 );
