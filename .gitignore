@@ -22,3 +22,17 @@ dist/
 
 # environment variables
 .env
+
+# generated files
+src/declarations/
+
+# rust
+target/
+
+# frontend code
+/frontend/node_modules/
+dist/
+
+# environment variables
+.env
+
