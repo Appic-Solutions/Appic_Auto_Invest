@@ -1,0 +1,108 @@
+.walletNotConnected {
+    background-color: $light-box-bg;
+    margin-top: 1rem;
+    border-radius: 15px;
+    padding: 1.5rem 1rem;
+    box-shadow: 0 2px 26px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    svg {
+        width: 60%;
+    }
+    h2 {
+        color: $light-primary;
+        font-family: Poppins;
+        font-size: 17px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+    }
+    p {
+        color: $light-primary;
+        font-family: Poppins;
+        font-size: 13px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        text-align: center;
+    }
+    .buttonsContainer{
+        display: flex;
+        gap: 2rem;
+        button{
+            @include button-responsive(mobile);
+            padding:1rem;
+            border-radius: 10px;
+
+        }
+    }
+    &.dark {
+        background-color: $dark-box-bg;
+
+        box-shadow: 0 2px 26px rgba(255, 255, 255, 0.1);
+
+        svg {
+            width: 60%;
+        }
+        h2 {
+            color: $dark-primary;
+        }
+        p {
+            color: $dark-primary;
+        }
+    }
+    
+}
+
+
+@media screen and (min-width:1024px){
+    .walletNotConnected {
+        background-color: $light-box-bg;
+        margin-top: 2rem;
+        border-radius: 15px;
+        padding: 3rem 5rem;
+        box-shadow: 0 2px 26px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        svg {
+            width: 60%;
+        }
+        h2 {
+            color: $light-primary;
+            font-family: Poppins;
+            font-size: 20px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: normal;
+        }
+        p {
+            color: $light-primary;
+            font-family: Poppins;
+            font-size: 17px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: normal;
+            text-align: center;
+        }
+        &.dark {
+            background-color: $dark-box-bg;
+    
+            box-shadow: 0 2px 26px rgba(255, 255, 255, 0.1);
+    
+            svg {
+                width: 60%;
+            }
+            h2 {
+                color: $dark-primary;
+            }
+            p {
+                color: $dark-primary;
+            }
+        }
+    }
+    
+}

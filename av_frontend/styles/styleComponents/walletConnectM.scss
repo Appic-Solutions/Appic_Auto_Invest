@@ -1,0 +1,279 @@
+.walletConnectM {
+    display: none;
+    width: 100%;
+    h3 {
+        @include text(mobile);
+        font-weight: 500;
+        font-size: 13px;
+        margin-bottom: 1rem;
+        color: $light-primary;
+    }
+    .buttons {
+        display: grid;
+        grid-template-columns: 1fr 2fr 1fr;
+        grid-template-rows: 6vh;
+        gap: 1rem;
+        justify-items: center;
+        align-items: center;
+        .chain {
+            background-color: $light-box-bg;
+            height: 100%;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.6rem 1rem;
+            border-radius: 15px;
+            img {
+                width: 25px;
+            }
+            svg {
+                stroke: #000000 !important;
+            }
+        }
+        .address {
+            background-color: $light-box-bg;
+            height: 100%;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            padding: 0.6rem 1rem;
+            border-radius: 15px;
+            color: $light-primary;
+            @include text(mobile);
+            font-size: 14px;
+            font-weight: 400;
+
+            img {
+                width: 25px;
+            }
+            svg {
+                stroke: #000000 !important;
+            }
+        }
+        .wallet {
+            background-color: $light-box-bg;
+            height: 100%;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.6rem 1rem;
+            border-radius: 15px;
+            img {
+                width: 25px;
+            }
+            svg {
+                stroke: #000000 !important;
+            }
+        }
+    }
+
+    &.dark {
+        h3 {
+            color: $dark-primary;
+        }
+        .buttons {
+            .chain {
+                background-color: $dark-box-bg;
+
+                img {
+                }
+                svg {
+                    stroke: #fff !important;
+                }
+            }
+            .address {
+                background-color: $dark-box-bg;
+
+                color: $dark-primary;
+                @include text(mobile);
+
+                img {
+                }
+                svg {
+                    stroke: #fff !important;
+                }
+            }
+            .wallet {
+                background-color: $dark-box-bg;
+
+                img {
+                }
+                svg {
+                    stroke: #fff !important;
+                }
+            }
+        }
+    }
+}
+
+.chainList {
+    padding: 0 2rem;
+    .chain {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 2rem;
+        align-items: center;
+        .chain__information {
+            width: 50%;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            img {
+                width: 30px;
+            }
+            .chain__description {
+                h3 {
+                    @include secondary-titles-responsive(mobile);
+                    color: $light-primary;
+                }
+                p {
+                    @include text(mobile);
+                    color: $light-primary;
+                }
+            }
+        }
+        svg {
+            font-size: 23px;
+            color: #00de3b;
+        }
+    }
+    &.dark {
+        .chain {
+            .chain__information {
+                img {
+                }
+                .chain__description {
+                    h3 {
+                        @include secondary-titles-responsive(mobile);
+                        color: $dark-primary;
+                    }
+                    p {
+                        @include text(mobile);
+                        color: $dark-primary;
+                    }
+                }
+            }
+            svg {
+                color: #00de3b;
+            }
+        }
+    }
+}
+
+.walletModal {
+    padding: 0 2rem;
+    margin-top: 2rem;
+    display: flex;
+    justify-content: space-between;
+    .wallet__info {
+        display: flex;
+        gap: 2rem;
+        align-items: center;
+        img {
+            width: 25px;
+        }
+        h3 {
+            @include secondary-titles-responsive(mobile);
+            color: $light-primary;
+        }
+    }
+    .wallet__actions {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+        .wallet__check {
+            color: #00de3b;
+            font-size: 20px;
+        }
+        .disconnectWallet{
+            background: none;
+        }
+        .wallet__disconnect {
+            color: red;
+            font-size: 20px;
+        }
+    }
+    &.dark {
+        .wallet__info {
+            img {
+            }
+            h3 {
+                color: $dark-primary;
+            }
+        }
+        .wallet__actions {
+            .wallet__check {
+                color: #00de3b;
+            }
+            .wallet__disconnect {
+                color: red;
+            }
+        }
+    }
+}
+
+
+.changeWallet {
+    padding: 0 2rem;
+    .walletOption {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 2rem;
+        align-items: center;
+        .wallet__information {
+            width: 50%;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            img {
+                width: 30px;
+            }
+            .wallet__description {
+                h3 {
+                    @include secondary-titles-responsive(mobile);
+                    color: $light-primary;
+                }
+                p {
+                    @include text(mobile);
+                    color: $light-primary;
+                }
+            }
+        }
+        svg {
+            font-size: 23px;
+            color: #00de3b;
+        }
+    }
+    &.dark {
+        .walletOption {
+            .wallet__information {
+                img {
+                }
+                .wallet__description {
+                    h3 {
+                        @include secondary-titles-responsive(mobile);
+                        color: $dark-primary;
+                    }
+                    p {
+                        @include text(mobile);
+                        color: $dark-primary;
+                    }
+                }
+            }
+            svg {
+                color: #00de3b;
+            }
+        }
+    }
+}
+
+
+@media screen and (min-width:1024px){
+    .walletConnectM{
+        display: none;
+    }
+}

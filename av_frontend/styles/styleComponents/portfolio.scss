@@ -1,0 +1,1281 @@
+.portfolio {
+    padding-top: 0;
+
+    .portfolio__box {
+        position: relative;
+        background-color: $light-box-bg;
+        box-shadow: 0 2px 26px rgba(0, 0, 0, 0.1);
+        border-radius: 15px;
+        padding: 1.5rem 1rem;
+
+        .refreshButton {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 20px;
+            height: 20px;
+        }
+        // .collapseContainer{
+            
+        //     display: flex;
+        //     justify-content: space-between;
+        //     align-items: center;
+        //     cursor: pointer;
+        //     // gap: 2rem;
+        //     // .totalbalance__container {
+        //     //     width: 30%;
+        //     //     display: grid;
+        //     //     grid-template-columns: 1fr;
+        //     //     align-content: flex-start;
+                
+               
+        //         .description {
+        //             display: flex;
+        //             align-items: center;
+        //             margin-bottom: 0rem;
+                   
+
+        //             p {
+        //                 font-weight: 500;
+        //                 font-size: 1.4rem;
+        //                 color: $light-primary;
+        //                 padding-right: 0.5rem;
+        //             }
+
+        //             .chainIMG {
+        //                 width: 15px;
+        //                 height: 15px;
+        //             }
+        //         }
+
+        //         .balance {
+        //             display: flex;
+        //             margin-bottom: 1rem;
+
+        //             h1 {
+        //                 font-size: 1.5rem;
+        //                 font-weight: 700;
+        //                 color: $light-primary;
+        //             }
+
+        //             span {
+        //                 font-size: 1.1rem;
+        //                 font-weight: 700;
+        //                 margin-right: 0.2rem;
+        //                 margin-top: 0.1rem;
+        //                 color: $light-primary;
+        //             }
+        //         }
+        //         img{
+        //             width:20px;
+        //             height:20px;
+        //         }
+          
+        // }
+        .collapseContainer{
+          display: none;
+        }
+        .addressActions {
+            margin: 1rem 0;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+
+            .avatarImage {
+                width: 36px;
+                height: 36px;
+                background: linear-gradient(45deg,
+                        rgba(131, 58, 180, 1) 0%,
+                        rgba(253, 29, 29, 1) 50%,
+                        rgba(252, 176, 69, 1) 100%);
+                border-radius: 50%;
+            }
+
+            .addressContainer {
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+
+                .address {
+                    font-size: 1.3rem;
+                    font-weight: 600;
+                }
+
+                .copyAddress {
+                    img {
+                        width: 20px;
+                        height: 20px;
+                    }
+                }
+            }
+        }
+        .upperContainer {
+            display: block;
+            .walletActions {
+
+                .actions {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr 1fr 1fr;
+                    width: 100%;
+                    justify-content: space-between;
+                    margin: 1.5rem 0;
+
+                    .action {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        gap: 0.5rem;
+
+                        // @include button-responsive(mobile);
+                        .imgContainer {
+                            padding: 0.5rem;
+                            border-radius: 50%;
+                            border: 1px solid $light-secondary;
+
+                            svg {
+                                fill: $light-secondary;
+                                height: 15px;
+                                width: 15px;
+                            }
+                        }
+
+                        p {
+                            font-size: 1.2rem;
+                            font-weight: 700;
+                            color: $light-primary;
+                        }
+                    }
+                }
+            }
+
+            .portfolio__totalBalance {
+                margin-top: 1.5rem;
+                width: 100%;
+              
+
+                .totalbalance__container {
+                    display: grid;
+                    grid-template-columns: auto auto auto;
+                    justify-content: space-around;
+                   
+                    // display: flex;
+                   
+                    
+
+                    .description {
+                        display: flex;
+                        align-items: center;
+                        gap: 0.5rem;
+                        margin-bottom: 0.5rem;
+                        margin-top: 0.5rem;
+
+                        p {
+                            font-weight: 500;
+                            font-size: 1rem;
+                            color: $light-primary;
+                        }
+
+                        .chainIMG {
+                            width: 12px;
+                            height: 12px;
+                        }
+                    }
+
+                    .balance {
+                        display: flex;
+
+                        h1 {
+                            font-size: 1.2rem;
+                            font-weight: 700;
+                            color: $light-primary;
+                        }
+
+                        span {
+                            font-size: 1rem;
+                            font-weight: 700;
+                            margin-right: 0.2rem;
+                            margin-top: 0.1rem;
+                            color: $light-primary;
+                        }
+                    }
+                }
+                .chart_container{
+                    width: 100%;
+                    display: none;
+                    justify-content: center;
+                    align-items: center;
+                    margin-top: 5rem;
+                    margin-bottom: 1rem;
+                    .chart{
+                        width: 100%;
+                        height: 100%;
+                    
+                }
+            }
+        }
+    }
+
+        .chains {
+            display: none;
+            grid-template-columns: 1fr 1fr;
+            width: 100%;
+            row-gap: 0.5rem;
+            column-gap: 0.5rem;
+            justify-content: space-between;
+            margin-top: 0rem;
+
+            .chain {
+                display: flex;
+                border: 1px solid #d9d9d9;
+                align-items: center;
+                gap: 0.2rem;
+                border-radius: 10px;
+                padding: 0.5rem 0;
+                padding-left: 0.5rem;
+                cursor: pointer;
+                justify-content: space-between;
+                overflow: hidden;
+
+                &:hover {
+                    background-color: $light-bg;
+                }
+
+                &.active {
+                    border: 1px solid $light-secondary;
+                    background-color: #f3f3f3;
+                    color: $light-secondary;
+                }
+
+                .info {
+                    width: 30%;
+
+                    h1 {
+                        font-size: 1rem;
+                        font-weight: 700;
+                        color: $light-primary;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                        overflow: hidden;
+                    }
+                }
+
+                .seprator {
+                    height: 100%;
+                    width: 1px;
+                    background-color: #d9d9d9;
+                }
+
+                .imageContainer {
+                    width: 20%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 0.5rem;
+
+                    img {
+                        width: 20px;
+                        height: 20px;
+                    }
+                }
+
+                p {
+                    font-size: 1rem;
+                    font-weight: 500;
+                    color: $light-primary;
+                    padding: 0.8rem;
+                }
+            }
+        }
+        .collapseCard{
+             display: none;
+     }
+       
+    }
+     
+
+
+    &.dark {
+        .portfolio__box {
+            background-color: $dark-box-bg;
+            box-shadow: 0 2px 26px rgba(255, 255, 255, 0.1);
+
+            .refreshButton {}
+
+            .upperContainer {
+                .walletActions {
+                    .addressActions {
+                        .avatarImage {
+                            width: 36px;
+                            height: 36px;
+                            background: linear-gradient(45deg,
+                                    rgba(131, 58, 180, 1) 0%,
+                                    rgba(253, 29, 29, 1) 50%,
+                                    rgba(252, 176, 69, 1) 100%);
+                            border-radius: 50%;
+                        }
+
+                        .addressContainer {
+                            .address {
+                                color: $dark-primary;
+                            }
+
+                            .copyAddress {
+                                img {}
+                            }
+                        }
+                    }
+
+                    .actions {
+                        .action {
+
+                            // @include button-responsive(mobile);
+                            .imgContainer {
+                                border: 1px solid $dark-secondary;
+
+                                svg {
+                                    fill: $dark-secondary;
+                                }
+                            }
+
+                            p {
+                                color: $dark-primary;
+                            }
+
+                            .action:nth-child(3) {}
+                        }
+                    }
+                }
+
+                .portfolio__totalBalance {
+                    .description {
+                        abbr {
+                            color: $dark-primary;
+                        }
+
+                        color: $dark-primary;
+
+                        p {
+                            color: $dark-primary;
+                        }
+
+                        .chainIMG {}
+                    }
+
+                    .balance {
+                        h1 {
+                            color: $dark-primary;
+                        }
+
+                        span {
+                            color: $dark-primary;
+                        }
+                    }
+                }
+            }
+
+            .chains {
+                .chain {
+                    border: 1px solid #d9d9d9;
+
+                    &:hover {
+                        background-color: $dark-bg;
+                    }
+
+                    &.active {
+                        border: 1px solid $dark-secondary;
+                        background-color: $dark-secondary;
+                        color: $dark-primary;
+                    }
+
+                    .info {
+
+                        h1 {
+                            color: $dark-primary;
+                        }
+                    }
+
+                    .seprator {
+                        background-color: #d9d9d9;
+                    }
+
+                    .imageContainer {
+                        img {}
+                    }
+
+                    p {
+                        color: $dark-primary;
+                    }
+                }
+            }
+        }
+    }
+}
+@media screen and (min-width: 768px ){
+    
+}
+@media screen and (min-width: 1024px) {
+    .portfolio {
+        padding-top: 4rem;
+
+        .portfolio__box {
+            position: relative;
+            background-color: $light-box-bg;
+            box-shadow: 0 2px 26px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            padding: 3rem 5rem 3rem 5rem;
+            // margin-top: 1rem;
+
+            .refreshButton {
+                position: absolute;
+                top: 1.5rem;
+                right: 1.5rem;
+                width: 20px;
+                height: 20px;
+                cursor: pointer;
+            }
+            .addressActions {
+                margin: 0 0;
+                display: flex;
+                align-items: center;
+                gap: 2rem;
+                justify-content: start;
+                
+
+                .avatarImage {
+                    width: 45px;
+                    height: 45px;
+                    background: linear-gradient(45deg,
+                            rgba(131, 58, 180, 1) 0%,
+                            rgba(253, 29, 29, 1) 50%,
+                            rgba(252, 176, 69, 1) 100%);
+                    border-radius: 50%;
+                }
+
+                .addressContainer {
+                    display: flex;
+                    align-items: center;
+                    gap: 2rem;
+
+                    .address {
+                        font-size: 1.6rem;
+                        font-weight: 600;
+                        color: $light-primary;
+                        
+                    }
+
+                    .copyAddress {
+                        img {
+                            width: 20px;
+                            height: 20px;
+                        }
+                    }
+                }
+            }
+            .collapseContainer{
+                width: 90%;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                cursor: pointer;
+                // gap: 2rem;
+                // .totalbalance__container {
+                //     width: 30%;
+                //     display: grid;
+                //     grid-template-columns: 1fr;
+                //     align-content: flex-start;
+                    
+                   
+                    .description {
+                        display: flex;
+                        align-items: center;
+                        margin-bottom: 0rem;
+                       
+
+                        p {
+                            font-weight: 500;
+                            font-size: 1.4rem;
+                            color: $light-primary;
+                            padding-right: 0.5rem;
+                        }
+
+                        .chainIMG {
+                            width: 15px;
+                            height: 15px;
+                        }
+                    }
+
+                    .balance {
+                        display: flex;
+                        margin-bottom: 1rem;
+
+                        h1 {
+                            font-size: 1.5rem;
+                            font-weight: 700;
+                            color: $light-primary;
+                        }
+
+                        span {
+                            font-size: 1.1rem;
+                            font-weight: 700;
+                            margin-right: 0.2rem;
+                            margin-top: 0.1rem;
+                            color: $light-primary;
+                        }
+                    }
+                    img{
+                        width:20px;
+                        height:20px;
+                    }
+              
+            }
+            .upperContainer {
+                display: flex;
+                justify-content: space-between;
+                
+
+                .walletActions {
+                    width: 35%;
+                  
+                    .actions {
+                        // width: 80%;
+                        display: grid;
+                        grid-template-columns: 22% 22% 22% 22%;
+
+                        justify-content: flex-start;
+                        margin-top: 2rem;
+
+                        .action {
+                            display: flex;
+                            flex-direction: column;
+                            align-items:flex-start;
+                            
+                            gap: 0.5rem;
+                            cursor: pointer;
+
+                            // @include button-responsive(mobile);
+                            .imgContainer {
+                                padding: 1rem;
+                                border-radius: 50%;
+                                border: 1px solid $light-secondary;
+
+                                svg {
+                                    fill: $light-secondary;
+                                    height: 18px;
+                                    width: 18px;
+                                }
+                            }
+
+                            p {
+                                font-size: 1.3rem;
+                                font-weight: 700;
+                                color: $light-primary;
+                            }
+
+                            &:hover {
+                                .imgContainer {
+                                    padding: 1rem;
+                                    border-radius: 50%;
+                                    border: 1px solid $light-secondary;
+                                    background-color: $light-bg;
+
+                                    svg {
+                                        fill: $light-secondary;
+                                        height: 18px;
+                                        width: 18px;
+                                    }
+                                }
+                            }
+                        }
+
+                        .action:nth-child(3) {}
+                    }
+                }
+
+                .portfolio__totalBalance {
+                    width: 65%;
+                    padding: 0rem 2rem 0rem 0rem;
+                    margin-top: 0rem;
+                    display: flex;
+                  
+                    .totalbalance__container {
+                        width: 30%;
+                        display: grid;
+                        grid-template-columns: 1fr;
+                        align-content: flex-start;
+                        
+                       
+                        .description {
+                            display: flex;
+                            align-items: center;
+                            margin-bottom: 0rem;
+                           
+
+                            p {
+                                font-weight: 500;
+                                font-size: 1.4rem;
+                                color: $light-primary;
+                                padding-right: 0.5rem;
+                            }
+
+                            .chainIMG {
+                                width: 15px;
+                                height: 15px;
+                            }
+                        }
+
+                        .balance {
+                            display: flex;
+                            margin-bottom: 1rem;
+
+                            h1 {
+                                font-size: 1.5rem;
+                                font-weight: 700;
+                                color: $light-primary;
+                            }
+
+                            span {
+                                font-size: 1.1rem;
+                                font-weight: 700;
+                                margin-right: 0.2rem;
+                                margin-top: 0.1rem;
+                                color: $light-primary;
+                            }
+                        }
+                    }
+                    .chart_container{
+                       display: block;
+                       margin-top: 0rem;
+                    }   
+                     
+                    
+                }
+            }
+
+            .chains {
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+                width: 100%;
+                // row-gap: 1.5rem;
+                column-gap: 1rem;
+                justify-content: space-between;
+                margin-top: 2rem;
+                position: relative;
+
+                .loadingChains {
+                    position: absolute;
+                    left: 47%;
+                    top: -2rem;
+                    width: 30px;
+                }
+
+                .chain {
+                    display: grid;
+                    grid-template-columns: 25px 35% 1px 1fr;
+                    border: 1px solid #d9d9d9;
+                    align-items: center;
+                    border-radius: 10px;
+                    cursor: pointer;
+                    justify-content: space-between;
+                    overflow: hidden;
+                    padding: 0;
+
+                    &:hover {
+                        background-color: $light-bg;
+                    }
+
+                    &.active {
+                        border: 1px solid $light-secondary;
+                        background-color: #f3f3f3;
+                        color: $light-secondary;
+                    }
+
+                    .info {
+                    width: 70%;
+
+                        h1 {
+                            font-size: 1.2rem;
+                            font-weight: 700;
+                            color: $light-primary;
+                            text-overflow: ellipsis;
+                            white-space: nowrap;
+                            overflow: hidden;
+                        }
+                    }
+
+                    .seprator {
+                        height: 100%;
+                        width: 1px;
+                        background-color: #d9d9d9;
+                    }
+
+                    .imageContainer {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        justify-self: center;
+                        padding: 1rem 0;
+
+                        img {
+                            min-width: 20px;
+                            height: 20px;
+                        }
+                    }
+
+                    p {
+                        padding: 0;
+                        font-size: 1.1rem;
+                        font-weight: 700;
+                        justify-self: center;
+                        color: $light-primary;
+
+                    }
+                }
+            }
+        
+       .collapseCard{
+             
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              gap: 2rem;
+              margin: auto;
+              margin-top: 1rem;
+              
+              cursor: pointer;
+         span {
+            font-size: 1.5rem;
+            color: $light-primary;
+            font-weight: 700;
+           
+         }
+         svg{
+             width: 20px;
+                height: 20px;
+               
+         }
+       }
+            // Keep hideItem below chain and upperContainer to override the styles
+            .hideItem {
+                display: none;
+               }
+        }
+
+        &.dark {
+            .portfolio__box {
+                background-color: $dark-box-bg;
+                box-shadow: 0 2px 26px rgba(0, 0, 0, 0.1);
+
+                .refreshButton {}
+                .addressActions{
+                    .addressContainer{
+                        .address{
+                            color: $dark-primary;
+                        }
+
+                    }
+                }
+                .collapseContainer{
+                    .description{
+                        p{
+                            color: $dark-primary;
+                        }
+                       
+                    }
+                    .balance{
+                        h1{
+                            color: $dark-primary;
+                        }
+                        span{
+                            color: $dark-primary;
+                        }
+                    }
+                }
+                .collapseCard{
+                    span{
+                        color: $dark-primary;
+                    
+                    }
+                    svg{
+                        fill: $dark-primary;
+                    }
+                }
+                .upperContainer {
+                    .walletActions {
+                        .addressActions {
+                            .avatarImage {
+                                background: linear-gradient(45deg,
+                                        rgba(131, 58, 180, 1) 0%,
+                                        rgba(253, 29, 29, 1) 50%,
+                                        rgba(252, 176, 69, 1) 100%);
+                                border-radius: 50%;
+                            }
+
+                            .addressContainer {
+                                .address {
+                                    color: $dark-primary;
+                                }
+
+                                .copyAddress {
+                                    img {}
+                                }
+                            }
+                        }
+
+                        .actions {
+                            .action {
+
+                                // @include button-responsive(mobile);
+                                .imgContainer {
+                                    border: 1px solid $dark-secondary;
+
+                                    svg {
+                                        fill: $dark-secondary;
+                                    }
+                                }
+
+                                p {
+                                    color: $dark-primary;
+                                }
+
+                                &:hover {
+                                    .imgContainer {
+                                        border: 1px solid $light-secondary;
+                                        background-color: $dark-bg;
+
+                                        svg {
+                                            fill: $light-secondary;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    .portfolio__totalBalance {
+                        .totalbalance__container {
+                            .description {
+                                p {
+                                    color: $dark-primary;
+                                }
+
+                                .chainIMG {}
+                            }
+
+                            .balance {
+                                h1 {
+                                    color: $dark-primary;
+                                }
+
+                                span {
+                                    color: $dark-primary;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                .chains {
+                    .chain {
+                        border: 1px solid #d9d9d9;
+
+                        &:hover {
+                            background-color: $dark-bg;
+                        }
+
+                        &.active {
+                            border: 1px solid $dark-secondary;
+                            background-color: $dark-secondary;
+                            color: $dark-primary;
+                        }
+
+                        .info {
+                            h1 {
+                                color: $dark-primary;
+                            }
+                        }
+
+                        .seprator {
+                            background-color: #d9d9d9;
+                        }
+
+                        .imageContainer {
+                            img {}
+                        }
+
+                        p {
+                            color: $dark-primary;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// @media screen and (min-width: 1520px) {
+//     .portfolio {
+//         padding-top: 3rem;
+
+//         .portfolio__box {
+//             position: relative;
+//             background-color: $light-box-bg;
+//             box-shadow: 0 2px 26px rgba(0, 0, 0, 0.1);
+//             border-radius: 15px;
+//             padding: 3rem 5rem;
+//             margin-top: 1rem;
+
+//             .refreshButton {
+//                 position: absolute;
+//                 top: 1.5rem;
+//                 right: 1.5rem;
+//                 width: 20px;
+//                 height: 20px;
+//                 cursor: pointer;
+//             }
+
+//             .upperContainer {
+//                 display: flex;
+//                 justify-content: space-between;
+
+//                 .walletActions {
+//                     width: 35%;
+
+//                     .addressActions {
+//                         margin: 0 0;
+//                         display: flex;
+//                         align-items: center;
+//                         gap: 2rem;
+//                         justify-content: start;
+
+//                         .avatarImage {
+//                             width: 45px;
+//                             height: 45px;
+//                             background: linear-gradient(45deg,
+//                                     rgba(131, 58, 180, 1) 0%,
+//                                     rgba(253, 29, 29, 1) 50%,
+//                                     rgba(252, 176, 69, 1) 100%);
+//                             border-radius: 50%;
+//                         }
+
+//                         .addressContainer {
+//                             display: flex;
+//                             align-items: center;
+//                             gap: 2rem;
+
+//                             .address {
+//                                 font-size: 1.6rem;
+//                                 font-weight: 600;
+//                             }
+
+//                             .copyAddress {
+//                                 img {
+//                                     width: 20px;
+//                                     height: 20px;
+//                                 }
+//                             }
+//                         }
+//                     }
+
+//                     .actions {
+//                         width: 80%;
+//                         display: grid;
+//                         grid-template-columns: 24% 24% 24% 24%;
+//                         justify-content: space-between;
+//                         justify-items: center;
+//                         margin-top: 3rem;
+
+//                         .action {
+//                             display: flex;
+//                             flex-direction: column;
+//                             align-items: center;
+//                             gap: 0.5rem;
+//                             cursor: pointer;
+
+//                             // @include button-responsive(mobile);
+//                             .imgContainer {
+//                                 padding: 1rem;
+//                                 border-radius: 50%;
+//                                 border: 1px solid $light-secondary;
+
+//                                 svg {
+//                                     fill: $light-secondary;
+//                                     height: 18px;
+//                                     width: 18px;
+//                                 }
+//                             }
+
+//                             p {
+//                                 font-size: 1.3rem;
+//                                 font-weight: 700;
+//                                 color: $light-primary;
+//                             }
+
+//                             &:hover {
+//                                 .imgContainer {
+//                                     padding: 1rem;
+//                                     border-radius: 50%;
+//                                     border: 1px solid $light-secondary;
+//                                     background-color: $light-bg;
+
+//                                     svg {
+//                                         fill: $light-secondary;
+//                                         height: 18px;
+//                                         width: 18px;
+//                                     }
+//                                 }
+//                             }
+//                         }
+
+//                         .action:nth-child(3) {}
+//                     }
+//                 }
+
+//                 .portfolio__totalBalance {
+//                     width: 65%;
+//                     margin-top: 0rem;
+//                     display: flex;
+//                     flex-direction: row;
+//                     align-items: start;
+//                     justify-content: start;
+                   
+//                     .totalbalance__container {
+//                         grid-template-columns: 1fr;
+//                         width: 50%;
+
+//                         .description {
+//                             display: flex;
+//                             align-items: center;
+//                             gap: 0.5rem;
+//                             margin-bottom: 0.5rem;
+//                             margin-top: 2rem;
+
+//                             p {
+//                                 font-weight: 500;
+//                                 font-size: 1.4rem;
+//                                 color: $light-primary;
+//                             }
+
+//                             .chainIMG {
+//                                 width: 15px;
+//                                 height: 15px;
+//                             }
+//                         }
+
+//                         .balance {
+//                             display: flex;
+
+//                             h1 {
+//                                 font-size: 1.6rem;
+//                                 font-weight: 700;
+//                                 color: $light-primary;
+//                             }
+
+//                             span {
+//                                 font-size: 1.1rem;
+//                                 font-weight: 700;
+//                                 margin-right: 0.2rem;
+//                                 margin-top: 0.1rem;
+//                                 color: $light-primary;
+//                             }
+//                         }
+//                     }
+//                 }
+//             }
+
+//             .chains {
+//                 display: grid;
+//                 grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+//                 width: 100%;
+//                 row-gap: 1.5rem;
+//                 column-gap: 1rem;
+//                 justify-content: space-between;
+//                 margin-top: 0rem;
+//                 position: relative;
+
+//                 .loadingChains {
+//                     position: absolute;
+//                     left: 47%;
+//                     top: -2rem;
+//                     width: 30px;
+//                 }
+
+//                 .chain {
+//                     display: grid;
+//                     grid-template-columns: 30px 40% 1px 45%;
+//                     border: 1px solid #d9d9d9;
+//                     align-items: center;
+//                     border-radius: 10px;
+//                     cursor: pointer;
+//                     justify-content: space-between;
+//                     overflow: hidden;
+
+//                     &:hover {
+//                         background-color: $light-bg;
+//                     }
+
+//                     &.active {
+//                         border: 1px solid $light-secondary;
+//                         background-color: #f3f3f3;
+//                         color: $light-secondary;
+//                     }
+
+//                     .info {
+//                         h1 {
+//                             font-size: 1.2rem;
+//                             font-weight: 700;
+//                             color: $light-primary;
+//                             text-overflow: ellipsis;
+//                             white-space: nowrap;
+//                             overflow: hidden;
+//                         }
+//                     }
+
+//                     .seprator {
+//                         height: 100%;
+//                         width: 1px;
+//                         background-color: #d9d9d9;
+//                     }
+
+//                     .imageContainer {
+//                         display: flex;
+//                         align-items: center;
+//                         justify-content: center;
+//                         justify-self: center;
+//                         padding: 1rem 0;
+
+//                         img {
+//                             min-width: 25px;
+//                             height: 25px;
+//                         }
+//                     }
+
+//                     p {
+//                         font-size: 1.2rem;
+//                         font-weight: 800;
+//                         justify-self: center;
+//                         color: $light-primary;
+
+//                     }
+//                 }
+//             }
+//         }
+
+//         &.dark {
+//             .portfolio__box {
+//                 background-color: $dark-box-bg;
+//                 box-shadow: 0 2px 26px rgba(0, 0, 0, 0.1);
+
+//                 .refreshButton {}
+
+//                 .upperContainer {
+//                     .walletActions {
+//                         .addressActions {
+//                             .avatarImage {
+//                                 background: linear-gradient(45deg,
+//                                         rgba(131, 58, 180, 1) 0%,
+//                                         rgba(253, 29, 29, 1) 50%,
+//                                         rgba(252, 176, 69, 1) 100%);
+//                                 border-radius: 50%;
+//                             }
+
+//                             .addressContainer {
+//                                 .address {
+//                                     color: $dark-primary;
+//                                 }
+
+//                                 .copyAddress {
+//                                     img {}
+//                                 }
+//                             }
+//                         }
+
+//                         .actions {
+//                             .action {
+
+//                                 // @include button-responsive(mobile);
+//                                 .imgContainer {
+//                                     border: 1px solid $dark-secondary;
+
+//                                     svg {
+//                                         fill: $dark-secondary;
+//                                     }
+//                                 }
+
+//                                 p {
+//                                     color: $dark-primary;
+//                                 }
+
+//                                 &:hover {
+//                                     .imgContainer {
+//                                         border: 1px solid $light-secondary;
+//                                         background-color: $dark-bg;
+
+//                                         svg {
+//                                             fill: $light-secondary;
+//                                         }
+//                                     }
+//                                 }
+//                             }
+//                         }
+//                     }
+
+//                     .portfolio__totalBalance {
+//                         .totalbalance__container {
+//                             .description {
+//                                 p {
+//                                     color: $dark-primary;
+//                                 }
+
+//                                 .chainIMG {}
+//                             }
+
+//                             .balance {
+//                                 h1 {
+//                                     color: $dark-primary;
+//                                 }
+
+//                                 span {
+//                                     color: $dark-primary;
+//                                 }
+//                             }
+//                         }
+//                     }
+//                 }
+
+//                 .chains {
+//                     .chain {
+//                         border: 1px solid #d9d9d9;
+
+//                         &:hover {
+//                             background-color: $dark-bg;
+//                         }
+
+//                         &.active {
+//                             border: 1px solid $dark-secondary;
+//                             background-color: $dark-secondary;
+//                             color: $dark-primary;
+//                         }
+
+//                         .info {
+//                             h1 {
+//                                 color: $dark-primary;
+//                             }
+//                         }
+
+//                         .seprator {
+//                             background-color: #d9d9d9;
+//                         }
+
+//                         .imageContainer {
+//                             img {}
+//                         }
+
+//                         p {
+//                             color: $dark-primary;
+//                         }
+//                     }
+//                 }
+//             }
+//         }
+//     }
+// }

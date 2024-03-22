@@ -1,0 +1,753 @@
+.navbar {
+    display: flex;
+    align-items: center;
+    padding: 2rem 0;
+    width: 100%;
+    justify-content: space-between;
+    .navbar__logo {
+        width: 10%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        .navbar__collapsibleBTN--desktop {
+            display: none;
+        }
+        .navbarLogoAndLogoType {
+            display: flex;
+            align-items: center;
+            img {
+            }
+            h1 {
+                color: $light-primary;
+                font-size: 18px;
+                font-style: normal;
+                font-weight: 700;
+                margin-left: 1rem;
+                display: none;
+            }
+        }
+    }
+    .navbar__themeSwitcher {
+        display: none;
+        .checkbox {
+            opacity: 0;
+            position: absolute;
+        }
+
+        .checkbox-label {
+            background-color: $light-box-bg;
+            width: 50px;
+            height: 26px;
+            border-radius: 50px;
+            position: relative;
+            padding: 1rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .fa-moon {
+            fill: $light-secondary;
+            height: 1.25em;
+            width: 40%;
+        }
+
+        .fa-sun {
+            fill: $light-secondary;
+            height: 1.25em;
+            width: 40%;
+        }
+
+        .checkbox-label .ball {
+            background-color: $light-primary;
+            width: 17px;
+            height: 17px;
+            position: absolute;
+            left: 6px;
+            top: 4px;
+            border-radius: 50%;
+            transition: transform 0.2s linear;
+        }
+
+        .checkbox:checked + .checkbox-label .ball {
+            transform: translateX(21px);
+        }
+        &.dark {
+            .checkbox {
+            }
+
+            .checkbox-label {
+                background-color: $dark-box-bg;
+            }
+
+            .fa-moon {
+                fill: $dark-secondary;
+            }
+
+            .fa-sun {
+                fill: $dark-secondary;
+            }
+
+            .checkbox-label .ball {
+                background-color: $dark-primary;
+            }
+
+            .checkbox:checked + .checkbox-label .ball {
+            }
+        }
+    }
+
+    .navbar__mainTitle {
+        width:60%;
+        font-size: 15px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+        color: $light-primary;
+        text-align: center;
+    }
+
+    .navbar__collapsibleBTN {
+        width: 10%;
+        text-align: end;
+    }
+    .navbar__connectBTN {
+        display: none;
+    }
+    .navbar__walletDetails {
+        display: none;
+    }
+    &.dark {
+        .navbar__logo {
+            img {
+            }
+            h1 {
+                color: $dark-primary;
+            }
+        }
+        .navbar__mainTitle {
+            
+            color: $dark-primary;
+        }
+    }
+}
+
+.navbar--collapsed {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: -100%;
+    background-color: $light-bg;
+    height: 100vh;
+    transition: ease-in all 0.3s;
+    z-index: 10;
+    .navbar--collapsed--layout {
+        // @include layout-centered(mobile);
+        width: 97%;
+        height: 100vh;
+        padding: 3rem 3rem;
+        background-color: $light-box-bg;
+        border-right: 1px solid rgba(0, 0, 0, 0.7);
+        margin: 0 0;
+        // height: 60vh;
+        display: flex;
+        flex-direction: column;
+        .upperPart {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            // padding: 2rem 0;
+            .navbar__logo {
+                max-width: 60%;
+                min-width: 45%;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                img {
+                }
+                h1 {
+                    color: $light-primary;
+                    font-size: 18px;
+                    font-style: normal;
+                    font-weight: 700;
+                    margin-left: 1rem;
+                }
+            }
+            .navbar__themeSwitcher {
+                .checkbox {
+                    opacity: 0;
+                    position: absolute;
+                }
+        
+                .checkbox-label {
+                    background-color: $light-bg;
+                    width: 50px;
+                    height: 26px;
+                    border-radius: 50px;
+                    position: relative;
+                    padding: 1rem;
+                    cursor: pointer;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                }
+        
+                .fa-moon {
+                    fill: $light-secondary;
+                    height: 1.25em;
+                    width: 40%;
+                }
+        
+                .fa-sun {
+                    fill: $light-secondary;
+                    height: 1.25em;
+                    width: 40%;
+                }
+        
+                .checkbox-label .ball {
+                    background-color: $light-primary;
+                    width: 17px;
+                    height: 17px;
+                    position: absolute;
+                    left: 6px;
+                    top: 4px;
+                    border-radius: 50%;
+                    transition: transform 0.2s linear;
+                }
+        
+                .checkbox:checked + .checkbox-label .ball {
+                    transform: translateX(21px);
+                }
+                &.dark {
+                    .checkbox {
+                    }
+        
+                    .checkbox-label {
+                        background-color: $dark-bg;
+                    }
+        
+                    .fa-moon {
+                        fill: $dark-secondary;
+                    }
+        
+                    .fa-sun {
+                        fill: $dark-secondary;
+                    }
+        
+                    .checkbox-label .ball {
+                        background-color: $dark-primary;
+                    }
+        
+                    .checkbox:checked + .checkbox-label .ball {
+                        
+                    }
+                }
+            }
+
+
+
+
+            .navbar__collapsibleBTN {
+                background-color: $light-box-bg;
+                box-shadow: 0 2px 26px rgba(0, 0, 0, 0.11);
+                border-radius: 50%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                cursor: pointer;
+                img {
+                    height: 100%;
+                    width: 100%;
+                }
+            }
+        }
+        .wallet__details {
+            margin-left: 0.7rem;
+            margin-top: 4rem;
+            p {
+                @include text(mobile);
+                margin-bottom: 1rem;
+                margin-left: 0.5rem;
+                font-size: 15px;
+            }
+            button {
+                @include button-responsive(mobile);
+            }
+        }
+        .seprator {
+            width: 95%;
+            margin: auto;
+            background-color: #000000;
+            margin-top: 3rem;
+            margin-bottom: 1.4rem;
+            opacity: 0.059;
+            height: 2px;
+        }
+        .navbar__list {
+        }
+        .navbar__option {
+            display: flex;
+            margin-top: 2rem;
+            padding: 1rem;
+            border-radius: 10px;
+            background: none;
+            width: 100%;
+            img {
+                margin-right: 2rem;
+            }
+            p {
+                @include text(mobile);
+                color: $light-primary;
+            }
+        }
+        .navbar__option.active {
+            background-color: #843ea10f;
+            img {
+            }
+            p {
+                color: $light-secondary;
+            }
+        }
+    }
+
+    &.dark {
+        .navbar--collapsed--layout {
+            background-color: $dark-box-bg;
+
+            border-right: 1px solid rgba(255, 255, 255, 0.7);
+
+            .upperPart {
+                .navbar__logo {
+                    img {
+                    }
+                    h1 {
+                        color: $dark-primary;
+                    }
+                }
+                .navbar__collapsibleBTN {
+                    background-color: $dark-box-bg;
+
+                    cursor: pointer;
+                    img {
+                    }
+                }
+            }
+            .wallet__details {
+                p {
+                    color: $dark-primary;
+                }
+                button {
+                }
+            }
+            .seprator {
+                background-color: #fff;
+            }
+            .navbar__list {
+            }
+            .navbar__option {
+                img {
+                }
+                p {
+                    color: $dark-primary;
+                }
+            }
+            .navbar__option.active {
+                background-color: #c69ada0f;
+                img {
+                }
+                p {
+                    color: $dark-secondary;
+                }
+            }
+        }
+    }
+}
+.navbar--collapsed.active {
+    left: 0;
+    transition: ease-in all 0.3;
+    background-color: gray;
+    &.dark {
+        background-color: gray;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 10;
+        width: 100vw;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 2rem 0;
+        background-color: $light-box-bg;
+        box-shadow: 0 2px 26px rgb(0 0 0 / 4%);
+        display: none;
+        .navbar__logo {
+            min-width: 30%;
+            display: flex;
+            align-items: center;
+            justify-content: unset;
+            gap: 1.5rem;
+            .navbar__collapsibleBTN--desktop {
+                display: block;
+                margin: 0 2.5rem;
+                cursor: pointer;
+                width: 20px;
+                height: 20px;
+            }
+            .navbarLogoAndLogoType {
+                display: flex;
+                align-items: center;
+                img {
+                }
+                h1 {
+                    color: $light-primary;
+                    font-size: 18px;
+                    font-style: normal;
+                    font-weight: 700;
+                    margin-left: 1rem;
+                    display: unset;
+                }
+            }
+        }
+        .navbar__themeSwitcher {
+            width: 50%;
+            display: unset;
+
+            .checkbox {
+                opacity: 0;
+                position: absolute;
+            }
+
+            .checkbox-label {
+                background-color: $light-bg;
+                width: 65px;
+                height: 30px;
+                border-radius: 50px;
+                position: relative;
+                padding: 1rem;
+                cursor: pointer;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .fa-moon {
+                fill: $light-secondary;
+                height: 1.5em;
+                width: 30%;
+            }
+
+            .fa-sun {
+                fill: $light-secondary;
+                height: 1.5em;
+                width: 30%;
+            }
+
+            .checkbox-label .ball {
+                background-color: $light-primary;
+                width: 19px;
+                height: 19px;
+                position: absolute;
+                left: 6px;
+                top: 5px;
+                border-radius: 40%;
+                transition: transform 0.2s linear;
+            }
+
+            .checkbox:checked + .checkbox-label .ball {
+                transform: translateX(31px);
+            }
+            &.dark {
+                .checkbox {
+                }
+
+                .checkbox-label {
+                    background-color: $dark-bg;
+                }
+
+                .fa-moon {
+                    fill: $dark-secondary;
+                }
+
+                .fa-sun {
+                    fill: $dark-secondary;
+                }
+
+                .checkbox-label .ball {
+                    background-color: $dark-primary;
+                }
+
+                .checkbox:checked + .checkbox-label .ball {
+                }
+            }
+        }
+
+        .navbar__mainTitle {
+            display: none;
+        }
+        .navbar__collapsibleBTN {
+            display: none;
+        }
+
+        .navbar__walletDetails {
+            max-width: 40%;
+            display: flex;
+            align-items: center;
+            justify-self: flex-end;
+            gap: 1.5rem;
+            margin-right: 4rem;
+            button {
+                cursor: pointer;
+                border-radius: 15px;
+                background: none;
+                border: 1px solid rgba(0, 0, 0, 0.1);
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                padding: 1rem 2rem;
+                color: $light-primary;
+                font-family: Poppins;
+                font-size: 16px;
+                font-style: normal;
+                font-weight: 400;
+                line-height: normal;
+                img,
+                svg {
+                    width: 27px;
+                    height: 27px;
+                }
+            }
+            button:hover {
+                background: $light-secondary;
+                border: none;
+
+                color: $light-box-bg;
+
+                svg {
+                    fill: $light-box-bg;
+                }
+            }
+            .navbar__connectBTN {
+                @include button-responsive(laptop);
+                padding: 1rem;
+                background-color: $light-secondary;
+                box-shadow: 0 2px 26px rgba(0, 0, 0, 0.05);
+                padding: 0.5rem 1rem;
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                font-weight: 500;
+            }
+            .navbar__connectBTN:hover {
+                background: none;
+                border: 1px solid rgba(0, 0, 0, 0.1);
+                color: $light-primary;
+            }
+        }
+        &.dark {
+            background-color: $dark-box-bg;
+            box-shadow: 0 2px 26px rgb(0 0 0 / 4%);
+            .navbar__logo {
+                .navbar__collapsibleBTN--desktop {
+                }
+                img {
+                }
+                h1 {
+                    color: $dark-primary;
+                }
+            }
+
+            .navbar__walletDetails {
+                button {
+                    border: 1px solid rgba(255, 255, 255, 0.2);
+
+                    color: $dark-primary;
+
+                    img,
+                    svg {
+                        width: 27px;
+                        height: 27px;
+                    }
+                }
+                button:hover {
+                    background: $dark-secondary;
+                    border: none;
+
+                    color: $dark-box-bg;
+
+                    svg {
+                        fill: $dark-box-bg;
+                    }
+                }
+                .navbar__connectBTN {
+                    background-color: $dark-secondary;
+                    box-shadow: 0 2px 26px rgba(255, 255, 255, 0.2);
+                }
+                .navbar__connectBTN:hover {
+                    background-color: none;
+                    border: 1px solid rgba(0, 0, 0, 0.1);
+                    color: $dark-primary;
+                }
+            }
+        }
+    }
+
+    .navbar--collapsed {
+        display: none;
+    }
+    .navbar--collapsed.active {
+        display: none;
+    }
+
+    .connectWalletModal {
+        // overflow-y: scroll
+
+        margin: 3rem 0 6rem 0;
+        .chooseChain {
+            h3 {
+                @include secondary-titles-responsive(laptop);
+                font-weight: 500;
+                color: $light-primary;
+            }
+            .chains {
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+                justify-items: center;
+                align-items: center;
+                grid-gap: 2rem 0;
+                padding: 2rem 0;
+                .chain {
+                    padding: 1rem;
+                    width: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    height: 100%;
+                    width: 100%;
+                    position: relative;
+
+                    img {
+                        height: 50%;
+                        width: 50%;
+                        position: relative;
+                    }
+                    p {
+                        @include text(laptop);
+                        margin-top: 2rem;
+                        color: $light-primary;
+                        font-size: 14px;
+                    }
+                    &.active::after {
+                        content: url("/assets/images/greenTick.svg");
+                        position: absolute;
+                        right: 30%;
+                    }
+                }
+
+                .chain:hover {
+                    background-color: rgba($color: #000000, $alpha: 0.2);
+                    border-radius: 15px;
+                    cursor: pointer;
+                }
+            }
+        }
+        .chooseWallet {
+            h3 {
+                @include secondary-titles-responsive(laptop);
+                font-weight: 500;
+                color: $light-primary;
+            }
+            .wallets {
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+                justify-items: center;
+                align-items: center;
+                grid-gap: 2rem 0;
+                padding: 2rem 0;
+                .wallet {
+                    padding: 1rem;
+                    width: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    height: 100%;
+                    width: 100%;
+                    position: relative;
+                    img {
+                        height: 50%;
+                        width: 50%;
+                    }
+                    p {
+                        @include text(laptop);
+                        margin-top: 2rem;
+                        font-size: 14px;
+                        text-align: center;
+                        color: $light-primary;
+                    }
+                    &.active::after {
+                        content: url("/assets/images/greenTick.svg");
+                        position: absolute;
+                        right: 30%;
+                    }
+                }
+                .wallet:hover {
+                    background-color: rgba($color: #000000, $alpha: 0.2);
+                    border-radius: 15px;
+                    cursor: pointer;
+                }
+            }
+        }
+
+        &.dark {
+            .chooseChain {
+                h3 {
+                    color: $dark-primary;
+                }
+                .chains {
+                    .chain {
+                        img {
+                            width: 50%;
+                        }
+                        p {
+                            @include text(laptop);
+                            color: $dark-primary;
+                        }
+                    }
+                    .chain:hover {
+                        background-color: rgba($color: #fff, $alpha: 0.2);
+                        border-radius: 15px;
+                        cursor: pointer;
+                    }
+                }
+            }
+            .chooseWallet {
+                h3 {
+                    @include secondary-titles-responsive(laptop);
+                    font-weight: 500;
+                    color: $dark-primary;
+                }
+                .wallets {
+                    .wallet {
+                        img {
+                            width: 50%;
+                        }
+                        p {
+                            @include text(laptop);
+                            color: $dark-primary;
+                        }
+                    }
+                    .wallet:hover {
+                        background-color: rgba($color: #fff, $alpha: 0.2);
+                    }
+                }
+            }
+        }
+    }
+}

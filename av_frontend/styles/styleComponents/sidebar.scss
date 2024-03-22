@@ -1,0 +1,623 @@
+.sidebar {
+
+    z-index: 8;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr; 
+    width: 100vw;
+    // justify-content: center;
+    justify-items: center;
+    background-color: $light-box-bg;
+    padding: 1rem 0;
+    box-shadow:
+        0px 2px 4px -1px rgba(0, 0, 0, 0.2),
+        0px 4px 5px 0px rgba(0, 0, 0, 0.14),
+        0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+
+    .sidebar__options {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        cursor: pointer;
+        svg {
+            height: 18px;
+            width: 18px;
+            margin: 1rem;
+        }
+        p {
+            @include text(mobile);
+            font-size: 10px;
+            color: #9b9b9b;
+        }
+    }
+
+    .sidebar__logo {
+        display: none;
+    }
+    .sidebar__options.hiddenM {
+        display: none;
+    }
+    .sidebar__options.active {
+        svg {
+            fill: $light-secondary;
+        }
+        p {
+            color: $light-secondary;
+        }
+    }
+    .switcherContainer {
+        display: none;
+        &.dark {
+            .checkbox {
+            }
+
+            .checkbox-label {
+                background-color: $dark-box-bg;
+            }
+
+            .fa-moon {
+                fill: $dark-secondary;
+            }
+
+            .fa-sun {
+                fill: $dark-secondary;
+            }
+
+            .checkbox-label .ball {
+                background-color: $dark-primary;
+            }
+
+            .checkbox:checked + .checkbox-label .ball {
+            }
+        }
+    }
+
+    &.dark {
+        background-color: $dark-box-bg;
+
+        box-shadow:
+            0px 2px 4px -1px rgba(255, 255, 255, 0.2),
+            0px 4px 5px 0px rgba(255, 255, 255, 0.14),
+            0px 1px 10px 0px rgba(255, 255, 255, 0.12);
+        .sidebar__options {
+            svg {
+            }
+            p {
+                color: #9b9b9b;
+            }
+        }
+        .sidebar__options.active {
+            svg {
+                fill: $dark-secondary;
+            }
+            p {
+                color: $dark-secondary;
+            }
+        }
+    }
+}
+
+
+@media screen and (min-width: 1024px) {
+    .sidebar {
+        z-index: 8;
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        display: grid;
+        width: 14vw;
+        height: 100vh;
+        justify-content: center;
+        align-items: center;
+        grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 3fr;
+        grid-template-columns: 1fr;
+        justify-items: start;
+        background-color: $light-box-bg;
+        padding: 0rem 2rem;
+        box-shadow:
+            0px 2px 4px -1px rgba(0, 0, 0, 0.2),
+            0px 4px 5px 0px rgba(0, 0, 0, 0.14),
+            0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+        transition: all ease 0.5s;
+
+
+        .sidebar__logo{
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            img{    
+                width: 28px;
+                height: 28px;
+
+            }
+            h1{
+                color: $light-primary;
+                font-size: 1.6rem;
+            }
+
+        }
+        .sidebar__options {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            transition: all ease 0.5s;
+
+            svg {
+               
+                
+                margin-right: 2rem;
+                width: 15px;
+                height: 15px;
+                transition: all ease 0.5s;
+
+                // text-align: center
+            }
+            p {
+                @include text(laptop);
+                //    display: none;
+                font-size: 1.2rem;
+                width: auto;
+                overflow: hidden;
+                transition: all ease 0.5s;
+
+            }
+        }
+        .sidebar__options.sidebar__options.hiddenM {
+            display: flex;
+        }
+        .sidebar__options.active {
+            svg {
+                fill: $light-secondary;
+            }
+            p {
+                color: $light-secondary;
+            }
+        }
+        .sidebar__options:hover {
+            svg {
+                fill: $light-secondary;
+            }
+            p {
+                color: $light-secondary;
+            }
+        }
+
+        .switcherContainer{
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 1rem;
+            justify-content: space-between;
+            p {
+                @include text(laptop);
+                //    display: none;
+                font-size: 1rem;
+                width: auto;
+                // overflow: hidden;
+                transition: all ease 0.5s;
+                color: #9b9b9b;
+            }
+            .navbar__themeSwitcher {
+                .checkbox {
+                    opacity: 0;
+                    position: absolute;
+                    
+                }
+                
+                .checkbox-label {
+                    background-color: $light-bg;
+                    width: 50px;
+                    height: 26px;
+                    border-radius: 50px;
+                    position: relative;
+                    padding: 1rem;
+                    cursor: pointer;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    
+                }
+        
+                .fa-moon {
+                    fill: $light-secondary;
+                    height: 1.25em;
+                    width: 40%;
+                }
+        
+                .fa-sun {
+                    fill: $light-secondary;
+                    height: 1.25em;
+                    width: 40%;
+                }
+        
+                .checkbox-label .ball {
+                    background-color: $light-primary;
+                    width: 17px;
+                    height: 17px;
+                    position: absolute;
+                    left: 6px;
+                    top: 4px;
+                    border-radius: 50%;
+                    transition: transform 0.2s linear;
+                }
+        
+                .checkbox:checked + .checkbox-label .ball {
+                    transform: translateX(21px);
+                }
+                &.dark {
+                    .checkbox {
+                    }
+        
+                    .checkbox-label {
+                        background-color: $dark-bg;
+                    }
+        
+                    .fa-moon {
+                        fill: $dark-secondary;
+                    }
+        
+                    .fa-sun {
+                        fill: $dark-secondary;
+                    }
+        
+                    .checkbox-label .ball {
+                        background-color: $dark-primary;
+                    }
+        
+                    .checkbox:checked + .checkbox-label .ball {
+                    }
+                }
+            }
+        }
+
+   
+
+        // &:hover {
+        //     padding: 0rem 3rem 0 1.5rem;
+
+        //     min-width: 10vw;
+        //     transition: all ease 0.5s;
+        //     .sidebar__options {
+        //         transition: all ease 0.5s;
+
+        //         svg {
+        //             margin-right: 2rem;
+        //             transition: all ease 0.5s;
+        //         }
+        //         p {
+        //             width: auto;
+        //             overflow: hidden;
+        //             transition: all ease 0.5s;
+        //         }
+        //     }
+        // }
+
+        // &.active {
+        //     padding: 0rem 3rem 0 1.5rem;
+
+        //     min-width: 12vw;
+        //     tran sition: all ease 0.5s;
+        //     .sidebar__options {
+        //         transition: all ease 0.5s;
+
+        //         svg {
+        //             margin-right: 2rem;
+        //             transition: all ease 0.5s;
+        //         }
+        //         p {
+        //             width: auto;
+        //             transition: all ease 0.5s;
+        //         }
+        //     }
+        //     .sidebar__options:hover {
+        //         svg {
+        //             fill: $light-secondary;
+        //         }
+        //         p {
+        //             color: $light-secondary;
+        //         }
+        //     }
+        // }
+        &.dark {
+            background-color: $dark-box-bg;
+            .sidebar__logo{
+               
+                h1{
+                    color: $dark-primary;
+                }
+    
+            }
+            box-shadow:
+                0px 2px 4px -1px rgba(255, 255, 255, 0.2),
+                0px 4px 5px 0px rgba(255, 255, 255, 0.14),
+                0px 1px 10px 0px rgba(255, 255, 255, 0.12);
+            .sidebar__options {
+                svg {
+                }
+                p {
+                    color: #9b9b9b;
+                }
+            }
+            .sidebar__options.active {
+                svg {
+                    fill: $dark-secondary;
+                }
+                p {
+                    color: $dark-secondary;
+                }
+            }
+            .sidebar__options:hover {
+                svg {
+                    fill: $light-secondary;
+                }
+                p {
+                    color: $light-secondary;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (min-width: 1400px) {
+    .sidebar {
+        z-index: 8;
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        display: grid;
+        width: 14vw;
+        height: 100vh;
+        justify-content: center;
+        align-items: center;
+        grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 3fr;
+        grid-template-columns: 1fr;
+        justify-items: start;
+        background-color: $light-box-bg;
+        padding: 0rem 1.5rem;
+        box-shadow:
+            0px 2px 4px -1px rgba(0, 0, 0, 0.2),
+            0px 4px 5px 0px rgba(0, 0, 0, 0.14),
+            0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+        transition: all ease 0.5s;
+
+
+        .sidebar__logo{
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            img{
+                width: unset;
+                height: unset;
+            }
+            h1{
+                color: $light-primary;
+                font-size: 1.8rem;
+            }
+
+        }
+        .sidebar__options {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            transition: all ease 0.5s;
+
+            svg {
+                max-width: 10rem;
+                min-width: 1rem;
+                margin-right: 2rem;
+                width: 20px;
+                height: 20px;
+                transition: all ease 0.5s;
+
+                // text-align: center
+            }
+            p {
+                @include text(laptop);
+                //    display: none;
+                font-size: 1.4rem;
+                width: auto;
+                overflow: hidden;
+                transition: all ease 0.5s;
+
+            }
+        }
+        .sidebar__options.sidebar__options.hiddenM {
+            display: flex;
+        }
+        .sidebar__options.active {
+            svg {
+                fill: $light-secondary;
+            }
+            p {
+                color: $light-secondary;
+            }
+        }
+        .sidebar__options:hover {
+            svg {
+                fill: $light-secondary;
+            }
+            p {
+                color: $light-secondary;
+            }
+        }
+
+        .switcherContainer{
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin: 1rem;
+            justify-content: space-between;
+            p {
+                @include text(laptop);
+                //    display: none;
+                font-size: 1.4rem;
+                width: auto;
+                // overflow: hidden;
+                transition: all ease 0.5s;
+                color: #9b9b9b;
+            }
+            .navbar__themeSwitcher {
+                width: 100%;
+                .checkbox {
+                    opacity: 0;
+                    position: absolute;
+                    
+                }
+                
+                .checkbox-label {
+                    background-color: $light-bg;
+                    width: 50px;
+                    height: 26px;
+                    border-radius: 50px;
+                    position: relative;
+                    padding: 1rem;
+                    cursor: pointer;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    
+                }
+        
+                .fa-moon {
+                    fill: $light-secondary;
+                    height: 1.25em;
+                    width: 40%;
+                }
+        
+                .fa-sun {
+                    fill: $light-secondary;
+                    height: 1.25em;
+                    width: 40%;
+                }
+        
+                .checkbox-label .ball {
+                    background-color: $light-primary;
+                    width: 17px;
+                    height: 17px;
+                    position: absolute;
+                    left: 6px;
+                    top: 4px;
+                    border-radius: 50%;
+                    transition: transform 0.2s linear;
+                }
+        
+                .checkbox:checked + .checkbox-label .ball {
+                    transform: translateX(21px);
+                }
+                &.dark {
+                    .checkbox {
+                    }
+        
+                    .checkbox-label {
+                        background-color: $dark-bg;
+                    }
+        
+                    .fa-moon {
+                        fill: $dark-secondary;
+                    }
+        
+                    .fa-sun {
+                        fill: $dark-secondary;
+                    }
+        
+                    .checkbox-label .ball {
+                        background-color: $dark-primary;
+                    }
+        
+                    .checkbox:checked + .checkbox-label .ball {
+                    }
+                }
+            }
+        }
+
+   
+
+        // &:hover {
+        //     padding: 0rem 3rem 0 1.5rem;
+
+        //     min-width: 10vw;
+        //     transition: all ease 0.5s;
+        //     .sidebar__options {
+        //         transition: all ease 0.5s;
+
+        //         svg {
+        //             margin-right: 2rem;
+        //             transition: all ease 0.5s;
+        //         }
+        //         p {
+        //             width: auto;
+        //             overflow: hidden;
+        //             transition: all ease 0.5s;
+        //         }
+        //     }
+        // }
+
+        // &.active {
+        //     padding: 0rem 3rem 0 1.5rem;
+
+        //     min-width: 12vw;
+        //     tran sition: all ease 0.5s;
+        //     .sidebar__options {
+        //         transition: all ease 0.5s;
+
+        //         svg {
+        //             margin-right: 2rem;
+        //             transition: all ease 0.5s;
+        //         }
+        //         p {
+        //             width: auto;
+        //             transition: all ease 0.5s;
+        //         }
+        //     }
+        //     .sidebar__options:hover {
+        //         svg {
+        //             fill: $light-secondary;
+        //         }
+        //         p {
+        //             color: $light-secondary;
+        //         }
+        //     }
+        // }
+        &.dark {
+            background-color: $dark-box-bg;
+            .sidebar__logo{
+               
+                h1{
+                    color: $dark-primary;
+                }
+    
+            }
+            box-shadow:
+                0px 2px 4px -1px rgba(255, 255, 255, 0.2),
+                0px 4px 5px 0px rgba(255, 255, 255, 0.14),
+                0px 1px 10px 0px rgba(255, 255, 255, 0.12);
+            .sidebar__options {
+                svg {
+                }
+                p {
+                    color: #9b9b9b;
+                }
+            }
+            .sidebar__options.active {
+                svg {
+                    fill: $dark-secondary;
+                }
+                p {
+                    color: $dark-secondary;
+                }
+            }
+            .sidebar__options:hover {
+                svg {
+                    fill: $light-secondary;
+                }
+                p {
+                    color: $light-secondary;
+                }
+            }
+        }
+    }
+}

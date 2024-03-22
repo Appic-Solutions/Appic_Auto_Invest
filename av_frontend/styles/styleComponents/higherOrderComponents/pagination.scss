@@ -1,0 +1,75 @@
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
+    gap: 1rem;
+    button {
+        color: $light-primary;
+        font-family: Inter;
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        cursor: pointer;
+        padding:0.7rem 1rem;
+        border-radius: 10px;
+        background-color: $light-box-bg;
+
+    }
+    button.active{
+        color: $light-box-bg;
+        background-color: $light-secondary;
+    }
+    &.dark{
+        button {
+            color: $dark-primary;
+            background-color: $dark-box-bg;
+    
+        }
+        button.active{
+            color: $dark-box-bg;
+            background-color: $dark-secondary;
+        }
+    }
+}
+
+
+@media screen and (min-width:1024px) {
+    .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 3rem;
+        gap: 1rem;
+        button {
+            color: $light-primary;
+            font-family: Inter;
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: normal;
+            cursor: pointer;
+            padding:0.7rem 1rem;
+            border-radius: 10px;
+            background-color: $light-box-bg;
+    
+        }
+        button.active{
+            color: $light-box-bg;
+            background-color: $light-secondary;
+        }
+        &.dark{
+            button {
+                color: $dark-primary;
+                background-color: $dark-box-bg;
+        
+            }
+            button.active{
+                color: $dark-box-bg;
+                background-color: $dark-secondary;
+            }
+        }
+    }
+    
+}

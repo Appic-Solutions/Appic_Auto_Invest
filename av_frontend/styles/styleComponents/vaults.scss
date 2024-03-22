@@ -1,0 +1,1904 @@
+.vaults {
+    .timePeriods {
+        display: flex;
+        align-items: center;
+        .timePeriod {
+            margin: 0 1rem;
+            color: $light-tertiary;
+            @include text(mobile);
+            font-size: 11px;
+            cursor: pointer;
+        }
+        .timePeriod.active {
+            background-color: $light-secondary;
+            padding: 3px 10px;
+            border-radius: 15px;
+            color: $light-box-bg;
+            font-weight: 700;
+        }
+    }
+    .vaults__headers {
+        background-color: $light-box-bg;
+        box-shadow: 0 2px 26px rgba(0, 0, 0, 0.1);
+
+        margin-top: 1rem;
+        border-radius: 15px;
+        padding: 1.5rem 1rem;
+
+        .header {
+            display: grid;
+            grid-template-columns: 60% 40%;
+            justify-items: center;
+            border-bottom: 1px solid #d9d9d9;
+            padding-bottom: 1rem;
+
+            .header__title {
+                @include text(mobile);
+                font-size: 14px;
+                font-style: normal;
+                font-weight: 700;
+                color: $light-secondary;
+            }
+            .header__title:first-child {
+                justify-self: self-start;
+            }
+        }
+        .vault {
+            display: grid;
+            grid-template-columns: 60% 40%;
+            align-items: center;
+            justify-items: center;
+            border-bottom: 1px solid #d9d9d9;
+            padding: 1rem 0;
+
+            .vault__info {
+                width: 100%;
+                padding: 0.5rem 1rem;
+                .nameAndSymbol {
+                    h4 {
+                        @include text(mobile);
+                        color: $light-primary;
+                        font-size: 15px;
+                        font-style: normal;
+                        font-weight: 500;
+                        line-height: normal;
+                        margin-bottom: 0.7rem;
+                        span {
+                            color: rgba(112, 112, 112, 0.52);
+                            font-weight: 400;
+                            font-size: 12px;
+                            margin-left: 0.5rem;
+                        }
+                    }
+                }
+                .vault__figures {
+                    display: flex;
+                    width: 100%;
+                    align-items: center;
+                    gap: 0.5rem;
+
+                    .vault__value {
+                        color: $light-tertiary;
+                        font-family: Inter;
+                        font-size: 13px;
+                        font-style: normal;
+                        font-weight: 400;
+                        line-height: normal;
+                    }
+                    .vault__changes {
+                        font-family: Inter;
+                        font-size: 13px;
+                        font-style: normal;
+                        font-weight: 400;
+                        line-height: normal;
+                    }
+                    .vault__changes.up {
+                        color: $light-percentageUP;
+                    }
+                    .vault__changes.down {
+                        color: $light-percentageDown;
+                    }
+                    .vault__changes.NoChange {
+                        color: $light-tertiary;
+                    }
+                }
+            }
+            .vault__coins {
+                display: flex;
+                align-items: center;
+                justify-self: end;
+                gap: 0.5rem;
+                .symbols {
+                    display: flex;
+                    gap: 0.5rem;
+                    
+                    img {
+                        width: 17px;
+                        height: 17px;
+                    }
+                }
+                .number {
+                    @include text(mobile);
+                    color: $light-tertiary;
+                    font-size: 11px;
+                    font-style: normal;
+                    font-weight: 400;
+                    line-height: normal;
+                }
+            }
+        }
+    }
+    .viewMoreButton {
+        margin-top: 2rem;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    &.dark {
+        .timePeriods {
+            .timePeriod {
+                color: $dark-tertiary;
+            }
+            .timePeriod.active {
+                background-color: $dark-secondary;
+
+                color: $dark-box-bg;
+            }
+        }
+        .vaults__headers {
+            background-color: $dark-box-bg;
+            box-shadow: 0 2px 26px rgba(255, 255, 255, 0.1);
+
+            .header {
+                border-bottom: 1px solid #d9d9d9;
+
+                .header__title {
+                    color: $dark-secondary;
+                }
+                .header__title:first-child {
+                }
+            }
+            .vault {
+                border-bottom: 1px solid #d9d9d9;
+                .vault__info {
+                    .nameAndSymbol {
+                        h4 {
+                            color: $dark-primary;
+                            span {
+                                color: rgba(112, 112, 112, 0.52);
+                            }
+                        }
+                    }
+                    .vault__figures {
+                        .vault__value {
+                            color: $dark-tertiary;
+                        }
+                        .vault__changes {
+                        }
+                        .vault__changes.up {
+                            color: $dark-percentageUP;
+                        }
+                        .vault__changes.down {
+                            color: $dark-percentageDown;
+                        }
+                        .vault__changes.NoChange {
+                            color: $dark-tertiary;
+                        }
+                    }
+                }
+                .vault__coins {
+                    .symbols {
+                        img {
+                        }
+                    }
+                    .number {
+                        color: $dark-tertiary;
+                    }
+                }
+            }
+        }
+    }
+    .vault:last-child {
+        border-bottom: none !important;
+        padding-bottom: 0 !important;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .vaults {
+        .timePeriods {
+            display: flex;
+            align-items: center;
+            .timePeriod {
+                margin: 0 1.5rem;
+                color: $light-tertiary;
+                @include text(mobile);
+                font-size: 15px;
+                font-style: normal;
+                font-weight: 400;
+            }
+            .timePeriod.active {
+                background-color: $light-secondary;
+                padding: 3px 10px;
+                border-radius: 17px;
+                color: $light-box-bg;
+                font-weight: 700;
+            }
+        }
+        .vaults__headers {
+            background-color: $light-box-bg;
+            margin-top: 2rem;
+            border-radius: 15px;
+            padding: 3rem 5rem;
+
+            .header {
+                display: grid;
+                grid-template-columns: 60% 40%;
+                justify-items: center;
+                border-bottom: 1px solid #d9d9d9;
+                padding-bottom: 2.5rem;
+
+                .header__title {
+                    @include text(mobile);
+                    font-size: 17px;
+                    font-style: normal;
+                    font-weight: 700;
+
+                    color: $light-secondary;
+                }
+                .header__title:first-child {
+                    justify-self: self-start;
+                }
+            }
+            .vault {
+                display: grid;
+                grid-template-columns: 60% 40%;
+                align-items: center;
+                justify-items: center;
+                border-bottom: 1px solid #d9d9d9;
+                padding: 2.5rem 0;
+
+                .vault__info {
+                    width: 100%;
+                    padding: 0.5rem 1rem;
+                    .nameAndSymbol {
+                        h4 {
+                            @include text(mobile);
+                            color: $light-primary;
+                            font-size: 18px;
+                            font-style: normal;
+                            font-weight: 500;
+                            line-height: normal;
+                            margin-bottom: 0.7rem;
+                            span {
+                                color: rgba(112, 112, 112, 0.52);
+                                font-size: 15px;
+                                font-style: normal;
+                                font-weight: 400;
+                                margin-left: 0.8rem;
+                            }
+                        }
+                    }
+                    .vault__figures {
+                        display: flex;
+                        width: 100%;
+                        align-items: center;
+                        gap: 0.5rem;
+
+                        .vault__value {
+                            color: $light-tertiary;
+                            font-family: Inter;
+                            font-size: 16px;
+                            font-style: normal;
+                            font-weight: 400;
+                            line-height: normal;
+                        }
+                        .vault__changes {
+                            font-family: Inter;
+                            font-size: 16px;
+                            font-style: normal;
+                            font-weight: 400;
+                            line-height: normal;
+                        }
+                        .vault__changes.up {
+                            color: $light-percentageUP;
+                        }
+                        .vault__changes.down {
+                            color: $light-percentageDown;
+                        }
+                        .vault__changes.NoChange {
+                            color: $light-tertiary;
+                        }
+                    }
+                }
+                .vault__coins {
+                    display: flex;
+                    align-items: center;
+                    gap: 1rem;
+                    .symbols {
+                        display: flex;
+                        gap: 0.5rem;
+                        img {
+                            width: 28px;
+                            height: 28px;
+                        }
+                    }
+                    .number {
+                        @include text(mobile);
+                        color: $light-tertiary;
+                        font-size: 18px;
+                        font-style: normal;
+                        font-weight: 400;
+                        line-height: normal;
+                    }
+                }
+            }
+        }
+        .viewMoreButton {
+            margin-top: 3rem;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        &.dark {
+            .timePeriods {
+                .timePeriod {
+                    color: $dark-tertiary;
+                }
+                .timePeriod.active {
+                    background-color: $dark-secondary;
+
+                    color: $dark-box-bg;
+                }
+            }
+            .vaults__headers {
+                background-color: $dark-box-bg;
+
+                .header {
+                    border-bottom: 1px solid #d9d9d9;
+
+                    .header__title {
+                        color: $dark-secondary;
+                    }
+                    .header__title:first-child {
+                    }
+                }
+                .vault {
+                    border-bottom: 1px solid #d9d9d9;
+                    .vault__info {
+                        .nameAndSymbol {
+                            h4 {
+                                color: $dark-primary;
+                                span {
+                                    color: rgba(112, 112, 112, 0.52);
+                                }
+                            }
+                        }
+                        .vault__figures {
+                            .vault__value {
+                                color: $dark-tertiary;
+                            }
+                            .vault__changes {
+                            }
+                            .vault__changes.up {
+                                color: $dark-percentageUP;
+                            }
+                            .vault__changes.down {
+                                color: $dark-percentageDown;
+                            }
+                            .vault__changes.NoChange {
+                                color: $dark-tertiary;
+                            }
+                        }
+                    }
+                    .vault__coins {
+                        .symbols {
+                            img {
+                            }
+                        }
+                        .number {
+                            color: $dark-tertiary;
+                        }
+                    }
+                }
+            }
+        }
+        .vault:last-child {
+            border-bottom: none !important;
+            padding-bottom: 0 !important;
+        }
+    }
+}
+
+.allVaults {
+    .allVaults_header{
+        display: flex;
+        align-items: baseline;
+    }
+    .timePeriods {
+        display: flex;
+        align-items: center;
+        .timePeriod {
+            margin: 0 1rem;
+            color: $light-tertiary;
+            @include text(mobile);
+            font-size: 11px;
+        }
+        .timePeriod.active {
+            background-color: $light-secondary;
+            padding: 3px 10px;
+            border-radius: 15px;
+            color: $light-box-bg;
+            font-weight: 700;
+        }
+    }
+    .vaults__headers {
+        background: none;
+        box-shadow: none;
+
+        margin-top: 1rem;
+        border-radius: 15px;
+        // padding: 1.5rem 1rem;
+
+        .vault {
+            display: grid;
+            grid-template-columns: 60% 40%;
+            align-items: center;
+            justify-items: center;
+            border-bottom: none;
+            padding: 0rem 0;
+            background: $light-box-bg;
+            margin-top: 1.5rem;
+            border-radius: 15px;
+
+            .vault__info {
+                width: 100%;
+                padding: 0.5rem 1rem;
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                cursor: pointer;
+                img {
+                    width: 25px;
+                    height: 25px;
+                }
+                .nameAndSymbol {
+                    h4 {
+                        @include text(mobile);
+                        color: $light-primary;
+                        font-size: 13px;
+                        font-style: normal;
+                        font-weight: 500;
+                        line-height: normal;
+                        margin-bottom: 0.7rem;
+                        span {
+                            color: rgba(112, 112, 112, 0.52);
+                            font-weight: 400;
+                            font-size: 11px;
+                            margin-left: 0.5rem;
+                        }
+                    }
+                }
+                .vault__figures {
+                    display: flex;
+                    width: 100%;
+                    align-items: center;
+                    gap: 0.5rem;
+
+                    .vault__value {
+                        color: $light-tertiary;
+                        font-family: Inter;
+                        font-size: 13px;
+                        font-style: normal;
+                        font-weight: 400;
+                        line-height: normal;
+                    }
+                    .vault__changes {
+                        font-family: Inter;
+                        font-size: 13px;
+                        font-style: normal;
+                        font-weight: 400;
+                        line-height: normal;
+                    }
+                    .vault__changes.up {
+                        color: $light-percentageUP;
+                    }
+                    .vault__changes.down {
+                        color: $light-percentageDown;
+                    }
+                    .vault__changes.NoChange {
+                        color: $light-tertiary;
+                    }
+                }
+            }
+            .vault__coins {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                .symbols {
+                    display: flex;
+                    gap: 0.5rem;
+                    img {
+                        width: 17px;
+                        height: 17px;
+                    }
+                }
+                .number {
+                    @include text(mobile);
+                    color: $light-tertiary;
+                    font-size: 11px;
+                    font-style: normal;
+                    font-weight: 400;
+                    line-height: normal;
+                }
+            }
+            .buy_button {
+                display: flex;
+                align-items: center;
+                justify-content:flex-end;
+                button {
+                    color: $light-primary;
+                    font-family: "Poppins";
+                    font-size: 13px;
+                    font-style: normal;
+                    font-weight: 400;
+                    line-height: normal;
+                    background-color: $light-box-bg;
+                    border: 1px solid $light-buttons;
+                    border-radius: 20px;
+                    padding: 0.5rem 2rem;
+                    margin-right: 0.8rem;
+                    cursor: pointer;
+                    
+                    
+                }
+            }
+        }
+        .vaultDetailSection {
+            width: 100%;
+            height: 0px;
+            overflow: hidden;
+            transition: height 3s ease-in-out;
+
+        
+            &.active {
+                height: auto;
+                transition: height 3s ease-in-out;
+            }
+           
+        }
+        
+    }
+    .vaultsD {
+        display: none;
+    }
+    .exchangeCard {
+        background-color: $light-box-bg; // Dark background color
+        color: $light-primary; // Text color
+        border-radius: 8px;
+        padding: 1rem;
+        // width: 85%;
+        margin: auto;
+        position: relative;
+         // Border color
+        .closeButton{
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: none;
+            border: none;
+            color: $light-primary;
+            font-size: 1.5rem;
+            cursor: pointer;
+            
+            &:hover {
+              color: lighten($light-primary, 10%); // Lighten the color on hover
+            }
+        }
+      
+        .card {
+          background-color: $light-box-bg; // Card background color
+          border-radius: 8px;
+          margin-bottom: 1rem;
+          
+          
+          color: #fff;
+       
+          
+          .cardHeader {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.5rem;
+            color: $light-tertiary; // Subtext color
+            padding: 0.8rem;
+          
+          }
+      
+          .cardBody {
+            background-color: $light-bg;
+            border: 1px solid $light-tertiary;
+            border-radius: 5px; // Border color
+            padding: 1rem 3rem ;
+            .balanceInfo {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding-right: 1rem;
+                    p {
+                        color: $light-tertiary; // Subtext color
+                        font-size: 1.2rem;
+                    }
+                // .eth {
+                //   margin: 0 0.5rem;
+                // }
+        
+                .maxButton {
+                  background-color: $light-secondary; // Max button background color
+                  color: $light-primary; // Max button text color
+                  border: none;
+                  padding: 0.25rem 0.5rem;
+                  border-radius: 8px;
+                  cursor: pointer;
+                }
+              }
+            .tokenInputContainer {
+                display: flex;
+                align-items: center;
+                background-color: $light-bg; // Adjust the color based on your UI theme
+                border-radius: 8px;
+                padding: 0.5rem 0rem;
+              
+                .tokenInput {
+                  flex-grow: 1;
+                  background-color: transparent;
+                  margin-right: 2rem;
+                 border: none;
+                  color: $light-primary ;// Adjust the color based on your UI theme
+                //   padding: 0.5rem;
+                  font-size: 1.8rem;
+                  &:focus {
+                    outline: none;
+                  }
+                }
+              
+                .maxButton {
+                  background-color: #a130d8; // Adjust the color based on your UI theme
+                  border: none;
+                  color: $light-primary;
+                  margin-right: 0.5rem;
+                  padding: 0.5rem 1rem;
+                  border-radius: 8px;
+                  font-size: 1.2rem;
+                  cursor: pointer;
+                  &:focus {
+                    outline: none;
+                  }
+                }
+              
+                .selectTokenButton {
+                  background-color: $light-box-bg; // Adjust the color based on your UI theme
+                  border: 1px solid $light-tertiary; // Adjust the color based on your UI theme
+                  display: flex;
+                  justify-content: center;
+                  gap: 1rem;
+                  align-items: center;
+                  border-radius: 8px;
+                 padding: 0.5rem 2rem;
+                  cursor: pointer;
+                  &:focus {
+                    outline: none;
+                  }
+                  .logo {
+                    border-radius: 25px;
+                    width: 3rem;
+                    height: 3rem;
+                
+                    &.placeholder {
+                      background-color: $light-bg; // Placeholder background color when no logo
+                      // Additional placeholder styles here
+                    }
+                  }
+                .symbol {
+                 color: $light-tertiary; // Adjust the color based on your UI theme
+                  font-size: 1.5rem;
+                  line-height: normal;
+                }
+              
+                  .arrow {
+                    margin-left: 0.5rem;
+                  }
+                }
+                .sellTokenButton{
+                    margin: 1.4rem 0rem;
+                }
+              }
+            .price {
+                display: flex;
+                justify-content: flex-end;
+                padding-right: 1rem;
+                 p {
+                    color: $light-tertiary; // Subtext color
+                    font-size: 1.2rem;
+                 }
+              }
+          }
+        }
+      
+        .arrowDown {
+            position: relative;
+           p {
+            position:absolute;
+            top: -0.5rem;
+            left:50%;
+            padding: 0.25rem 0.5rem;
+            border: 1px solid $light-tertiary;
+            border-radius:50%;
+            // left: ;
+            text-align: center;
+          font-size: 1.5rem;
+          color: $light-tertiary
+           }
+         
+        }
+        .error {
+            margin-top: 1rem;
+           p{
+            color: red;
+            font-size: 1.5rem;
+            text-align: center;
+            
+           }
+        }
+      
+        .buyButton {
+          background-color: $light-secondary; // Buy button background color
+          // Buy button text color
+          width: 100%;
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         gap: 2rem;
+          border: none;
+          padding: 1rem 1rem;
+          border-radius: 8px;
+          cursor: pointer;
+          margin-top: 0.5rem;
+          img{
+                width: 2.5rem;
+                height: 2.5rem;
+          }
+          p {
+            font-size: 1.5rem;
+          font-weight: bold;
+          color: $light-primary;
+
+          }
+       
+        }
+
+        .txnProgress {
+            background-color: $light-tertiary; // Buy button background color
+            // Buy button text color
+            width: 100%;
+           display: flex;
+           justify-content: center;
+           align-items: center;
+           gap: 2rem;
+            border: none;
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 0.5rem;
+            img{
+                  width: 2.5rem;
+                  height: 2.5rem;
+            }
+        }
+      }
+      .addTokenModal {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1.5rem 3rem;
+            height: 50vh;
+            overflow-y: hidden;
+        
+            .searchBox {
+                max-height: 10vh;
+                display: flex;
+                width: 100%;
+                align-items: center;
+                background-color: #fafafa;
+                padding: 1.4rem 1rem;
+                border: 1px solid #edeef2;
+                border-radius: 15px;
+                gap: 1rem;
+        
+                input {
+                    background: none;
+                    outline: none;
+                    display: flex;
+                    align-items: center;
+                }
+        
+                svg {
+                    width: 17.016px;
+                    height: 17.016px;
+                }
+            }
+        
+            .selectM {
+                max-height: 10vh;
+                @include button-responsive(mobile);
+                padding: 1rem;
+                width: 100%;
+                margin-top: 2rem;
+                border-radius: 15px;
+            }
+        
+            .tokens {
+                width: 100%;
+                margin-top: 2rem;
+                height: 100%;
+        
+                .header {
+                    display: grid;
+                    grid-template-columns: 80% 20%;
+                    justify-content: center;
+                    border-bottom: 1px solid #d9d9d9;
+                    padding-bottom: 1rem;
+
+        
+                    h2 {
+                        font-family: Poppins;
+                        font-size: 13px;
+                        font-style: normal;
+                        font-weight: 700;
+                        color: #843ea1;
+                    }
+                }
+        
+                .tokensContainer {
+                    overflow-y: scroll;
+                    height: 100%;
+        
+                    .token {
+                        display: grid;
+                        grid-template-columns: 80% 20%;
+                        align-items: center;
+                        padding: 1rem 0;
+                        cursor: pointer;
+        
+                        &:hover {
+                            background-color: #f7f7f7;
+                        }
+        
+                        &.disabled {
+                            cursor: auto;
+                            pointer-events: none;
+                        }
+        
+                        &.present {
+                            pointer-events: none;
+        
+                            .exsitingSpan {
+                                background-color: $light-secondary;
+                                color: #fff;
+                                padding: 0.5rem;
+                                font-size: 9px;
+                                border-radius: 10px;
+                                margin-left: 0.5rem;
+                            }
+        
+                            .isSelected {
+                                fill: $light-secondary;
+                            }
+                        }
+        
+                        &.active {
+                            cursor: pointer;
+                            pointer-events: all;
+        
+                            .isSelected {
+                                fill: $light-secondary;
+                            }
+                        }
+        
+                        .token__info {
+                            display: flex;
+                            align-items: center;
+                            gap: 1rem;
+        
+                            .logos {
+                                width: 32px;
+                                height: 32px;
+                                position: relative;
+        
+                                .coinLogo {
+                                    width: 100%;
+                                    height: 100%;
+                                }
+        
+                                .chainLogo {
+                                    position: absolute;
+                                    right: -4px;
+                                    bottom: 0;
+                                    width: 16px;
+                                    height: 16px;
+                                }
+                            }
+        
+                            img {
+                                width: 24px;
+                                height: 24px;
+                            }
+        
+                            .nameAndSymbol {
+                                h3 {
+                                    font-family: Poppins;
+                                    font-size: 13px;
+                                    font-style: normal;
+                                    font-weight: 500;
+                                    line-height: normal;
+                                    color: $light-primary;
+                                    text-transform: capitalize;
+                                }
+        
+                                p {
+                                    font-family: Poppins;
+                                    font-size: 11px;
+                                    font-style: normal;
+                                    font-weight: 400;
+                                    line-height: normal;
+                                    color: $light-tertiary;
+                                }
+                            }
+                        }
+        
+                        .priceAndSelected {
+                            display: flex;
+                            align-items: center;
+                            justify-content: space-between;
+                            align-self: start;
+        
+                            .price {
+                                font-family: Inter;
+                                font-size: 14px;
+                                font-style: normal;
+                                font-weight: 400;
+                                line-height: normal;
+                                color: $light-primary;
+                            }
+        
+                            .isSelected {
+                                width: 13px;
+                                height: 13px;
+                            }
+                        }
+                    }
+                }
+            }
+        
+            .selectD {
+                display: none;
+            }
+        }
+      
+   
+    &.dark {
+        .timePeriods {
+            .timePeriod {
+                color: $dark-tertiary;
+            }
+            .timePeriod.active {
+                background-color: $dark-secondary;
+
+                color: $dark-box-bg;
+            }
+        }
+        .vaults__headers {
+            background: none;
+            box-shadow: none;
+
+            margin-top: 1rem;
+            border-radius: 15px;
+            // padding: 1.5rem 1rem;
+
+            .vault {
+                display: grid;
+                grid-template-columns: 60% 40%;
+                align-items: center;
+                // justify-items: center;
+                border-bottom: none;
+                // padding: 1.5rem 0;
+                background: $dark-box-bg;
+                margin-top: 1.5rem;
+                border-radius: 15px;
+                border-bottom-right-radius: 0px ;
+                border-bottom-left-radius: 0px ;
+               
+                .vault__info {
+                    width: 100%;
+                    padding: 0.5rem 1rem;
+                    display: flex;
+                    align-items: center;
+                    gap: 1rem;
+                    img {
+                        width: 25px;
+                        height: 25px;
+                    }
+                    .nameAndSymbol {
+                        h4 {
+                            @include text(mobile);
+                            color: $dark-primary;
+                            font-size: 13px;
+                            font-style: normal;
+                            font-weight: 500;
+                            line-height: normal;
+                            margin-bottom: 0.7rem;
+                            span {
+                                color: #9a9cb8;
+
+                                font-weight: 400;
+                                font-size: 11px;
+                                margin-left: 0.5rem;
+                            }
+                        }
+                    }
+                    .vault__figures {
+                        display: flex;
+                        width: 100%;
+                        align-items: center;
+                        gap: 0.5rem;
+
+                        .vault__value {
+                            color: $dark-tertiary;
+                            font-family: Inter;
+                            font-size: 13px;
+                            font-style: normal;
+                            font-weight: 400;
+                            line-height: normal;
+                        }
+                        .vault__changes {
+                            font-family: Inter;
+                            font-size: 13px;
+                            font-style: normal;
+                            font-weight: 400;
+                            line-height: normal;
+                        }
+                        .vault__changes.up {
+                            color: $dark-percentageUP;
+                        }
+                        .vault__changes.down {
+                            color: $dark-percentageDown;
+                        }
+                        .vault__changes.NoChange {
+                            color: $dark-tertiary;
+                        }
+                    }
+                }
+                .vault__coins {
+                    display: flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                    .symbols {
+                        display: flex;
+                        gap: 0.5rem;
+                        img {
+                            width: 17px;
+                            height: 17px;
+                        }
+                    }
+                    .number {
+                        @include text(mobile);
+                        color: $dark-tertiary;
+                        font-size: 11px;
+                        font-style: normal;
+                        font-weight: 400;
+                        line-height: normal;
+                    }
+                }
+                .buy_button {
+                    button {             
+                        background-color: $dark-box-bg;
+                        border: 1px solid $dark-buttons;   
+                    }
+                }
+            }
+            .vaultDetailSection {
+              
+            }
+        }
+        .vaultsD {
+            display: none;
+        }
+        .exchangeCard{
+            background-color: $dark-box-bg; // Dark background color
+            color: $dark-primary; // Text color
+            .closeButton{
+                color: $dark-primary;
+                &:hover {
+                    color: lighten($dark-primary, 10%); // Lighten the color on hover
+                }
+            }
+            .card{
+                background-color: $dark-box-bg; // Card background color
+                color: $dark-primary; // Text color
+                .cardHeader{
+                    color: $dark-tertiary; // Subtext color
+                  
+                }
+                .cardBody{
+                    background-color: $dark-box-bg; // Card body background color
+                    .balanceInfo{
+                        .eth{
+                            margin: 0 0.5rem;
+                        }
+                   
+                        .maxButton{
+                            background-color: $dark-secondary; // Max button background color
+                            color: $dark-primary; // Max button text color
+                        }
+                    }
+                    .tokenInputContainer{
+                        background-color: $dark-box-bg; // Adjust the color based on your UI theme
+                        .tokenInput{
+                            color: $dark-primary ;// Adjust the color based on your UI theme
+                        }
+                        .maxButton{
+                            background-color: $dark-secondary; // Max button background color
+                            color: $dark-primary; // Max button text color
+                        }
+                        .selectTokenButton{
+                            border: none;
+                            background-color: $dark-bg; // Adjust the color based on your UI theme
+                            color: $dark-primary; // Adjust the color based on your UI theme
+                            .logo{
+                                &.placeholder{
+                                    background-color: $dark-box-bg; // Placeholder background color when no logo
+                                }
+                            }
+                            .symbol{
+                                color: $dark-tertiary; // Adjust the color based on your UI theme
+                            }
+
+                        }
+                    }
+                    .price{
+                        color: $dark-tertiary; // Subtext color
+                    }
+                }
+            
+            }
+            .buyButton {
+                background-color: $dark-secondary; // Buy button background color
+                // Buy button text color
+                p {
+                    color: $dark-primary;
+                }    
+            }
+            .txnProgress{
+                background-color: $dark-tertiary; // Buy button background color
+            }
+            
+        }
+        .addTokenModal{
+
+        }
+      
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .allVaults {
+        .titleAndHeader {
+            margin-top: 2rem;
+        }
+        .timePeriods {
+            display: flex;
+            align-items: center;
+            .timePeriod {
+                margin: 0 1.5rem;
+                color: $light-tertiary;
+                @include text(mobile);
+                font-size: 15px;
+                font-style: normal;
+                font-weight: 400;
+            }
+            .timePeriod.active {
+                background-color: $light-secondary;
+                padding: 3px 10px;
+                border-radius: 17px;
+                color: $light-box-bg;
+                font-weight: 700;
+            }
+        }
+        .vaults__headers {
+            display: none;
+        }
+
+        .vaultsD {
+            display: block;
+            background-color: $light-box-bg;
+            margin-top: 2rem;
+            border-radius: 15px;
+            padding: 3rem 0;
+            .headers {
+                display: grid;
+                grid-template-columns: 5% 35% 15% 15% 15% 15%;
+                justify-items: center;
+                font-family: Poppins;
+                font-size: 15px;
+                font-style: normal;
+                font-weight: 500;
+                line-height: normal;
+                color: $light-secondary;
+                border-bottom: 1px solid #9a9cb8;
+                padding: 0 2rem 2rem 2rem;
+                .sharp {
+                    justify-self: start;
+                }
+                .header:nth-child(2) {
+                    justify-self: start;
+                }
+            }
+            .vaults {
+                .vault {
+                    display: grid;
+                    grid-template-columns: 5% 35% 15% 15% 15% 15%;
+                    grid-template-rows: 3rem;
+                    align-items: center;
+                    justify-items: center;
+                    padding: 2rem;
+
+                    .order {
+                        justify-self: start;
+                        font-family: Inter;
+                        font-size: 16px;
+                        font-style: normal;
+                        font-weight: 400;
+                        line-height: normal;
+                        color: $light-primary;
+                    }
+                    .vault__info {
+                        justify-self: start;
+
+                        display: flex;
+                        align-items: center;
+                        gap: 1rem;
+                        cursor: pointer;
+                        img {
+                            width: 28px;
+                            height: 28px;
+                        }
+                        .nameAndSymbol {
+                            display: flex;
+                            align-items: center;
+                            h3 {
+                                font-family: Poppins;
+                                font-size: 1.5rem;
+                                font-style: normal;
+                                font-weight: 500;
+                                line-height: normal;
+                                color: $light-primary;
+                            }
+                            h4 {
+                                font-family: Poppins;
+                                font-size: 1.5rem;
+                                font-style: normal;
+                                font-weight: 400;
+                                line-height: normal;
+                                color: $light-tertiary;
+                            }
+                        }
+                    }
+
+                    .changes {
+                        font-family: Inter;
+                        font-size: 1.5rem;
+                        font-style: normal;
+                        font-weight: 400;
+                        line-height: normal;
+                        color: $light-tertiary;
+                    }
+                    .changes.Up {
+                        color: $light-percentageUP;
+                    }
+                    .changes.Down {
+                        color: $light-percentageDown;
+                    }
+                    .changes.NoChange {
+                        color: $light-tertiary;
+                    }
+
+                    .price {
+                        color: $light-primary;
+                        font-family: Inter;
+                        font-size: 1.5rem;
+                        font-style: normal;
+                        font-weight: 400;
+                        line-height: normal;
+                    }
+
+                    .coins {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        width: 70%;
+                        .symbols {
+                            display: flex;
+                            width: 20px;
+                            height: 20px;
+                        }
+                        .number {
+                            color: #b4b4b4;
+                            font-family: Poppins;
+                            font-size: 14px;
+                            font-style: normal;
+                            font-weight: 400;
+                        }
+                    }
+                    .buy_button {
+                        display: flex;
+                        align-items: center;
+                        
+                        button {
+                            color: $light-primary;
+                            font-family: "Poppins";
+                            font-size: 1.5rem;
+                            font-style: normal;
+                            font-weight: 400;
+                            line-height: normal;
+                            background-color: $light-box-bg;
+                            border: 1px solid $light-buttons;
+                            border-radius: 25px;
+                            padding:0.7rem 2.5rem;
+                            cursor: pointer;
+                            transition: all 0.2s ease-in-out;
+                            &:hover {
+                                background-color: $light-buttons;
+                                color: $light-bg;
+                                transition: all 0.2s ease-in-out;
+                            }
+                        }
+                        svg {
+                           cursor: pointer;
+                        }
+                    }
+                }
+                .vaultDetailSection {
+                    width: 100%;
+                    height: 0px;
+                    overflow: hidden;
+                    transition: height 3s ease-in-out;
+                    border-bottom: 1px solid #D9D9D9;
+                
+                    &.active {
+                        height: auto;
+                        transition: height 3s ease-in-out;
+                    }
+                   
+                }
+                .vault:last-child {
+                    border-bottom: none;
+                }
+            }
+        }
+        .addTokenModal {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0;
+            overflow-y: unset;
+            position: relative;
+            
+           .closeButton {
+                position: absolute;
+                top: 0;
+                right: 0;
+                background: none;
+                border: none;
+                color: $light-primary;
+                font-size: 1.5rem;
+                cursor: pointer;
+                &:hover {
+                    color: lighten($light-primary, 10%);
+                }
+            } 
+    
+            .closeModal {
+                display: none;
+            }
+    
+            .searchBox {
+                height: 5vh;
+                display: flex;
+                width: 90%;
+                margin: 2rem auto 0 auto;
+                align-items: center;
+                background-color: #fafafa;
+                padding: 1rem;
+                border: 1px solid #edeef2;
+                border-radius: 15px;
+                gap: 1rem;
+    
+                input {
+                    background: none;
+                    outline: none;
+                    display: flex;
+                    align-items: center;
+                    font-family: Poppins;
+                    font-size: 16px;
+                    font-style: normal;
+                    font-weight: 400;
+                    line-height: normal;
+                    width: 100%;
+                }
+    
+                svg {
+                    width: 25;
+                    height: 25px;
+                }
+            }
+    
+            .selectM {
+                display: none;
+                max-height: 10vh;
+                @include button-responsive(mobile);
+                padding: 1rem;
+                width: 100%;
+                margin-top: 2rem;
+                border-radius: 15px;
+            }
+    
+            .tokens {
+                width: 100%;
+                margin-top: 0;
+                overflow-y: hidden;
+                padding: 0 1rem;
+    
+                .header {
+                    display: grid;
+                    grid-template-columns: 80% 20%;
+                    border-bottom: 1px solid #d9d9d9;
+                    padding-bottom: 1.5rem;
+                    margin-top: 0;
+    
+                    h2 {
+                        font-size: 15px;
+                        font-style: normal;
+                        font-weight: 600;
+                        line-height: normal;
+                        color: #843ea1;
+                        position: relative;
+                        cursor: pointer;
+    
+                        img{
+                            display: none;
+                           position: absolute;
+                            width: 20px;
+                        }
+                        &.active.up{
+                            img{
+                                display: inline;
+                                position: absolute;
+                                width: 20px;
+                                top: 2px;
+                                transform: rotate(180deg);
+                            }
+                        }
+                        &.active.down{
+                            img{
+                                display: inline;
+                                position: absolute;
+                                width: 20px;
+                                top: 2px;
+                            }
+                        }
+                    }
+                }
+    
+                .tokensContainer {
+                    height: 100%;
+                    overflow: hidden;
+                    overflow-y: scroll;
+                    // padding-bottom: 5rem;
+                    height: 30vh;
+    
+                    &::-webkit-scrollbar-track {
+                        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+                        background-color: #F5F5F5;
+                    }
+    
+                    &::-webkit-scrollbar {
+                        width: 10px;
+                        background-color: #F5F5F5;
+                    }
+    
+                    &::-webkit-scrollbar-thumb {
+                        background-color: $light-secondary;
+                        background-image: -webkit-linear-gradient(90deg,
+                                rgba(255, 255, 255, .2) 25%,
+                                transparent 25%,
+                                transparent 50%,
+                                rgba(255, 255, 255, .2) 50%,
+                                rgba(255, 255, 255, .2) 75%,
+                                transparent 75%,
+                                transparent)
+                    }
+    
+                    .token {
+                        display: grid;
+                        grid-template-columns: 80% 20%;
+                        align-items: center;
+                        margin-top: 0.7rem;
+                        padding: 0.5rem 0;
+                        border-bottom: 1px solid #d9d9d9;
+                        cursor: pointer;
+    
+                        &:hover {
+                            background-color: #f7f7f7;
+                        }
+    
+                        &.disabled {
+                            cursor: auto;
+                            pointer-events: none;
+                        }
+    
+                        &.present {
+                            pointer-events: none;
+    
+                            .exsitingSpan {
+                                background-color: $light-secondary;
+                                color: #fff;
+                                padding: 0.5rem;
+                                font-size: 9px;
+                                border-radius: 10px;
+                                margin-left: 0.5rem;
+                            }
+    
+                            .isSelected {
+                                fill: $light-secondary;
+                            }
+                        }
+    
+                        &.active {
+                            cursor: pointer;
+                            pointer-events: all;
+    
+                            .isSelected {
+                                fill: $light-secondary;
+                            }
+                        }
+    
+                        .token__info {
+                            display: flex;
+                            align-items: center;
+                            gap: 1rem;
+    
+                            .logos {
+                                width: 25px;
+                                height: 25px;
+                                position: relative;
+    
+                                .coinLogo {
+                                    width: 100%;
+                                    height: 100%;
+                                }
+    
+                                .chainLogo {
+                                    position: absolute;
+                                    right: -4px;
+                                    bottom: 0;
+                                    width: 16px;
+                                    height: 16px;
+                                }
+                            }
+    
+                            img {
+                                width: 25px;
+                                height: 25px;
+                            }
+    
+                            .nameAndSymbol {
+                                display: flex;
+                                align-items: center;
+                                gap: 0.3rem;
+    
+                                h3 {
+                                    font-family: Poppins;
+                                    font-size: 14px;
+                                    font-style: normal;
+                                    font-weight: 500;
+                                    line-height: normal;
+                                    color: $light-primary;
+                                    text-transform: capitalize;
+                                }
+    
+                                p {
+                                    font-family: Poppins;
+                                    font-size: 11px;
+                                    font-style: normal;
+                                    font-weight: 400;
+                                    line-height: normal;
+                                    color: $light-tertiary;
+                                }
+                            }
+                        }
+    
+                        .priceAndSelected {
+                            display: flex;
+                            align-items: center;
+                            justify-content: space-between;
+                            align-self: center;
+    
+                            .price {
+                                text-align: right;
+                                font-family: Rubik;
+                                font-size: 15px;
+                                font-style: normal;
+                                font-weight: 400;
+                                line-height: normal;
+                                color: $light-primary;
+                            }
+    
+                            .isSelected {
+                                width: 15.956px;
+                                height: 15.956px;
+                            }
+                        }
+    
+                        &.active {
+                            .isSelected {
+                                fill: $light-secondary;
+                            }
+                        }
+                    }
+                }
+            }
+    
+            .selectD {
+                display: block;
+                max-height: 10vh;
+                @include button-responsive(mobile);
+                padding: 1rem;
+                width: 100%;
+                margin-top: 2rem;
+                border-radius: 15px;
+            }
+    
+            .tokensmodalButtonContainer {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 90%;
+                gap: 1rem;
+    
+                button {
+                    width: 50%;
+                    @include button-responsive(laptop);
+                    border-radius: 10px;
+                    padding: 1rem 0;
+                    margin-top: 1rem;
+                }
+    
+                .close {
+                    background: none;
+                    border: 1px solid $light-secondary;
+                    color: $light-primary;
+                }
+            }
+        }
+
+        &.dark {
+            .timePeriods {
+                .timePeriod {
+                    color: $dark-tertiary;
+                }
+                .timePeriod.active {
+                    background-color: $dark-secondary;
+
+                    color: $dark-box-bg;
+                }
+            }
+
+            .vaultsD {
+                display: block;
+                background-color: $dark-box-bg;
+                margin-top: 2rem;
+                border-radius: 15px;
+                padding: 3rem 0;
+                .headers {
+                    display: grid;
+                    grid-template-columns: 5% 35% 15% 15% 15% 15%;
+                    justify-items: center;
+                    font-family: Poppins;
+                    font-size: 15px;
+                    font-style: normal;
+                    font-weight: 500;
+                    line-height: normal;
+                    color: $dark-secondary;
+                    border-bottom: 1px solid #9a9cb8;
+                    padding: 0 2rem 2rem 2rem;
+                    .sharp {
+                        justify-self: start;
+                    }
+                    .header:nth-child(2) {
+                        justify-self: start;
+                    }
+                }
+                .vaults {
+                    .vault {
+                        display: grid;
+                        grid-template-columns: 5% 35% 15% 15% 15% 15%;
+                        grid-template-rows: 3rem;
+                        align-items: center;
+                        justify-items: center;
+                        padding: 2rem;
+                       
+
+                        .order {
+                            justify-self: start;
+                            font-family: Inter;
+                            font-size: 16px;
+                            font-style: normal;
+                            font-weight: 400;
+                            line-height: normal;
+                            color: $dark-primary;
+                        }
+                        .vault__info {
+                            justify-self: start;
+                            display: flex;
+                            align-items: center;
+                            gap: 1rem;
+
+                            img {
+                                width: 28px;
+                                height: 28px;
+                            }
+                            .nameAndSymbol {
+                                h3 {
+                                    color: $dark-primary;
+                                }
+                                h4 {
+                                    color: $dark-tertiary;
+                                }
+                            }
+                        }
+
+                        .changes {
+                           color: $dark-tertiary;
+                        }
+                        .changes.Up {
+                            color: $dark-percentageUP;
+                        }
+                        .changes.Down {
+                            color: $dark-percentageDown;
+                        }
+                        .changes.NoChange {
+                            color: $dark-tertiary;
+                        }
+
+                        .price {
+                            color: $dark-primary;
+                        }
+
+                        .coins {
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            width: 70%;
+                            .symbols {
+                                display: flex;
+                                width: 20px;
+                                height: 20px;
+                            }
+                            .number {
+                                color: $dark-tertiary;
+                            }
+                        }
+                        .buy_button {
+                            button {
+                                color: $dark-primary;
+                                background-color: $dark-box-bg;
+                                border: 1px solid $dark-buttons;
+                                &:hover {
+                                    background-color: $dark-buttons;
+                                    color: $dark-bg;
+                                   
+                                }
+                            }
+                        }
+                    }
+                    .vault:last-child {
+                        border-bottom: none;
+                    }
+                }
+            }
+            .addTokenModal{
+                .closeButton {
+                    color: $dark-primary;
+                    &:hover {
+                        color: lighten($dark-primary, 10%);
+                    }
+                }
+                .searchBox {
+                    background-color: #0c101c;
+                    border: 1px solid #3a4151;
+    
+                    input {}
+    
+                    svg {}
+                }
+    
+                .selectM {}
+    
+                .tokens {
+                    .header {
+                        border-bottom: 1px solid #d9d9d9;
+    
+                        h2 {
+                            color: $dark-secondary;
+                        }
+                    }
+    
+                    .token {
+                        &:hover {
+                            background-color: #34353542;
+                        }
+    
+                        .token__info {
+                            .logos {
+                                .coinLogo {}
+    
+                                .chainLogo {}
+                            }
+    
+                            img {}
+    
+                            .nameAndSymbol {
+                                h3 {
+                                    color: $dark-primary;
+                                }
+    
+                                p {
+                                    color: $dark-tertiary;
+                                }
+                            }
+                        }
+    
+                        .priceAndSelected {
+                            .price {
+                                color: $dark-primary;
+                            }
+    
+                            .isSelected {}
+                        }
+    
+                        &.active {
+                            .isSelected {
+                                fill: $dark-secondary;
+                            }
+                        }
+                    }
+                }
+                .tokensmodalButtonContainer {
+                
+        
+                    button {
+                      
+                    }
+        
+                    .close {
+                      color: $dark-primary;
+                    }
+                }
+            }
+        }
+    }
+}

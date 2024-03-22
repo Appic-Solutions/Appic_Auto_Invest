@@ -1,0 +1,1486 @@
+.crossChain {
+  width: 100%;
+  background-color: $light-box-bg;
+  border-radius: 15px;
+  box-shadow: 0 2px 26px rgba(0, 0, 0, 0.1);
+  margin-top: 2rem;
+  padding: 1.5rem 2rem;
+
+  .tokensBox {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 100%;
+    width: 100%;
+
+    position: relative;
+    gap: 2rem;
+    height: auto;
+
+    .token {
+      border: 1px solid rgb(224, 224, 224);
+      border-radius: 12px;
+      padding: 1.4rem 1.6rem;
+      width: 100%;
+      height: auto;
+      cursor: pointer;
+
+      p {
+        color: $light-primary;
+        font-family: Inter;
+        font-weight: 700;
+        font-size: 15px;
+        margin-bottom: 1rem;
+      }
+
+      .tokenInfo {
+        display: flex;
+        align-items: center;
+        gap: 1.6rem;
+
+        .logos {
+          width: 32px;
+          height: 32px;
+          position: relative;
+
+          .coinLogo {
+            width: 100%;
+            height: 100%;
+          }
+
+          .chainLogo {
+            position: absolute;
+            right: -4px;
+            bottom: 0;
+            width: 16px;
+            height: 16px;
+          }
+        }
+
+        .logos.empty {
+          width: 32px;
+          height: 32px;
+          position: relative;
+
+          .emptyLogo {
+            width: 100%;
+            height: 100%;
+            background-color: rgb(224, 224, 224);
+            border-radius: 50%;
+          }
+
+          .emptyChainLogo {
+            position: absolute;
+            border: 3px solid #fff;
+
+            right: -5px;
+            bottom: 0;
+            width: 18px;
+            height: 18px;
+            background-color: rgb(224, 224, 224);
+            border-radius: 50%;
+          }
+        }
+
+        .nameAndChain {
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+
+          h3 {
+            color: $light-primary;
+            font-family: Inter;
+            font-size: 18px;
+            font-weight: 500;
+          }
+
+          h4 {
+            color: rgb(116, 116, 116);
+            font-family: Inter;
+            font-weight: 400;
+            font-size: 11px;
+          }
+        }
+
+        .nameAndChain.empty {
+          display: flex;
+          flex-direction: column;
+
+          h3 {
+            color: rgb(116, 116, 116);
+            font-family: Inter;
+            font-size: 18px;
+            font-weight: 500;
+          }
+        }
+      }
+    }
+
+    .token:hover {
+      background-color: rgb(248, 248, 248);
+      transition: all 0.3s ease-in;
+    }
+
+    .from {
+    }
+
+    .to {
+    }
+
+    .reverse {
+      background: $light-box-bg;
+      padding: 0.5rem;
+      cursor: pointer;
+      border: 1px solid rgb(224, 224, 224);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      top: 42%;
+      left: 43%;
+
+      svg {
+        fill: #000;
+        width: 2.4rem;
+        height: 2.4rem;
+      }
+    }
+  }
+  .BTCAddress {
+    margin-top: 2rem;
+
+    .token {
+      border: 1px solid rgb(224, 224, 224);
+      border-radius: 12px;
+      padding: 2rem 2.4rem;
+      width: 100%;
+      height: auto;
+
+      p {
+        color: $light-primary;
+        font-family: Inter;
+        font-weight: 700;
+        font-size: 15px;
+        margin-bottom: 1rem;
+      }
+      .amountToBeChanged {
+        width: 100%;
+        color: $light-primary;
+        font-family: Inter;
+        font-size: 19px;
+        font-weight: 700;
+        outline: none;
+        padding: 1rem 0;
+      }
+
+      input[type="number"]::-webkit-inner-spin-button {
+        display: none;
+      }
+
+    
+    }
+  }
+  .amount {
+    margin-top: 2rem;
+
+    .token {
+      border: 1px solid rgb(224, 224, 224);
+      border-radius: 12px;
+      padding: 1.4rem 1.6rem;
+      width: 100%;
+      height: 45%;
+
+      p {
+        color: $light-primary;
+        font-family: Inter;
+        font-weight: 700;
+        font-size: 15px;
+        margin-bottom: 1rem;
+      }
+
+      .tokenInfo {
+        display: flex;
+        align-items: center;
+        gap: 1.6rem;
+
+        .logos {
+          width: 32px;
+          height: 32px;
+          position: relative;
+
+          .coinLogo {
+            width: 100%;
+            height: 100%;
+          }
+
+          .chainLogo {
+            position: absolute;
+            right: -4px;
+            bottom: 0;
+            width: 16px;
+            height: 16px;
+          }
+        }
+
+        .logos.empty {
+          width: 32px !important;
+          height: 32px;
+          position: relative;
+
+          .emptyLogo {
+            width: 100%;
+            height: 100%;
+            background-color: rgb(224, 224, 224);
+            border-radius: 50%;
+          }
+
+          .emptyChainLogo {
+            position: absolute;
+            border: 3px solid #fff;
+
+            right: -5px;
+            bottom: 0;
+            width: 18px;
+            height: 18px;
+            background-color: rgb(224, 224, 224);
+            border-radius: 50%;
+          }
+        }
+
+        .nameAndChain {
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+          width: 60%;
+
+          .amountToBeChanged {
+            width: 100%;
+            color: $light-primary;
+            font-family: Inter;
+            font-size: 24px;
+            font-weight: 700;
+            outline: none;
+            padding: 1rem 0;
+          }
+
+          input[type="number"]::-webkit-inner-spin-button {
+            display: none;
+          }
+
+          h4 {
+            color: rgb(116, 116, 116);
+            font-family: Inter;
+            font-weight: 400;
+            font-size: 12px;
+          }
+        }
+
+        .nameAndChain.empty {
+          display: flex;
+          flex-direction: column;
+
+          .amountToBeChanged {
+            width: 100%;
+            color: $light-primary;
+            font-family: Inter;
+            font-size: 24px;
+            font-weight: 700;
+            outline: none;
+            padding: 1rem 0;
+          }
+        }
+
+        .max {
+          align-self: flex-end;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          height: 100%;
+          gap: 1rem;
+
+          button {
+            background-color: $light-secondary;
+            border-radius: 15px;
+            border: none;
+            padding: 0.5rem 1rem;
+            color: #fff;
+            cursor: pointer;
+          }
+
+          p {
+            margin-bottom: 0;
+            color: rgb(116, 116, 116);
+            font-family: Inter;
+            font-weight: 400;
+            font-size: 12px;
+            justify-self: flex-end;
+          }
+        }
+      }
+    }
+  }
+
+  button.exchange {
+    margin-top: 2rem;
+    @include button-responsive(mobile);
+    width: 100%;
+    border-radius: 12px;
+    padding: 1rem 1rem;
+  }
+
+  button.exchange:disabled {
+    cursor: auto;
+    background-color: #833ea1ac;
+  }
+
+  .chains {
+    display: grid;
+    grid-template-columns: 13% 13% 13% 13% 13% 13% 13%;
+    justify-content: space-between;
+    row-gap: 1rem;
+    align-items: center;
+
+    .chain {
+      width: 100%;
+      position: relative;
+      padding: 1rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: 1px solid rgb(224, 224, 224);
+      border-radius: 12px;
+      cursor: pointer;
+
+      img {
+        width: 50%;
+      }
+
+      p {
+        display: none;
+        position: absolute;
+        top: -50px;
+        background-color: #434343;
+        padding: 1rem;
+        color: #fff;
+        font-weight: 500;
+        font-family: Inter;
+        font-size: 11px;
+        border-radius: 12px;
+      }
+
+      &:hover {
+        border: 1px solid rgb(224, 224, 224);
+        background-color: #e5e5e5;
+
+        img {
+          width: 50%;
+        }
+
+        p {
+          display: block;
+        }
+      }
+
+      &.active {
+        border: 1px solid $light-secondary;
+        background-color: #faeeffdc;
+      }
+    }
+  }
+
+  .searchBar {
+    margin: 1.5rem 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 1.5rem;
+    border: 1px solid rgb(224, 224, 224);
+    border-radius: 12px;
+
+    input {
+      width: 83%;
+      outline: none;
+      font-weight: 500;
+      font-family: Inter;
+      font-size: 15px;
+      background: none;
+      color: $light-primary;
+    }
+
+    svg {
+      width: 7%;
+      fill: rgba(0, 0, 0, 0.54);
+    }
+  }
+
+  .tokens {
+    overflow-y: scroll;
+    height: 30vh;
+
+    .loader {
+      display: flex;
+      align-items: center;
+
+      justify-content: center;
+      height: unset;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      font-size: 14px;
+      padding: 0 0.5rem;
+    }
+    // p {
+    //     font-size: 14px;
+    //     font-weight: 600;
+    //     color: $light-primary;
+    //     margin-bottom: 1rem;
+    //     font-family: Inter;
+    // }
+
+    .token {
+      display: flex;
+      align-items: center;
+      padding: 1rem 0.5rem;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      border-radius: 15px;
+
+      .tokenInfo {
+        display: flex;
+        gap: 1.5rem;
+
+        img {
+          width: 32px;
+          height: 32px;
+        }
+
+        .nameAndSymbol {
+          display: flex;
+          flex-direction: column;
+          width: 80%;
+          gap: 0.7rem;
+
+          h3 {
+            font-family: Inter;
+            font-size: 13px;
+            color: $light-primary;
+            font-weight: 500;
+          }
+
+          h4 {
+            font-family: Inter;
+            font-size: 11px;
+            color: rgb(116, 116, 116);
+            font-weight: 400;
+          }
+        }
+      }
+
+      .price {
+        font-family: Inter;
+        font-size: 13px;
+        color: $light-primary;
+        font-weight: 500;
+      }
+      .value {
+        font-family: Inter;
+        font-size: 13px;
+        color: $light-primary;
+        font-weight: 500;
+      }
+    }
+
+    .token:hover {
+      background-color: #e5e5e5;
+    }
+  }
+
+  &.dark {
+    .crossChain {
+      background-color: $dark-box-bg;
+
+      box-shadow: 0 2px 26px rgba(255, 255, 255, 0.1);
+
+      .tokensBox {
+        .token {
+          border: 1px solid rgb(244, 244, 244);
+
+          cursor: pointer;
+
+          p {
+            color: $dark-primary;
+          }
+
+          .tokenInfo {
+            .logos {
+              .coinLogo {
+              }
+
+              .chainLogo {
+              }
+            }
+
+            .logos.empty {
+              .emptyLogo {
+                background-color: rgb(66, 66, 66);
+              }
+
+              .emptyChainLogo {
+                border: 3px solid $dark-box-bg;
+
+                background-color: rgb(66, 66, 66);
+              }
+            }
+
+            .nameAndChain {
+              h3 {
+                color: $dark-primary;
+              }
+
+              h4 {
+                color: rgba(255, 255, 255, 0.7);
+              }
+            }
+
+            .nameAndChain.empty {
+              h3 {
+                color: rgba(255, 255, 255, 0.7);
+              }
+            }
+          }
+        }
+
+        .token:hover {
+          border: 1px solid rgb(244, 244, 244);
+          background-color: rgb(4, 1, 23);
+        }
+
+        .from {
+        }
+
+        .to {
+        }
+
+        .reverse {
+          border: 1px solid rgb(66, 66, 66);
+          background-color: $dark-box-bg;
+
+          svg {
+            fill: $dark-primary;
+          }
+        }
+      }
+      .BTCAddress {
+       
+        .token {
+          border: 1px solid rgb(244, 244, 244);
+
+    
+          p {
+            color: $dark-primary;
+
+          }
+          .amountToBeChanged {
+            color: $dark-primary;
+            background: none;
+          }
+    
+          input[type="number"]::-webkit-inner-spin-button {
+            display: none;
+          }
+    
+        
+        }
+      }
+      .amount {
+        .token {
+          border: 1px solid rgb(244, 244, 244);
+
+          p {
+            color: $dark-primary;
+          }
+
+          .tokenInfo {
+            .logos {
+              .coinLogo {
+              }
+
+              .chainLogo {
+              }
+            }
+
+            .logos.empty {
+              .emptyLogo {
+                background-color: rgb(66, 66, 66);
+              }
+
+              .emptyChainLogo {
+                border: 3px solid #fff;
+
+                background-color: rgb(66, 66, 66);
+              }
+            }
+
+            .nameAndChain {
+              .amountToBeChanged {
+                color: $dark-primary;
+                background: none;
+              }
+
+              input[type="number"]::-webkit-inner-spin-button {
+              }
+
+              h4 {
+                color: rgba(255, 255, 255, 0.7);
+              }
+            }
+
+            .nameAndChain.empty {
+              .amountToBeChanged {
+                color: $dark-primary;
+              }
+            }
+
+            .max {
+              button {
+                background-color: $dark-secondary;
+
+                color: #fff;
+              }
+
+              p {
+                color: rgba(255, 255, 255, 0.7);
+              }
+            }
+          }
+        }
+      }
+
+      button.exchange {
+        margin-top: 2rem;
+        @include button-responsive(mobile);
+        width: 100%;
+        border-radius: 12px;
+        padding: 1rem 1rem;
+      }
+
+      .chains {
+        .chain {
+          border: 1px solid rgb(66, 66, 66);
+
+          img {
+          }
+
+          p {
+            background-color: #434343;
+
+            color: #fff;
+          }
+
+          &:hover {
+            border: 1px solid rgb(66, 66, 66);
+            background-color: rgb(4, 1, 23);
+
+            img {
+              width: 100%;
+            }
+
+            p {
+              background-color: #434343;
+              color: #fff;
+            }
+          }
+
+          &.active {
+            border: 1px solid $dark-secondary;
+            background-color: #1b0a2681;
+          }
+        }
+      }
+
+      .searchBar {
+        border: 1px solid rgb(66, 66, 66);
+
+        input {
+          color: $dark-primary;
+        }
+
+        svg {
+          fill: rgba(255, 255, 255, 0.54);
+        }
+      }
+
+      .tokens {
+        p {
+          color: $dark-primary;
+        }
+
+        .token {
+          .tokenInfo {
+            img {
+            }
+
+            .nameAndSymbol {
+              h3 {
+                color: $dark-primary;
+              }
+
+              h4 {
+                color: rgb(116, 116, 116);
+              }
+            }
+          }
+
+          .price {
+            color: $dark-primary;
+          }
+        }
+
+        .token:hover {
+          background-color: rgb(4, 1, 23);
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .crossChain {
+    .flex {
+      display: flex;
+      gap: 2rem;
+
+      .crosschainContainer {
+        width: 35%;
+
+        .crossChain {
+          width: 100%;
+          background-color: $light-box-bg;
+          border-radius: 15px;
+          box-shadow: 0 2px 26px rgba(0, 0, 0, 0.1);
+          margin-top: 2rem;
+          padding: 3rem 5rem;
+
+          .tokensBox {
+            width: 100%;
+            display: grid;
+            grid-template-columns: 49% 49%;
+            grid-template-rows: 1fr;
+            justify-content: space-between;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            gap: 0;
+            height: auto;
+
+            .token {
+              border: 1px solid rgb(224, 224, 224);
+              border-radius: 12px;
+              padding: 2rem 2.4rem;
+              width: 100%;
+              height: 100%;
+              cursor: pointer;
+
+              p {
+                color: $light-primary;
+                font-family: Inter;
+                font-weight: 700;
+                font-size: 18px;
+                margin-bottom: 1rem;
+              }
+
+              .tokenInfo {
+                display: flex;
+                align-items: center;
+                gap: 2rem;
+
+                .logos {
+                  width: 36px;
+                  height: 36px;
+                  position: relative;
+
+                  .coinLogo {
+                    width: 100%;
+                    height: 100%;
+                  }
+
+                  .chainLogo {
+                    position: absolute;
+                    right: -7px;
+                    bottom: 0;
+                    width: 20px;
+                    height: 20px;
+                  }
+                }
+
+                .logos.empty {
+                  width: 36px;
+                  height: 36px;
+                  position: relative;
+
+                  .emptyLogo {
+                    width: 100%;
+                    height: 100%;
+                    background-color: rgb(224, 224, 224);
+                    border-radius: 50%;
+                  }
+
+                  .emptyChainLogo {
+                    position: absolute;
+                    border: 3px solid #fff;
+
+                    right: -8px;
+                    bottom: 0;
+                    width: 20px;
+                    height: 20px;
+                    background-color: rgb(224, 224, 224);
+                    border-radius: 50%;
+                  }
+                }
+
+                .nameAndChain {
+                  display: flex;
+                  flex-direction: column;
+                  gap: 0.8rem;
+
+                  h3 {
+                    color: $light-primary;
+                    font-family: Inter;
+                    font-size: 18px;
+                    font-weight: 500;
+                  }
+
+                  h4 {
+                    color: rgb(116, 116, 116);
+                    font-family: Inter;
+                    font-weight: 400;
+                    font-size: 11px;
+                  }
+                }
+
+                .nameAndChain.empty {
+                  display: flex;
+                  width: 70%;
+                  flex-direction: column;
+
+                  h3 {
+                    color: rgb(116, 116, 116);
+                    font-family: Inter;
+                    font-size: 18px;
+                    font-weight: 500;
+                  }
+                }
+              }
+            }
+
+            .token:hover {
+              background-color: rgb(248, 248, 248);
+              transition: all 0.3s ease-in;
+            }
+
+            .from {
+            }
+
+            .to {
+            }
+
+            .reverse {
+              background: $light-box-bg;
+              padding: 0.5rem;
+              cursor: pointer;
+              transform: rotate(90deg);
+              border: 1px solid rgb(224, 224, 224);
+              border-radius: 50%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              position: absolute;
+              top: 40%;
+              left: 47.5%;
+
+              svg {
+                fill: #000;
+                width: 2.4rem;
+                height: 2.4rem;
+              }
+            }
+          }
+
+     
+
+          .amount {
+            margin-top: 2rem;
+
+            .token {
+              border: 1px solid rgb(224, 224, 224);
+              border-radius: 12px;
+              padding: 2rem 2.4rem;
+              width: 100%;
+              height: auto;
+
+              p {
+                color: $light-primary;
+                font-family: Inter;
+                font-weight: 700;
+                font-size: 18px;
+                margin-bottom: 1rem;
+              }
+
+              .tokenInfo {
+                display: flex;
+                align-items: center;
+                gap: 1.6rem;
+
+                .logos {
+                  width: 36px;
+                  height: 36px;
+                  position: relative;
+
+                  .coinLogo {
+                    width: 100%;
+                    height: 100%;
+                  }
+
+                  .chainLogo {
+                    position: absolute;
+                    right: -7px;
+                    bottom: 0;
+                    width: 20px;
+                    height: 20px;
+                  }
+                }
+
+                .logos.empty {
+                  width: 36px !important;
+                  height: 36px;
+                  position: relative;
+
+                  .emptyLogo {
+                    width: 100%;
+                    height: 100%;
+                    background-color: rgb(224, 224, 224);
+                    border-radius: 50%;
+                  }
+
+                  .emptyChainLogo {
+                    position: absolute;
+                    border: 3px solid #fff;
+
+                    right: -8px;
+                    bottom: 0;
+                    width: 20px;
+                    height: 20px;
+                    background-color: rgb(224, 224, 224);
+                    border-radius: 50%;
+                  }
+                }
+
+                .nameAndChain {
+                  display: flex;
+                  flex-direction: column;
+                  gap: 0.3rem;
+                  width: 70%;
+
+                  .amountToBeChanged {
+                    width: 100%;
+                    color: $light-primary;
+                    font-family: Inter;
+                    font-size: 24px;
+                    font-weight: 700;
+                    outline: none;
+                    padding: 1rem 0;
+                  }
+
+                  input[type="number"]::-webkit-inner-spin-button {
+                    display: none;
+                  }
+
+                  h4 {
+                    color: rgb(116, 116, 116);
+                    font-family: Inter;
+                    font-weight: 400;
+                    font-size: 12px;
+                  }
+                }
+
+                .nameAndChain.empty {
+                  display: flex;
+                  flex-direction: column;
+
+                  .amountToBeChanged {
+                    width: 100%;
+                    color: $light-primary;
+                    font-family: Inter;
+                    font-size: 24px;
+                    font-weight: 700;
+                    outline: none;
+                    padding: 1rem 0;
+                  }
+                }
+
+                .max {
+                  align-self: flex-end;
+                  display: flex;
+                  flex-direction: column;
+                  align-items: center;
+                  height: 100%;
+                  gap: 1rem;
+
+                  button {
+                    background-color: $light-secondary;
+                    border-radius: 17px;
+                    border: none;
+                    padding: 0.5rem 1.5rem;
+                    color: #fff;
+                    cursor: pointer;
+                  }
+
+                  p {
+                    margin-bottom: 0;
+                    color: rgb(116, 116, 116);
+                    font-family: Inter;
+                    font-weight: 400;
+                    font-size: 14px;
+                    justify-self: flex-end;
+                  }
+                }
+              }
+            }
+          }
+
+     
+
+          button.exchange {
+            margin-top: 2rem;
+            @include button-responsive(laptop);
+            width: 100%;
+            border-radius: 12px;
+            padding: 1.5rem 1rem;
+          }
+
+          .chains {
+            display: grid;
+            grid-template-columns: 13% 13% 13% 13% 13% 13% 13%;
+            justify-content: space-between;
+            row-gap: unset;
+            align-items: center;
+
+            .chain {
+              width: 100%;
+              position: relative;
+              padding: 1.5rem;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              border: 1px solid rgb(224, 224, 224);
+              border-radius: 12px;
+              cursor: pointer;
+
+              img {
+                width: 100%;
+              }
+
+              p {
+                display: none;
+                position: absolute;
+                top: -50px;
+                background-color: #434343;
+                padding: 1rem;
+                color: #fff;
+                font-weight: 500;
+                font-family: Inter;
+                font-size: 13px;
+                border-radius: 12px;
+              }
+
+              &:hover {
+                border: 1px solid rgb(224, 224, 224);
+                background-color: #e5e5e5;
+
+                img {
+                  width: 100%;
+                }
+
+                p {
+                  display: block;
+                }
+              }
+
+              &.active {
+                border: 1px solid $light-secondary;
+                background-color: #faeeffdc;
+              }
+            }
+          }
+
+          .searchBar {
+            margin: 2rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 1.5rem;
+            border: 1px solid rgb(224, 224, 224);
+            border-radius: 12px;
+
+            input {
+              width: 85%;
+              outline: none;
+              font-weight: 500;
+              font-family: Inter;
+              font-size: 15px;
+              background: none;
+              color: $light-primary;
+            }
+
+            svg {
+              width: 5%;
+              fill: rgba(0, 0, 0, 0.54);
+            }
+          }
+
+          .tokens {
+            overflow-y: scroll;
+            height: 30vh;
+
+            .loader {
+              display: flex;
+              align-items: center;
+
+              justify-content: center;
+              height: unset;
+            }
+            .header {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              margin-bottom: 1rem;
+              font-size: 15px;
+              font-weight: 600;
+              padding: 0 1rem;
+            }
+            // p {
+            //   font-size: 15px;
+            //   font-weight: 600;
+            //   color: $light-primary;
+            //   margin-bottom: 1rem;
+            //   font-family: Inter;
+            // }
+
+            .token {
+              display: flex;
+              align-items: center;
+              padding: 1.5rem 1rem;
+              justify-content: space-between;
+              align-items: center;
+              cursor: pointer;
+              border-radius: 15px;
+
+              .tokenInfo {
+                display: flex;
+                gap: 2rem;
+
+                img {
+                  width: 42px;
+                  height: 42px;
+                }
+
+                .nameAndSymbol {
+                  display: flex;
+                  flex-direction: column;
+                  width: 80%;
+                  gap: 0.7rem;
+
+                  h3 {
+                    font-family: Inter;
+                    font-size: 16px;
+                    color: $light-primary;
+                    font-weight: 500;
+                  }
+
+                  h4 {
+                    font-family: Inter;
+                    font-size: 11px;
+                    color: rgb(116, 116, 116);
+                    font-weight: 400;
+                  }
+                }
+              }
+
+              .price {
+                font-family: Inter;
+                font-size: 16px;
+                color: $light-primary;
+                font-weight: 500;
+              }
+            }
+
+            .token:hover {
+              background-color: #e5e5e5;
+            }
+          }
+        }
+      }
+
+      .crossChainActions {
+        width: 45%;
+      }
+    }
+
+    &.dark {
+      background-color: $dark-box-bg;
+
+      .flex {
+        .crosschainContainer {
+        
+
+          .tokensBox {
+            .token {
+              border: 1px solid rgb(244, 244, 244);
+
+              cursor: pointer;
+
+              p {
+                color: $dark-primary;
+              }
+
+              .tokenInfo {
+                .logos {
+                  .coinLogo {
+                  }
+
+                  .chainLogo {
+                  }
+                }
+
+                .logos.empty {
+                  .emptyLogo {
+                    background-color: rgb(66, 66, 66);
+                  }
+
+                  .emptyChainLogo {
+                    border: 3px solid $dark-box-bg;
+
+                    background-color: rgb(66, 66, 66);
+                  }
+                }
+
+                .nameAndChain {
+                  h3 {
+                    color: $dark-primary;
+                  }
+
+                  h4 {
+                    color: rgba(255, 255, 255, 0.7);
+                  }
+                }
+
+                .nameAndChain.empty {
+                  h3 {
+                    color: rgba(255, 255, 255, 0.7);
+                  }
+                }
+              }
+            }
+
+            .token:hover {
+              border: 1px solid rgb(244, 244, 244);
+              background-color: rgb(4, 1, 23);
+            }
+
+            .from {
+            }
+
+            .to {
+            }
+
+            .reverse {
+              border: 1px solid rgb(66, 66, 66);
+              background-color: $dark-box-bg;
+
+              svg {
+                fill: $dark-primary;
+              }
+            }
+          }
+          .BTCAddress {
+       
+            .token {
+              border: 1px solid rgb(244, 244, 244);
+    
+        
+              p {
+                color: $dark-primary;
+    
+              }
+              .amountToBeChanged {
+                color: $dark-primary;
+                background: none;
+              }
+        
+              input[type="number"]::-webkit-inner-spin-button {
+                display: none;
+              }
+        
+            
+            }
+          }
+          .amount {
+            .token {
+              border: 1px solid rgb(244, 244, 244);
+
+              p {
+                color: $dark-primary;
+              }
+
+              .tokenInfo {
+                .logos {
+                  .coinLogo {
+                  }
+
+                  .chainLogo {
+                  }
+                }
+
+                .logos.empty {
+                  .emptyLogo {
+                    background-color: rgb(66, 66, 66);
+                  }
+
+                  .emptyChainLogo {
+                    border: 3px solid #fff;
+
+                    background-color: rgb(66, 66, 66);
+                  }
+                }
+
+                .nameAndChain {
+                  .amountToBeChanged {
+                    color: $dark-primary;
+                    background: none;
+                  }
+
+                  input[type="number"]::-webkit-inner-spin-button {
+                  }
+
+                  h4 {
+                    color: rgba(255, 255, 255, 0.7);
+                  }
+                }
+
+                .nameAndChain.empty {
+                  .amountToBeChanged {
+                    color: $dark-primary;
+                  }
+                }
+
+                .max {
+                  button {
+                    background-color: $dark-secondary;
+
+                    color: #fff;
+                  }
+
+                  p {
+                    color: rgba(255, 255, 255, 0.7);
+                  }
+                }
+              }
+            }
+          }
+
+          button.exchange {
+            margin-top: 2rem;
+            @include button-responsive(mobile);
+            width: 100%;
+            border-radius: 12px;
+            padding: 1rem 1rem;
+          }
+        }
+
+        .crossChainActions {
+        
+          .chains {
+            .chain {
+              border: 1px solid rgb(66, 66, 66);
+
+              img {
+              }
+
+              p {
+                background-color: #434343;
+
+                color: #fff;
+              }
+
+              &:hover {
+                border: 1px solid rgb(66, 66, 66);
+                background-color: rgb(4, 1, 23);
+
+                img {
+                  width: 50%;
+                }
+
+                p {
+                  background-color: #434343;
+                  color: #fff;
+                }
+              }
+
+              &.active {
+                border: 1px solid $dark-secondary;
+                background-color: #1b0a2681;
+              }
+            }
+          }
+
+          .searchBar {
+            border: 1px solid rgb(66, 66, 66);
+
+            input {
+              color: $dark-primary;
+            }
+
+            svg {
+              fill: rgba(255, 255, 255, 0.54);
+            }
+          }
+
+          .tokens {
+            p {
+              color: $dark-primary;
+            }
+
+            .token {
+              .tokenInfo {
+                img {
+                }
+
+                .nameAndSymbol {
+                  h3 {
+                    color: $dark-primary;
+                  }
+
+                  h4 {
+                    color: rgb(116, 116, 116);
+                  }
+                }
+              }
+
+              .price {
+                color: $dark-primary;
+              }
+            }
+
+            .token:hover {
+              background-color: rgb(4, 1, 23);
+            }
+          }
+        }
+      }
+    }
+  }
+}
