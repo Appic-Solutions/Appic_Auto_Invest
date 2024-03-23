@@ -1,29 +1,21 @@
 // variables.scss
 
 // Light Mode Colors
-$light-bg: #F5F6FA;
-$light-box-bg:#fff;
-$light-primary: #14172C;
-$light-secondary: #843EA1;
-$light-tertiary:#85879e;
-$light-buttons:#843EA1;
-$light-percentageUP: #00DE3B;
-$light-percentageDown: #E63F66;
-
-
-
-
-
+$light-bg: #f5f6fa;
+$light-box-bg: color-mix(in srgb, #000 0%, #fff);
+$light-primary: color-mix(in srgb, #000 0%, #141414);
+$light-secondary: #843ea1;
+$light-tertiary: #85879e;
+$light-buttons: #843ea1;
+$light-percentageUP: #00de3b;
+$light-percentageDown: #e63f66;
 
 // Dark Mode Colors
-$dark-bg: #0C101C;
-$dark-box-bg:#1A222F;
-$dark-primary: #FFF;
-$dark-secondary: #843EA1;
-$dark-tertiary:#9A9CB8;
-$dark-buttons:#843EA1;
-$dark-percentageUP: #00DE3B;
-$dark-percentageDown: #E63F66;
-
-
-
+$dark-bg: #0c101c;
+$dark-box-bg: color-mix(in srgb, #fff 0%, #191a1a);
+$dark-primary: color-mix(in srgb, #fff 0%, #e4e7e7);
+$dark-secondary: #843ea1;
+$dark-tertiary: #9a9cb8;
+$dark-buttons: #843ea1;
+$dark-percentageUP: #00de3b;
+$dark-percentageDown: #e63f66;

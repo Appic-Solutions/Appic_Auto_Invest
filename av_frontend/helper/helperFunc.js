@@ -1,5 +1,5 @@
 import { netWorkConfig } from "@/config/network";
-import { walletConfig } from "@/config/wallet";
+// import { walletConfig } from "@/config/wallet";
 // import { MetaMaskConnector } from "wagmi/connectors/metaMask";
 // import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
 // import { CoinbaseWalletConnector } from "wagmi/connectors/coinbaseWallet";
@@ -45,14 +45,13 @@ import { walletConfig } from "@/config/wallet";
 export function findNetworkConfig(chainId) {
   return netWorkConfig.find((config) => config.networkId === chainId);
 }
-// Create a utility function to find wallet configuration
-export function findWalletConfig(walletName) {
-  return walletConfig.find((config) => config.walletId === walletName);
-}
+// // Create a utility function to find wallet configuration
+// export function findWalletConfig(walletName) {
+//   return walletConfig.find((config) => config.walletId === walletName);
+// }
 // function for formating walletAddress
 export const formatAddress = (address) => {
-  let newAddress =
-    address?.substr(0, 6) + "..." + address?.substr(address?.length - 5);
+  let newAddress = address?.substr(0, 6) + "..." + address?.substr(address?.length - 5);
   return newAddress;
 };
 

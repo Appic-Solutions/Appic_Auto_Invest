@@ -1,251 +1,243 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;300;500;700;900&family=Poppins:wght@100;200;300;400;500;600;700;800;900&family=Rubik:wght@300;400;500&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;300;500;700;900&family=Poppins:wght@100;200;300;400;500;600;700;800;900&family=Rubik:wght@300;400;500&display=swap");
 @import "./mixins.scss";
 @import "./colors.scss";
 
 * {
-    margin: 0;
-    padding: 0;
-    border: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
 
-    font-family: "Inter", sans-serif;
-    vertical-align: baseline;
-    box-sizing: border-box;
+  font-family: "Inter", sans-serif;
+  vertical-align: baseline;
+  box-sizing: border-box;
 }
 
 html {
-    font-size: 62.5%;
-    scroll-behavior: smooth !important;
-    overflow-x: hidden;
-    height: 100%;
+  font-size: 62.5%;
+  scroll-behavior: smooth !important;
+  overflow-x: hidden;
+  height: 100%;
 }
 
 ol,
 ul {
-    list-style: none;
+  list-style: none;
 }
 
 blockquote,
 q {
-    quotes: none;
+  quotes: none;
 }
 
 blockquote:before,
 blockquote:after,
 q:before,
 q:after {
-    content: "";
-    content: none;
+  content: "";
+  content: none;
 }
 
 table {
-    border-collapse: collapse;
-    border-spacing: 0;
+  border-collapse: collapse;
+  border-spacing: 0;
 }
 
 body {
-    overflow-x: hidden;
-    position: relative;
-
+  overflow-x: hidden;
+  position: relative;
 }
 
 .background {
-    // overflow-x: hidden;
-    @include mode-styles-bg(light);
-    width: 100%;
-    min-height: 100vh;
-    padding-bottom: 9rem;
-    position: relative;
+  // overflow-x: hidden;
+  @include mode-styles-bg(light);
+  width: 100%;
+  min-height: 100vh;
+  padding-bottom: 9rem;
+  position: relative;
+  padding-top: 1rem;
+  &.dark {
+    @include mode-styles-bg(dark);
+  }
 
-    &.dark {
-        @include mode-styles-bg(dark);
+  .layout {
+    @include layout-centered(mobile);
+
+    .loader {
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      img {
+        fill: $light-secondary;
+      }
     }
-
-    .layout {
-        @include layout-centered(mobile);
-
-        .loader {
-            width: 100%;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            img {
-                fill: $light-secondary;
-            }
-        }
-    }
+  }
 }
 
 .loadingcomponent {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
 }
 .suggestion {
-    position:fixed;
+  position: fixed;
+  right: -3rem;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  top: 45vh;
+  transform: rotate(-90deg);
+  transform-origin: top;
+  cursor: pointer;
+  color: $light-primary;
+  font-size: 1.2rem;
+  padding: 1rem 1rem;
+  background-color: $light-secondary;
+  // Add styles for the suggestion button
+}
+@media screen and (min-width: 1024px) {
+  .background {
+    // overflow-x: hidden;
+    height: 100%;
+    width: 100%;
+    min-height: 100vh;
+    // padding-bottom: 9rem;
+    position: relative;
+
+    &.dark {
+    }
+
+    .layout {
+      height: 100%;
+      @include layout-centered(laptop);
+    }
+  }
+  .suggestion {
+    position: fixed;
     right: -3rem;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
-    top:45vh;
+    top: 45vh;
     transform: rotate(-90deg);
     transform-origin: top;
     cursor: pointer;
     color: $light-primary;
-    font-size: 1.2rem;
-    padding: 1rem 1rem;
+    font-size: 1.5rem;
+    padding: 1.2rem 1.2rem;
     background-color: $light-secondary;
     // Add styles for the suggestion button
-  
   }
-@media screen and (min-width: 1024px) {
-    .background {
-        // overflow-x: hidden;
-        height: 100%;
-        width: 100%;
-        min-height: 100vh;
-        // padding-bottom: 9rem;
-        position: relative;
-
-        &.dark {}
-
-        .layout {
-            height: 100%;
-            @include layout-centered(laptop);
-        }
-    }
-    .suggestion {
-        position:fixed;
-        right: -3rem;
-        border-top-left-radius: 15px;
-        border-top-right-radius: 15px;
-        top:45vh;
-        transform: rotate(-90deg);
-        transform-origin: top;
-        cursor: pointer;
-        color: $light-primary;
-        font-size: 1.5rem;
-        padding: 1.2rem 1.2rem;
-        background-color: $light-secondary;
-        // Add styles for the suggestion button
-      
-      }
 }
 
 a {
-    text-decoration: none;
+  text-decoration: none;
 }
 
-
 .crosschainFrame {
-    // height: 0;
+  // height: 0;
+  transition: all 0.3s ease-in;
+  overflow: hidden;
+
+  .crossChain {
     transition: all 0.3s ease-in;
+
+    height: auto;
+  }
+
+  .croschainMinimizedLastMessage {
+    height: 0;
     overflow: hidden;
-
-    .crossChain {
-        transition: all 0.3s ease-in;
-
-        height: auto;
-    }
-
-    .croschainMinimizedLastMessage {
-        height: 0;
-        overflow: hidden;
-        transition: all 0.3s ease-in;
-
-    }
+    transition: all 0.3s ease-in;
+  }
 }
 
 .crosschainFrame.hide {
-    display: none;
+  display: none;
 }
 
 .crosschainFrame.minimized {
-    height: auto;
-    position: fixed;
-    right: 5vw;
-    bottom: 5vh;
-    width: 15vw;
-    height: 10vh;
+  height: auto;
+  position: fixed;
+  right: 5vw;
+  bottom: 5vh;
+  width: 15vw;
+  height: 10vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease-in;
+  background-color: $light-box-bg;
+  border-radius: 10px;
+  border: 1px solid rgb(224, 224, 224);
+  color: $light-primary;
+  cursor: pointer;
+
+  .crossChain {
+    height: 0;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    transition: all 0.3s ease-in;
+  }
+
+  .croschainMinimizedLastMessage {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    gap: 0.5rem;
     transition: all 0.3s ease-in;
-    background-color: $light-box-bg;
-    border-radius: 10px;
-    border: 1px solid rgb(224, 224, 224);
-    color: $light-primary;
-    cursor: pointer;
+    height: 100%;
 
-    .crossChain {
-        height: 0;
-        overflow: hidden;
-        margin: 0;
-        padding: 0;
-        transition: all 0.3s ease-in;
+    .messageContainer {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      img {
+        width: 10%;
+      }
+
+      h3 {
+        font-size: 10px;
+      }
     }
 
-    .croschainMinimizedLastMessage {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        gap: 0.5rem;
-        transition: all 0.3s ease-in;
-        height: 100%;
+    .transactionStatus {
+      text-align: center;
+      color: $light-primary;
 
-        .messageContainer {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            img {
-                width: 10%;
+      &.successful {
+        color: $light-percentageUP;
+      }
 
-            }
-
-            h3 {
-               
-
-                font-size: 10px;
-            }
-        }
-
-        .transactionStatus {
-            text-align: center;
-            color: $light-primary;
-
-            &.successful {
-                color: $light-percentageUP;
-            }
-
-            &.failed {
-                color: $light-percentageDown;
-            }
-        }
+      &.failed {
+        color: $light-percentageDown;
+      }
     }
+  }
 
-    &.dark {
-        background-color: $dark-box-bg;
-        color: $dark-primary;
-        border: 1px solid rgb(244, 244, 244);
+  &.dark {
+    background-color: $dark-box-bg;
+    color: $dark-primary;
+    border: 1px solid rgb(244, 244, 244);
 
-        .transactionStatus {
-            color: $dark-primary;
+    .transactionStatus {
+      color: $dark-primary;
 
-            &.successful {
-                color: $dark-percentageUP;
-            }
+      &.successful {
+        color: $dark-percentageUP;
+      }
 
-            &.failed {
-                color: $dark-percentageDown;
-            }
-        }
+      &.failed {
+        color: $dark-percentageDown;
+      }
     }
+  }
 }
-
 
 //components
 @import "./styleComponents/navbar.scss";
@@ -256,7 +248,6 @@ a {
 @import "./styleComponents/higherOrderComponents/titles.scss";
 @import "./styleComponents/walletConnectM.scss";
 @import "./styleComponents/walletTokens.scss";
-@import "./styleComponents/vaults.scss";
 @import "./styleComponents/supportedTokens.scss";
 @import "./styleComponents/higherOrderComponents/alphaButton.scss";
 @import "./styleComponents/higherOrderComponents/pagination.scss";
@@ -272,4 +263,4 @@ a {
 //pages
 @import "./pages/main.scss";
 @import "./pages/vaultDetails.scss";
-@import "./pages/dca.scss"
+@import "./pages/dca.scss";
