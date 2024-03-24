@@ -6,15 +6,17 @@
   height: 100vh;
   z-index: 20;
   overflow: hidden;
+  pointer-events: none;
+
   .bg {
     width: 100%;
     height: 100%;
     background-color: rgba(20, 20, 20, 0.8);
-
+    opacity: 0;
+    transition: all 0.2s ease-in;
     .container {
       position: absolute;
       bottom: 0;
-      height: 70%;
       width: 100%;
       overflow: hidden;
       background-color: $light-bg;
@@ -25,10 +27,22 @@
       flex-direction: column;
       align-items: center;
       padding-top: 10%;
+      height: 0;
+      transition: all 0.3s ease-in;
       .topSection {
         display: grid;
         grid-template-columns: 0.5fr 1fr 0.5fr;
         width: 100%;
+        .backBTN {
+          background: none;
+          color: $light-primary;
+
+          svg {
+            fill: none;
+            width: 16px;
+            height: 16px;
+          }
+        }
         .closeBTN {
           background: none;
           color: $light-primary;
@@ -81,7 +95,98 @@
               font-size: 1rem;
             }
           }
+
+          &.NotDetected {
+            cursor: not-allowed;
+            // background: none;
+          }
         }
+        .loadingContainer {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          .loading {
+            width: 50px;
+          }
+          h3 {
+            margin-top: 2rem;
+            font-size: 1.7rem;
+            color: $light-primary;
+          }
+          p {
+            margin-top: 1.5rem;
+            font-size: 1.3rem;
+            color: $light-secondary;
+          }
+          button {
+            margin-top: 1.5rem;
+            background: none;
+            background-color: $light-box-bg;
+            color: $light-secondary;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            border: 1px solid $light-border;
+            border-radius: $border-radius;
+            padding: 0.7rem;
+            svg {
+              fill: none;
+              width: 14px;
+              height: 14px;
+            }
+            &:hover {
+              background-color: #fff;
+            }
+          }
+        }
+        .failedContainer {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          .failed {
+            width: 50px;
+          }
+          h3 {
+            margin-top: 2rem;
+            font-size: 1.7rem;
+            color: $light-percentageDown;
+          }
+          p {
+            margin-top: 1.5rem;
+            font-size: 1.3rem;
+            color: $light-secondary;
+          }
+          button {
+            margin-top: 1.5rem;
+            background: none;
+            background-color: $light-box-bg;
+            color: $light-secondary;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            border: 1px solid $light-border;
+            border-radius: $border-radius;
+            padding: 0.7rem;
+            svg {
+              fill: none;
+              width: 14px;
+              height: 14px;
+            }
+            &:hover {
+              background-color: #fff;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &.active {
+    .bg {
+      opacity: 1;
+      pointer-events: all;
+      .container {
+        height: 70%;
       }
     }
   }
@@ -94,7 +199,12 @@
         background-color: $dark-bg;
 
         .topSection {
-          width: 100%;
+          .backBTN {
+            color: $dark-primary;
+
+            svg {
+            }
+          }
           .closeBTN {
             color: $dark-primary;
             svg {
@@ -121,6 +231,54 @@
                 color: $dark-secondary;
               }
             }
+            &.NotDetected {
+              cursor: not-allowed;
+              // background: none;
+            }
+          }
+          .loadingContainer {
+            .loading {
+            }
+            h3 {
+              color: $dark-primary;
+            }
+            p {
+              color: $dark-secondary;
+            }
+            button {
+              background-color: $dark-box-bg;
+              color: $dark-secondary;
+
+              border: 1px solid $dark-border;
+
+              svg {
+              }
+              &:hover {
+                background-color: #000;
+              }
+            }
+          }
+          .failedContainer {
+            .failed {
+            }
+            h3 {
+              color: $dark-percentageDown;
+            }
+            p {
+              color: $dark-secondary;
+            }
+            button {
+              background-color: $dark-box-bg;
+              color: $dark-secondary;
+
+              border: 1px solid $dark-border;
+              border-radius: $border-radius;
+              svg {
+              }
+              &:hover {
+                background-color: #000;
+              }
+            }
           }
         }
       }
@@ -137,6 +295,7 @@
     height: 100vh;
     z-index: 20;
     overflow: hidden;
+    pointer-events: none;
     .bg {
       width: 100%;
       height: 100%;
@@ -144,11 +303,13 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      opacity: 0;
+      transition: all 0.3s ease-in;
+
       .container {
         position: static;
-        height: auto;
         width: 20%;
-        overflow-y: hidden;
+        overflow: hidden;
         background-color: $light-bg;
         border-radius: $border-radius;
         border-bottom-left-radius: auto;
@@ -156,11 +317,24 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        padding: 2% 0;
+        padding: 0 0;
+        height: 0;
+        transition: all 0.2s ease-in;
+
         .topSection {
           display: grid;
           grid-template-columns: 0.5fr 1fr 0.5fr;
           width: 100%;
+          .backBTN {
+            background: none;
+            color: $light-primary;
+
+            svg {
+              fill: none;
+              width: 20px;
+              height: 20px;
+            }
+          }
           .closeBTN {
             background: none;
             cursor: pointer;
@@ -214,6 +388,100 @@
                 font-size: 1.1rem;
               }
             }
+            &.NotDetected {
+              cursor: not-allowed;
+              // background: none;
+            }
+          }
+          .loadingContainer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            .loading {
+              width: 50px;
+            }
+            h3 {
+              margin-top: 2rem;
+              font-size: 1.7rem;
+              color: $light-primary;
+            }
+            p {
+              margin-top: 1.5rem;
+              font-size: 1.3rem;
+              color: $light-secondary;
+            }
+            button {
+              margin-top: 1.5rem;
+              background: none;
+              background-color: $light-box-bg;
+              color: $light-secondary;
+              font-size: 1.3rem;
+              display: flex;
+              align-items: center;
+              border: 1px solid $light-border;
+              border-radius: $border-radius;
+              padding: 0.7rem;
+              svg {
+                fill: none;
+                width: 14px;
+                height: 14px;
+              }
+              &:hover {
+                background-color: #fff;
+              }
+            }
+          }
+          .failedContainer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            .failed {
+              width: 50px;
+            }
+            h3 {
+              margin-top: 2rem;
+              font-size: 1.7rem;
+              color: $light-percentageDown;
+            }
+            p {
+              margin-top: 1.5rem;
+              font-size: 1.3rem;
+              color: $light-secondary;
+            }
+            button {
+              margin-top: 1.5rem;
+              background: none;
+              background-color: $light-box-bg;
+              color: $light-secondary;
+              font-size: 1.3rem;
+              display: flex;
+              align-items: center;
+              border: 1px solid $light-border;
+              border-radius: $border-radius;
+              padding: 0.7rem;
+              svg {
+                fill: none;
+                width: 14px;
+                height: 14px;
+              }
+              &:hover {
+                background-color: #fff;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    &.active {
+      .bg {
+        opacity: 1;
+        pointer-events: all;
+        .container {
+          height: auto;
+          padding: 2% 0;
+          .topSection {
+            height: auto;
           }
         }
       }
@@ -227,7 +495,11 @@
           background-color: $dark-bg;
 
           .topSection {
-            width: 100%;
+            .backBTN {
+              color: $dark-primary;
+              svg {
+              }
+            }
             .closeBTN {
               color: $dark-primary;
               svg {
@@ -252,6 +524,54 @@
                 }
                 .walletStatus {
                   color: $dark-secondary;
+                }
+              }
+              &.NotDetected {
+                cursor: not-allowed;
+                // background: none;
+              }
+            }
+            .loadingContainer {
+              .loading {
+              }
+              h3 {
+                color: $dark-primary;
+              }
+              p {
+                color: $dark-secondary;
+              }
+              button {
+                background-color: $dark-box-bg;
+                color: $dark-secondary;
+
+                border: 1px solid $dark-border;
+
+                svg {
+                }
+                &:hover {
+                  background-color: #000;
+                }
+              }
+            }
+            .failedContainer {
+              .failed {
+              }
+              h3 {
+                color: $dark-percentageDown;
+              }
+              p {
+                color: $dark-secondary;
+              }
+              button {
+                background-color: $dark-box-bg;
+                color: $dark-secondary;
+
+                border: 1px solid $dark-border;
+                border-radius: $border-radius;
+                svg {
+                }
+                &:hover {
+                  background-color: #000;
                 }
               }
             }

@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialMode = {
-  isDark: true,
+  isDark: false,
 };
 const themeSlice = createSlice({
   name: "themeSlice",
