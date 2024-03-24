@@ -5,17 +5,21 @@ $light-bg: #f5f6fa;
 $light-box-bg: color-mix(in srgb, #000 0%, #fff);
 $light-primary: color-mix(in srgb, #000 0%, #141414);
 $light-secondary: #843ea1;
-$light-tertiary: #85879e;
+$light-tertiary: rgba(0, 0, 0, 0.05);
 $light-buttons: #843ea1;
 $light-percentageUP: #00de3b;
 $light-percentageDown: #e63f66;
+$light-border: rgba(0, 0, 0, 0.05);
 
 // Dark Mode Colors
-$dark-bg: #0c101c;
-$dark-box-bg: color-mix(in srgb, #fff 0%, #191a1a);
+$dark-bg: color-mix(in srgb, #fff 0%, #191a1a);
+$dark-box-bg: rgba(255, 255, 255, 0.02);
 $dark-primary: color-mix(in srgb, #fff 0%, #e4e7e7);
 $dark-secondary: #843ea1;
-$dark-tertiary: #9a9cb8;
+$dark-tertiary: rgba(255, 255, 255, 0.05);
 $dark-buttons: #843ea1;
 $dark-percentageUP: #00de3b;
 $dark-percentageDown: #e63f66;
+$dark-border: rgba(255, 255, 255, 0.05);
+
+$border-radius: clamp(0px, calc(4px * 9), 44px);

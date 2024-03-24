@@ -1,4 +1,5 @@
 "use client";
+import { closeConnectWalletModal } from "@/redux/features/walletsModal";
 import darkModeClassnamegenerator, { darkClassGenerator } from "@/utils/darkClassGenerator";
 import { artemisWalletAdapter } from "@/utils/walletConnector";
 import { useEffect, useState } from "react";
@@ -26,7 +27,12 @@ function WalletConnectM() {
               <div className="topSection">
                 <div></div>
                 <h3 className="title">Connect Wallet</h3>
-                <button className="closeBTN">
+                <button
+                  onClick={() => {
+                    dispatch(closeConnectWalletModal());
+                  }}
+                  className="closeBTN"
+                >
                   <svg fill="none" viewBox="0 0 16 16">
                     <path
                       fill="currentColor"

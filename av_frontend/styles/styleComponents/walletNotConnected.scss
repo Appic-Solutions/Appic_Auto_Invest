@@ -1,9 +1,10 @@
 .walletNotConnected {
   background-color: $light-box-bg;
   margin-top: 1rem;
-  border-radius: 15px;
+  border-radius: clamp(0px, calc(4px * 9), 44px);
   padding: 1.5rem 1rem;
-  box-shadow: 0 2px 26px rgba(0, 0, 0, 0.1);
+  border: 1px solid $light-border;
+  // box-shadow: 0 2px 26px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -46,8 +47,8 @@
   }
   &.dark {
     background-color: $dark-box-bg;
-
-    box-shadow: 0 2px 26px rgba(255, 255, 255, 0.1);
+    border: 1px solid $dark-border;
+    // box-shadow: 0 2px 26px rgba(255, 255, 255, 0.1);
 
     svg {
       width: 60%;
@@ -65,9 +66,11 @@
   .walletNotConnected {
     background-color: $light-box-bg;
     margin-top: 2rem;
-    border-radius: 15px;
+    border-radius: clamp(0px, calc(4px * 9), 44px);
     padding: 3rem 5rem;
-    box-shadow: 0 2px 26px rgba(0, 0, 0, 0.1);
+    border: 1px solid $light-border;
+
+    // box-shadow: 0 2px 26px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -94,8 +97,9 @@
     }
     &.dark {
       background-color: $dark-box-bg;
+      border: 1px solid $dark-border;
 
-      box-shadow: 0 2px 26px rgba(255, 255, 255, 0.1);
+      // box-shadow: 0 2px 26px rgba(255, 255, 255, 0.1);
 
       svg {
         width: 60%;
