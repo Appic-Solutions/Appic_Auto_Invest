@@ -27,7 +27,6 @@ const walletSlice = createSlice({
       state.items.walletName = action.payload.walletName;
       state.items.isWalletConnected = action.payload.isWalletConnected;
       state.items.assets = action.payload.assets;
-      state.items.web3Instance = action.payload.web3Instance;
     },
     // Action to disconnect Wallet
     resetWallet: (state, action) => {
@@ -36,7 +35,6 @@ const walletSlice = createSlice({
       state.items.accountID = 1;
       state.items.walletName = null;
       state.items.assets = [];
-      state.items.web3Instance = null;
     },
     setPrincipalID: (state, action) => {
       state.items.principalID = action.payload;

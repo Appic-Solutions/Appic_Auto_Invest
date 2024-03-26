@@ -36,6 +36,7 @@
         .backBTN {
           background: none;
           color: $light-primary;
+          cursor: pointer;
 
           svg {
             fill: none;
@@ -96,10 +97,10 @@
             }
           }
 
-          &.NotDetected {
-            cursor: not-allowed;
-            // background: none;
-          }
+          // &.NotDetected {
+          //   cursor: not-allowed;
+          //   // background: none;
+          // }
         }
         .loadingContainer {
           display: flex;
@@ -129,6 +130,7 @@
             border: 1px solid $light-border;
             border-radius: $border-radius;
             padding: 0.7rem;
+            cursor: pointer;
             svg {
               fill: none;
               width: 14px;
@@ -155,6 +157,7 @@
             margin-top: 1.5rem;
             font-size: 1.3rem;
             color: $light-secondary;
+            text-align: center;
           }
           button {
             margin-top: 1.5rem;
@@ -167,6 +170,7 @@
             border: 1px solid $light-border;
             border-radius: $border-radius;
             padding: 0.7rem;
+            cursor: pointer;
             svg {
               fill: none;
               width: 14px;
@@ -231,10 +235,10 @@
                 color: $dark-secondary;
               }
             }
-            &.NotDetected {
-              cursor: not-allowed;
-              // background: none;
-            }
+            // &.NotDetected {
+            //   cursor: not-allowed;
+            //   // background: none;
+            // }
           }
           .loadingContainer {
             .loading {
@@ -328,6 +332,7 @@
           .backBTN {
             background: none;
             color: $light-primary;
+            cursor: pointer;
 
             svg {
               fill: none;
@@ -388,10 +393,10 @@
                 font-size: 1.1rem;
               }
             }
-            &.NotDetected {
-              cursor: not-allowed;
-              // background: none;
-            }
+            // &.NotDetected {
+            //   cursor: not-allowed;
+            //   // background: none;
+            // }
           }
           .loadingContainer {
             display: flex;
@@ -447,6 +452,7 @@
               margin-top: 1.5rem;
               font-size: 1.3rem;
               color: $light-secondary;
+              text-align: center;
             }
             button {
               margin-top: 1.5rem;
@@ -526,10 +532,10 @@
                   color: $dark-secondary;
                 }
               }
-              &.NotDetected {
-                cursor: not-allowed;
-                // background: none;
-              }
+              // &.NotDetected {
+              //   cursor: not-allowed;
+              //   // background: none;
+              // }
             }
             .loadingContainer {
               .loading {

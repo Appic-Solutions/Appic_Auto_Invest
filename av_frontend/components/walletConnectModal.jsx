@@ -1,11 +1,12 @@
 "use client";
 import canistersIDs from "@/config/canistersIDs";
+import { initWallet } from "@/redux/features/walletSlice";
 import { closeConnectWalletModal } from "@/redux/features/walletsModal";
 import darkModeClassnamegenerator, { darkClassGenerator } from "@/utils/darkClassGenerator";
 import { artemisWalletAdapter } from "@/utils/walletConnector";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
+// import { AV_backend } from "../../AVRoot/src/declarations/AV_backend";
 function WalletConnectM() {
   const dispatch = useDispatch();
 
@@ -23,19 +24,33 @@ function WalletConnectM() {
 
   // Connect to selected wallet
   const handleConnect = async (selectedWallet) => {
-    if (selectedWallet.adapter?.readyState == "NotDetected") {
-      return;
-    }
     try {
+      if (selectedWallet.adapter?.readyState == "NotDetected") {
+        let response = await artemisWalletAdapter.connect(selectedWalletDetails.id, { whitelist: canistersIDs, host: "https://icp0.io/" });
+        return;
+      }
       setSelectedWalletDetails(selectedWallet);
       setConnectWalletStatus("Loading");
       let response = await artemisWalletAdapter.connect(selectedWallet.id, { whitelist: canistersIDs, host: "https://icp0.io/" });
-      if (response == true) {
-        dispatch(closeConnectWalletModal);
+      if (response) {
+        let accountID = artemisWalletAdapter.accountId;
+        dispatch(
+          initWallet({
+            principalID: response,
+            accountID,
+            walletName: selectedWallet.name,
+            isWalletConnected: true,
+            assets: [],
+          })
+        );
+        dispatch(closeConnectWalletModal());
+        setConnectWalletStatus(null);
       } else {
         setConnectWalletStatus("Failed");
       }
-    } catch (error) {}
+    } catch (error) {
+      setConnectWalletStatus("Failed");
+    }
   };
 
   // Trying to connect to wallet again handler
@@ -43,8 +58,19 @@ function WalletConnectM() {
     try {
       setConnectWalletStatus("Loading");
       let response = await artemisWalletAdapter.connect(selectedWalletDetails.id, { whitelist: canistersIDs, host: "https://icp0.io/" });
-      if (response == true) {
-        dispatch(closeConnectWalletModal);
+      if (response) {
+        let accountID = artemisWalletAdapter.accountId;
+        dispatch(
+          initWallet({
+            principalID: response,
+            accountID,
+            walletName: selectedWallet.name,
+            isWalletConnected: true,
+            assets: [],
+          })
+        );
+        dispatch(closeConnectWalletModal());
+        setConnectWalletStatus(null);
       }
     } catch (error) {
       setConnectWalletStatus("Failed");
@@ -62,17 +88,11 @@ function WalletConnectM() {
                   setConnectWalletStatus(null);
                 }}
               >
-                {connectWalletStatus == "Loading" ||
-                  ("Failed" && (
-                    <svg fill="none" viewBox="0 0 16 16">
-                      <path
-                        fill="currentColor"
-                        fill-rule="evenodd"
-                        d="M11.04 1.46a1 1 0 0 1 0 1.41L5.91 8l5.13 5.13a1 1 0 1 1-1.41 1.41L3.79 8.71a1 1 0 0 1 0-1.42l5.84-5.83a1 1 0 0 1 1.41 0Z"
-                        clip-rule="evenodd"
-                      ></path>
-                    </svg>
-                  ))}
+                {(connectWalletStatus == "Loading" || connectWalletStatus == "Failed") && (
+                  <svg fill="none" viewBox="0 0 16 16">
+                    <path fill="currentColor" fill-rule="evenodd" d="M11.04 1.46a1 1 0 0 1 0 1.41L5.91 8l5.13 5.13a1 1 0 1 1-1.41 1.41L3.79 8.71a1 1 0 0 1 0-1.42l5.84-5.83a1 1 0 0 1 1.41 0Z" clip-rule="evenodd"></path>
+                  </svg>
+                )}
               </button>
               <h3 className="title">Connect Wallet</h3>
               <button
@@ -110,9 +130,7 @@ function WalletConnectM() {
                         <img src={wallet.icon} className="walletIcon" alt="" />
                         <div className="walletDetails">
                           <h4 className="walletName">{wallet.name}</h4>
-                          <p className="walletStatus">
-                            {wallet.adapter?.readyState == "NotDetected" ? "Please Install the wallet first" : wallet.adapter?.readyState}
-                          </p>
+                          <p className="walletStatus">{wallet.adapter?.readyState == "NotDetected" ? "Click here to install" : wallet.adapter?.readyState}</p>
                         </div>
                       </div>
                     );
@@ -143,7 +161,7 @@ function WalletConnectM() {
                 <div className="failedContainer">
                   <img className="failed" src="/Failed.svg" />
                   <h3>Connection Failed</h3>
-                  <p>Please try again</p>
+                  <p>This might be cuased by previous open connectiosn, Please try again.</p>
                   <button onClick={handleTryAgain}>
                     <svg fill="none" viewBox="0 0 14 16">
                       <path

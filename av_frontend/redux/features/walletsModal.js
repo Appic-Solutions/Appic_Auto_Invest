@@ -9,11 +9,9 @@ const connectWalletModalSlice = createSlice({
   initialState: initialModal,
   reducers: {
     closeConnectWalletModal: (state) => {
-      console.log(state);
       state.isActive = false;
     },
     openConnectWalletModal: (state) => {
-      console.log(state);
       state.isActive = true;
     },
   },

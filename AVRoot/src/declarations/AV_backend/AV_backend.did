@@ -1,0 +1,124 @@
+type TransactionStatus = 
+ variant {
+   Failed: TransactionFailureReason;
+   NotTriggered;
+   Pending;
+   Successful;
+ };
+type TransactionFailureReason = 
+ variant {
+   BadBurn: record {min_burn_amount: nat;};
+   BadFee: record {expected_fee: nat;};
+   CreatedInFuture: record {ledger_time: nat64;};
+   CustomError: text;
+   Duplicate: record {duplicate_of: nat;};
+   Expired;
+   GenericError: record {
+                   error_code: nat;
+                   message: text;
+                 };
+   InsufficientAllowance: record {allowance: nat;};
+   InsufficientFunds: record {balance: nat;};
+   TemporarilyUnavailable;
+   TooOld;
+ };
+type Transaction = 
+ record {
+   amountBought: opt nat;
+   sellingAmount: nat;
+   step1: opt text;
+   step2: opt text;
+   step3: opt text;
+   step4: opt text;
+   step5: opt text;
+   step6: opt text;
+   transactionId: nat;
+   transactionStatus: TransactionStatus;
+   transactionTime: int;
+ };
+type Result_1 = 
+ variant {
+   err: PositionCreationError;
+   ok: nat;
+ };
+type PositionTokens = 
+ record {
+   buyToken: principal;
+   sellToken: principal;
+ };
+type PositionStatus = 
+ variant {
+   Active;
+   Deleted;
+   InActive;
+ };
+type PositionId = nat64;
+type PositionCreationError = 
+ variant {
+   AllowanceNotEnough:
+    record {
+      expectedAllowance: nat;
+      receivedAllowance: nat;
+    };
+   GenericError: record {message: text;};
+   NotEnoughFee: record {
+                   expectedFee: nat;
+                   receivedFee: nat;
+                 };
+   PositionInThePast;
+   TokenNotFound;
+   WronmgAlloance: record {
+                     expectedAllowance: nat;
+                     inputAllowance: nat;
+                   };
+ };
+type Position = 
+ record {
+   allowance: nat;
+   destination: principal;
+   managerCanister: principal;
+   positionId: PositionId;
+   positionStatus: PositionStatus;
+   swaps: vec Transaction;
+   tokens: PositionTokens;
+ };
+type Pair = 
+ record {
+   buyToken: principal;
+   sellToken: principal;
+ };
+type GetAllowanceArgs = 
+ record {
+   amountPerSwap: nat;
+   noOfSwaps: nat;
+   sellToken: principal;
+   userPrincipal: principal;
+ };
+type CreatePositionsArgs = 
+ record {
+   allowance: nat;
+   amountPerSwap: nat;
+   buyToken: principal;
+   destination: principal;
+   sellToken: principal;
+   swapsTime: vec nat;
+ };
+type AllowanceAmountResult = 
+ record {
+   minAllowanceForApproveFunction: nat;
+   minAllowanceForPositionCreation: nat;
+ };
+service : {
+  addPair: (principal, principal) -> (text);
+  calculateFee: (GetAllowanceArgs) -> (nat);
+  createPosition: (CreatePositionsArgs) -> (Result_1);
+  getAllPairs: () -> (vec Pair);
+  getAllPositions: () -> (vec Position) query;
+  getAllowanceForNewTrade: (GetAllowanceArgs) -> (AllowanceAmountResult);
+  getPositionsFor: (principal, opt principal, opt principal, opt bool) ->
+   (vec Position) query;
+  removePair: (principal, principal) -> (text);
+  retreiveTime: () -> (int);
+  transferTokens: (principal, principal, nat) -> (text);
+  withdrawFromSonic: (principal, nat) -> (text);
+}
