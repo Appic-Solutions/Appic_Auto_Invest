@@ -1,5 +1,7 @@
 "use client";
 import canistersIDs from "@/config/canistersIDs";
+import whiteListCanisters from "@/config/whiteListCanisters";
+import { idlFactory } from "@/did/ledger/icrc1.did";
 import { initWallet } from "@/redux/features/walletSlice";
 import { closeConnectWalletModal } from "@/redux/features/walletsModal";
 import darkModeClassnamegenerator, { darkClassGenerator } from "@/utils/darkClassGenerator";
@@ -26,12 +28,12 @@ function WalletConnectM() {
   const handleConnect = async (selectedWallet) => {
     try {
       if (selectedWallet.adapter?.readyState == "NotDetected") {
-        let response = await artemisWalletAdapter.connect(selectedWalletDetails.id, { whitelist: canistersIDs, host: "https://icp0.io/" });
+        let response = await artemisWalletAdapter.connect(selectedWalletDetails.id, { whitelist: whiteListCanisters, host: "https://icp0.io/" });
         return;
       }
       setSelectedWalletDetails(selectedWallet);
       setConnectWalletStatus("Loading");
-      let response = await artemisWalletAdapter.connect(selectedWallet.id, { whitelist: canistersIDs, host: "https://icp0.io/" });
+      let response = await artemisWalletAdapter.connect(selectedWallet.id, { whitelist: whiteListCanisters, host: "https://icp0.io/" });
       if (response) {
         let accountID = artemisWalletAdapter.accountId;
         dispatch(
@@ -45,36 +47,40 @@ function WalletConnectM() {
         );
         dispatch(closeConnectWalletModal());
         setConnectWalletStatus(null);
+        const actor = await artemisWalletAdapter.getCanisterActor(canistersIDs.NNS_ICP_LEDGER, idlFactory, true);
+        let icrc1Name = await actor.icrc1_decimals();
+        console.log(icrc1Name);
       } else {
         setConnectWalletStatus("Failed");
       }
     } catch (error) {
+      console.log(error);
       setConnectWalletStatus("Failed");
     }
   };
 
   // Trying to connect to wallet again handler
   const handleTryAgain = async () => {
-    try {
-      setConnectWalletStatus("Loading");
-      let response = await artemisWalletAdapter.connect(selectedWalletDetails.id, { whitelist: canistersIDs, host: "https://icp0.io/" });
-      if (response) {
-        let accountID = artemisWalletAdapter.accountId;
-        dispatch(
-          initWallet({
-            principalID: response,
-            accountID,
-            walletName: selectedWallet.name,
-            isWalletConnected: true,
-            assets: [],
-          })
-        );
-        dispatch(closeConnectWalletModal());
-        setConnectWalletStatus(null);
-      }
-    } catch (error) {
-      setConnectWalletStatus("Failed");
-    }
+    // try {
+    //   setConnectWalletStatus("Loading");
+    //   let response = await artemisWalletAdapter.connect(selectedWalletDetails.id, { whitelist: , host: "https://icp0.io/" });
+    //   if (response) {
+    //     let accountID = artemisWalletAdapter.accountId;
+    //     dispatch(
+    //       initWallet({
+    //         principalID: response,
+    //         accountID,
+    //         walletName: selectedWallet.name,
+    //         isWalletConnected: true,
+    //         assets: [],
+    //       })
+    //     );
+    //     dispatch(closeConnectWalletModal());
+    //     setConnectWalletStatus(null);
+    //   }
+    // } catch (error) {
+    //   setConnectWalletStatus("Failed");
+    // }
   };
   return (
     <>

@@ -1,7 +1,7 @@
 {
   "canisters": {
-    "AV_backend": {
-      "main": "src/AV_backend/main.mo",
+    "APPIC_ROOT": {
+      "main": "src/Appic_root/main.mo",
       "type": "motoko"
     }
   },
