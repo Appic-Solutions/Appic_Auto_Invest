@@ -1,48 +1,54 @@
-import { useCallback, useEffect, useState } from "react";
-import { artemisWalletAdapter } from "@/utils/walletConnector";
-import canistersIDs from "@/config/canistersIDs";
-import { dip20IdleFactory, icrcIdlFactory, sonicIdlFactory } from "@/did";
-import { initTokens } from "@/redux/features/tokensSlice";
-import { useDispatch } from "react-redux";
-import { parseResponseGetAllTokens } from "@/utils/responseParser";
+import { useCallback, useEffect, useState } from 'react';
+import { artemisWalletAdapter } from '@/utils/walletConnector';
+import { dip20IdleFactory, icrcIdlFactory, sonicIdlFactory } from '@/did';
+import { useDispatch } from 'react-redux';
 
-import { Principal } from "@dfinity/principal";
-import { waitWithTimeout } from "@/utils/timeFunctions";
+import { Principal } from '@dfinity/principal';
+import { waitWithTimeout } from '@/utils/timeFunctions';
+import { setAssets, setError } from '@/redux/features/walletSlice';
+import BigNumber from 'bignumber.js';
 
-export const useBalances = (isConnected, PrincipalId, AccountId, allTokens) => {
+export const useBalances = (isConnected, PrincipalId, AccountId, supportedTokens) => {
   const dispatch = useDispatch();
-  const [principalAssets, setPrincipalAssets] = useState(null);
   const [principalAssetsError, setPrincipalAssetsError] = useState(null);
   useEffect(() => {
     if (isConnected == false) return;
-    // Fetch all tokens from sonic canister
     if (PrincipalId == null) return;
-    if (allTokens == null || allTokens.length == 0) return;
+    if (supportedTokens == null || supportedTokens.length == 0) return;
+
+    // Get use Assets
     async function getPrincipalAssets() {
       try {
-        const principalAssets = await tokenBalances(allTokens, PrincipalId);
-        console.log(principalAssets);
+        const principalAssets = await tokenBalances(supportedTokens, PrincipalId);
+        const nonZeroAssests = principalAssets.filter((token) => token.balance != '0');
+        dispatch(setAssets(nonZeroAssests));
       } catch (error) {
         console.log(error);
+        setPrincipalAssetsError(error);
+        setError(error);
       }
     }
     getPrincipalAssets();
     return () => {};
-  }, [isConnected, PrincipalId, AccountId, allTokens]);
+  }, [isConnected, PrincipalId, AccountId, supportedTokens]);
   return {};
 };
 
-const tokenBalances = (allTokens, principalId) => {
+const tokenBalances = (supportedTokens, principalId) => {
   const tokens = Promise.all(
-    allTokens.map(async (token) => {
+    supportedTokens.map(async (token) => {
       const tokenCanisterId = token.id;
       const tokenType = token.tokenType;
       try {
         let tokenBalance = await _getTokenBalance(tokenCanisterId, tokenType, principalId);
-        return { ...token, balance: tokenBalance };
+        let usdBalance = new BigNumber(tokenBalance)
+          .dividedBy(10 ** token.decimals)
+          .multipliedBy(token.price)
+          .toString();
+        return { ...token, balance: tokenBalance.toString(), usdBalance };
       } catch (error) {
         console.log(error);
-        const errorResult = { ...token, balance: BigInt(0) };
+        const errorResult = { ...token, balance: '0' };
         return errorResult;
       }
     })
@@ -53,13 +59,16 @@ const tokenBalances = (allTokens, principalId) => {
 const _getTokenBalance = async (canisterId, tokenType, principalId) => {
   var tokenType = tokenType.toLowerCase();
   var tokenBalance = BigInt(0);
-  const idleFactory = tokenType == "dip20" || tokenType == "yc" ? dip20IdleFactory : icrcIdlFactory;
+  const idleFactory = tokenType == 'dip20' || tokenType == 'yc' ? dip20IdleFactory : icrcIdlFactory;
   try {
     var tokenActor = await artemisWalletAdapter.getCanisterActor(canisterId, idleFactory, true);
-    if (tokenType == "dip20" || tokenType == "yc") {
+    if (tokenType == 'dip20' || tokenType == 'yc') {
       tokenBalance = await Promise.race([tokenActor.balanceOf(Principal.fromText(principalId)), waitWithTimeout(10000)]);
-    } else if (tokenType == "icrc1" || tokenType == "icrc2") {
-      tokenBalance = await Promise.race([tokenActor.icrc1_balance_of({ owner: Principal.fromText(principalId), subaccount: [] }), waitWithTimeout(10000)]);
+    } else if (tokenType == 'icrc1' || tokenType == 'icrc2') {
+      tokenBalance = await Promise.race([
+        tokenActor.icrc1_balance_of({ owner: Principal.fromText(principalId), subaccount: [] }),
+        waitWithTimeout(10000),
+      ]);
     }
   } catch (error) {
     console.log(error);
@@ -67,3 +76,4 @@ const _getTokenBalance = async (canisterId, tokenType, principalId) => {
   }
   return tokenBalance;
 };
+

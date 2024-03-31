@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 // import { fetchData } from "@/utils/apiHandler";
 
 const initialWalletItems = {
@@ -13,10 +13,10 @@ const initialWalletItems = {
 };
 
 const walletSlice = createSlice({
-  name: "wallet",
+  name: 'wallet',
   initialState: {
     items: initialWalletItems,
-    status: "idle",
+    status: 'idle',
     error: null,
   },
   reducers: {
@@ -63,5 +63,5 @@ const walletSlice = createSlice({
 
 export const walletReducer = walletSlice.reducer;
 
-export const { initWallet, resetWallet, changeAccountID, setprincipalID, startLoading, stopLoading, setError, setAssets, setAllAssets } =
-  walletSlice.actions;
+export const { initWallet, resetWallet, changeAccountID, setprincipalID, startLoading, stopLoading, setError, setAssets } = walletSlice.actions;
+

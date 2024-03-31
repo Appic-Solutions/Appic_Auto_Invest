@@ -1,18 +1,19 @@
-"use client";
-import canistersIDs from "@/config/canistersIDs";
-import whiteListCanisters from "@/config/whiteListCanisters";
-import { AppicIdlFactory } from "@/did";
-import { initWallet } from "@/redux/features/walletSlice";
-import { closeConnectWalletModal } from "@/redux/features/walletsModal";
-import darkModeClassnamegenerator, { darkClassGenerator } from "@/utils/darkClassGenerator";
-import { artemisWalletAdapter } from "@/utils/walletConnector";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+'use client';
+import canistersIDs from '@/config/canistersIDs';
+import whiteListCanisters from '@/config/whiteListCanisters';
+import { AppicIdlFactory } from '@/did';
+import { initWallet } from '@/redux/features/walletSlice';
+import { closeConnectWalletModal } from '@/redux/features/walletsModal';
+import darkModeClassnamegenerator, { darkClassGenerator } from '@/utils/darkClassGenerator';
+import { artemisWalletAdapter } from '@/utils/walletConnector';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 //Hooks
-import { useAllTokens } from "@/hooks/getAllTokens";
-import { useIcpPrice } from "@/hooks/getIcpPrice";
-import { useBalances } from "@/hooks/getPrincipalBalances";
+import { useAllTokens } from '@/hooks/getAllTokens';
+import { useIcpPrice } from '@/hooks/getIcpPrice';
+import { useBalances } from '@/hooks/getPrincipalBalances';
+import { usePrices } from '@/hooks/getTokenPrices';
 
 function WalletConnectM() {
   const dispatch = useDispatch();
@@ -28,23 +29,27 @@ function WalletConnectM() {
   const accoundID = useSelector((state) => state.wallet?.items?.accoundID);
   const walletName = useSelector((state) => state.wallet.items.walletName);
   const assets = useSelector((state) => state.wallet.items.assets);
-  const tokensList = useSelector((state) => state.tokens.tokens);
+  const icpPrice = useSelector((state) => state.icpPrice.usdPrice);
+  const allTokensList = useSelector((state) => state.allTokens.tokens);
+  const supportedTokens = useSelector((state) => state.supportedTokens.tokens);
   // Custom Hooks
-  const { allTokens, allTokensError } = useAllTokens(isWalletConnected, principalID, accoundID);
-  const { icpPrice, icpPriceError } = useIcpPrice(isWalletConnected, principalID, accoundID);
-  const {} = useBalances(isWalletConnected, principalID, accoundID, tokensList);
+  const { icpPriceError } = useIcpPrice();
+  const { allTokensError } = useAllTokens();
+  const { getTokensPricesError } = usePrices(allTokensList, icpPrice);
+  const {} = useBalances(isWalletConnected, principalID, accoundID, supportedTokens);
+
   // Events
 
   // Connect to selected wallet
   const handleConnect = async (selectedWallet) => {
     try {
-      if (selectedWallet.adapter?.readyState == "NotDetected") {
-        let response = await artemisWalletAdapter.connect(selectedWallet.id, { whitelist: whiteListCanisters, host: "https://icp0.io/" });
+      if (selectedWallet.adapter?.readyState == 'NotDetected') {
+        let response = await artemisWalletAdapter.connect(selectedWallet.id, { whitelist: whiteListCanisters, host: 'https://icp0.io/' });
         return;
       }
       setSelectedWalletDetails(selectedWallet);
-      setConnectWalletStatus("Loading");
-      let response = await artemisWalletAdapter.connect(selectedWallet.id, { whitelist: whiteListCanisters, host: "https://icp0.io/" });
+      setConnectWalletStatus('Loading');
+      let response = await artemisWalletAdapter.connect(selectedWallet.id, { whitelist: whiteListCanisters, host: 'https://icp0.io/' });
       if (response) {
         let accountID = artemisWalletAdapter.accountId;
         dispatch(
@@ -62,19 +67,19 @@ function WalletConnectM() {
         // let icrc1Name = await actor.retreiveCaller();
         // console.log(icrc1Name.toText());
       } else {
-        setConnectWalletStatus("Failed");
+        setConnectWalletStatus('Failed');
       }
     } catch (error) {
       console.log(error);
-      setConnectWalletStatus("Failed");
+      setConnectWalletStatus('Failed');
     }
   };
 
   // Trying to connect to wallet again handler
   const handleTryAgain = async () => {
     try {
-      setConnectWalletStatus("Loading");
-      let response = await artemisWalletAdapter.connect(selectedWalletDetails.id, { whitelist: whiteListCanisters, host: "https://icp0.io/" });
+      setConnectWalletStatus('Loading');
+      let response = await artemisWalletAdapter.connect(selectedWalletDetails.id, { whitelist: whiteListCanisters, host: 'https://icp0.io/' });
       if (response) {
         let accountID = artemisWalletAdapter.accountId;
         dispatch(
@@ -90,14 +95,14 @@ function WalletConnectM() {
         setConnectWalletStatus(null);
       }
     } catch (error) {
-      setConnectWalletStatus("Failed");
+      setConnectWalletStatus('Failed');
     }
   };
 
   // Rernder
   return (
     <>
-      <div className={`${darkClassGenerator(isDark, "walletConnectModal")} ${connectWalletModal && "active"}`}>
+      <div className={`${darkClassGenerator(isDark, 'walletConnectModal')} ${connectWalletModal && 'active'}`}>
         <div className="bg">
           <div className="container">
             <div className="topSection">
@@ -107,9 +112,14 @@ function WalletConnectM() {
                   setConnectWalletStatus(null);
                 }}
               >
-                {(connectWalletStatus == "Loading" || connectWalletStatus == "Failed") && (
+                {(connectWalletStatus == 'Loading' || connectWalletStatus == 'Failed') && (
                   <svg fill="none" viewBox="0 0 16 16">
-                    <path fill="currentColor" fillRule="evenodd" d="M11.04 1.46a1 1 0 0 1 0 1.41L5.91 8l5.13 5.13a1 1 0 1 1-1.41 1.41L3.79 8.71a1 1 0 0 1 0-1.42l5.84-5.83a1 1 0 0 1 1.41 0Z" clipRule="evenodd"></path>
+                    <path
+                      fill="currentColor"
+                      fillRule="evenodd"
+                      d="M11.04 1.46a1 1 0 0 1 0 1.41L5.91 8l5.13 5.13a1 1 0 1 1-1.41 1.41L3.79 8.71a1 1 0 0 1 0-1.42l5.84-5.83a1 1 0 0 1 1.41 0Z"
+                      clipRule="evenodd"
+                    ></path>
                   </svg>
                 )}
               </button>
@@ -145,12 +155,14 @@ function WalletConnectM() {
                         onClick={() => {
                           handleConnect(wallet);
                         }}
-                        className={`wallet ${wallet.adapter?.readyState == "NotDetected" && "NotDetected"}`}
+                        className={`wallet ${wallet.adapter?.readyState == 'NotDetected' && 'NotDetected'}`}
                       >
                         <img src={wallet.icon} className="walletIcon" alt="" />
                         <div className="walletDetails">
                           <h4 className="walletName">{wallet.name}</h4>
-                          <p className="walletStatus">{wallet.adapter?.readyState == "NotDetected" ? "Click here to install" : wallet.adapter?.readyState}</p>
+                          <p className="walletStatus">
+                            {wallet.adapter?.readyState == 'NotDetected' ? 'Click here to install' : wallet.adapter?.readyState}
+                          </p>
                         </div>
                       </div>
                     );
@@ -158,7 +170,7 @@ function WalletConnectM() {
                 </>
               )}
 
-              {connectWalletStatus == "Loading" && (
+              {connectWalletStatus == 'Loading' && (
                 <div className="loadingContainer">
                   <img className="loading" src="/Loading.svg" />
                   <h3>Conitinue in {selectedWalletDetails.name}</h3>
@@ -177,7 +189,7 @@ function WalletConnectM() {
                 </div>
               )}
 
-              {connectWalletStatus == "Failed" && (
+              {connectWalletStatus == 'Failed' && (
                 <div className="failedContainer">
                   <img className="failed" src="/Failed.svg" />
                   <h3>Connection Failed</h3>
@@ -204,3 +216,4 @@ function WalletConnectM() {
 }
 
 export default WalletConnectM;
+

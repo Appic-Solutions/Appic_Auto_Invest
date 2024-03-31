@@ -1,9 +1,9 @@
-import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 
 const intialCoins = { tokens: [] };
 
-const tokensSlice = createSlice({
-  name: "tokens",
+const allTokensSlice = createSlice({
+  name: 'tokens',
   initialState: intialCoins,
   reducers: {
     // Action to setCoins for the first time
@@ -17,5 +17,6 @@ const tokensSlice = createSlice({
   },
 });
 
-export const tokensReducer = tokensSlice.reducer;
-export const { initTokens, resetTokens } = tokensSlice.actions;
+export const allTokensReducer = allTokensSlice.reducer;
+export const { initTokens, resetTokens } = allTokensSlice.actions;
+

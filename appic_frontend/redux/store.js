@@ -1,18 +1,20 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore } from '@reduxjs/toolkit';
 
-import { initWallet, setAssets, startLoading, stopLoading, walletReducer } from "./features/walletSlice";
-import { sidebarReducer, themeReducer } from "./features/themeSlice";
-import { tokensReducer } from "./features/tokensSlice";
-import { pageReducer } from "./features/pageData";
-import { connectWalletModalReducer } from "./features/walletsModal";
-import { icpPriceReducer } from "./features/icpPrice";
+import { initWallet, setAssets, startLoading, stopLoading, walletReducer } from './features/walletSlice';
+import { sidebarReducer, themeReducer } from './features/themeSlice';
+import { allTokensReducer } from './features/allTokensSlice';
+import { pageReducer } from './features/pageData';
+import { connectWalletModalReducer } from './features/walletsModal';
+import { icpPriceReducer } from './features/icpPrice';
+import { supportedTokensReducer } from './features/supportedTokensSlice';
 
 export const store = configureStore({
   reducer: {
     wallet: walletReducer,
     theme: themeReducer,
     sidebar: sidebarReducer,
-    tokens: tokensReducer,
+    allTokens: allTokensReducer,
+    supportedTokens: supportedTokensReducer,
     page: pageReducer,
     connectWalletModal: connectWalletModalReducer,
     icpPrice: icpPriceReducer,
@@ -24,3 +26,4 @@ export const store = configureStore({
 });
 
 export const getState = store.getState;
+
