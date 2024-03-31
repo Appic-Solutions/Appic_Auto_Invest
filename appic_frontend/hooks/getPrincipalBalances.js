@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 
 import { Principal } from '@dfinity/principal';
 import { waitWithTimeout } from '@/utils/timeFunctions';
-import { setAssets, setError } from '@/redux/features/walletSlice';
+import { setAssets, setError, setTotalBalance, startLoading, stopLoading } from '@/redux/features/walletSlice';
 import BigNumber from 'bignumber.js';
 
 export const useBalances = (isConnected, PrincipalId, AccountId, supportedTokens) => {
@@ -15,23 +15,33 @@ export const useBalances = (isConnected, PrincipalId, AccountId, supportedTokens
     if (isConnected == false) return;
     if (PrincipalId == null) return;
     if (supportedTokens == null || supportedTokens.length == 0) return;
-
+    dispatch(startLoading());
     // Get use Assets
     async function getPrincipalAssets() {
+      let totalBalance = 0;
       try {
         const principalAssets = await tokenBalances(supportedTokens, PrincipalId);
-        const nonZeroAssests = principalAssets.filter((token) => token.balance != '0');
+        const nonZeroAssests = principalAssets.filter((token) => {
+          if (token.balance != '0') {
+            totalBalance += Number(token.usdBalance);
+            return true;
+          }
+        });
+
         dispatch(setAssets(nonZeroAssests));
+        dispatch(setTotalBalance(totalBalance));
+        dispatch(stopLoading());
       } catch (error) {
         console.log(error);
         setPrincipalAssetsError(error);
         setError(error);
+        dispatch(stopLoading());
       }
     }
     getPrincipalAssets();
     return () => {};
   }, [isConnected, PrincipalId, AccountId, supportedTokens]);
-  return {};
+  return { principalAssetsError };
 };
 
 const tokenBalances = (supportedTokens, principalId) => {

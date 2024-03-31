@@ -1,26 +1,24 @@
-"use client";
+'use client';
 
-import darkModeClassnamegenerator from "@/utils/darkClassGenerator";
-import Title from "./higerOrderComponents/titlesAndHeaders";
-import AlphaButton from "./higerOrderComponents/button";
-import WalletNotConnected from "./walletNotConnectd";
-import { useSelector } from "react-redux";
-import { usePathname, useRouter } from "next/navigation";
-import { formatSignificantNumber, formatDecimalValue } from "@/helper/numberFormatter";
-import { useEffect, useState } from "react";
+import darkModeClassnamegenerator from '@/utils/darkClassGenerator';
+import Title from './higerOrderComponents/titlesAndHeaders';
+import AlphaButton from './higerOrderComponents/button';
+import WalletNotConnected from './walletNotConnectd';
+import { useSelector } from 'react-redux';
+import { usePathname, useRouter } from 'next/navigation';
+import { formatSignificantNumber, formatDecimalValue } from '@/helper/numberFormatter';
+import { useEffect, useState } from 'react';
 // import { useWeb3Modal } from "@web3modal/wagmi/react";
 // import { useConnectModal } from "@particle-network/connect-react-ui";
-import LoadingComponent from "./higerOrderComponents/loadingComponent";
-import { netWorkConfig } from "@/config/network";
-import { findNetworkConfig } from "@/helper/helperFunc";
+import LoadingComponent from './higerOrderComponents/loadingComponent';
+import { netWorkConfig } from '@/config/network';
+import { findNetworkConfig } from '@/helper/helperFunc';
 function WalletTokens({ setEditMode }) {
   const [isClient, setIsClient] = useState(false);
   const [showLowValueAssets, setShowLowValueAssets] = useState(false);
   useEffect(() => {
     setIsClient(true);
   }, []);
-  // const { open, close } = useWeb3Modal()
-  // const {openConnectModal} = useConnectModal()
 
   const isWalletConnected = useSelector((state) => state.wallet.items.isWalletConnected);
   const principalID = useSelector((state) => state.wallet.items.principalID);
@@ -29,9 +27,9 @@ function WalletTokens({ setEditMode }) {
   const assets = useSelector((state) => state.wallet.items.assets);
 
   return (
-    <div className={darkModeClassnamegenerator("walletTokens")}>
+    <div className={darkModeClassnamegenerator('walletTokens')}>
       {isClient && (
-        <Title title="Portfolio">
+        <Title title="Wallet Tokens">
           {isWalletConnected && (
             <div className="wallet__totlaBalance">
               {/* <p className="balance__title">Balance on {findNetworkConfig(chainId).networkName}:</p> */}
@@ -170,3 +168,4 @@ function WalletTokens({ setEditMode }) {
 }
 
 export default WalletTokens;
+

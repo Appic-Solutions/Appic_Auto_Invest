@@ -10,6 +10,7 @@ const initialWalletItems = {
   loader: false,
   error: null,
   assets: [],
+  totalBalance: 0,
 };
 
 const walletSlice = createSlice({
@@ -27,6 +28,7 @@ const walletSlice = createSlice({
       state.items.walletName = action.payload.walletName;
       state.items.isWalletConnected = action.payload.isWalletConnected;
       state.items.assets = action.payload.assets;
+      state.items.totalBalance = action.payload.totalBalance;
     },
     // Action to disconnect Wallet
     resetWallet: (state, action) => {
@@ -58,10 +60,14 @@ const walletSlice = createSlice({
     setAssets: (state, action) => {
       state.items.assets = action.payload;
     },
+    setTotalBalance: (state, action) => {
+      state.items.totalBalance = action.payload;
+    },
   },
 });
 
 export const walletReducer = walletSlice.reducer;
 
-export const { initWallet, resetWallet, changeAccountID, setprincipalID, startLoading, stopLoading, setError, setAssets } = walletSlice.actions;
+export const { initWallet, resetWallet, changeAccountID, setprincipalID, startLoading, stopLoading, setError, setAssets, setTotalBalance } =
+  walletSlice.actions;
 

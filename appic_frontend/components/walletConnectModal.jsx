@@ -29,15 +29,24 @@ function WalletConnectM() {
   const accoundID = useSelector((state) => state.wallet?.items?.accoundID);
   const walletName = useSelector((state) => state.wallet.items.walletName);
   const assets = useSelector((state) => state.wallet.items.assets);
+  const totalBalance = useSelector((state) => state.wallet.items.totalBalance);
   const icpPrice = useSelector((state) => state.icpPrice.usdPrice);
   const allTokensList = useSelector((state) => state.allTokens.tokens);
   const supportedTokens = useSelector((state) => state.supportedTokens.tokens);
   // Custom Hooks
-  const { icpPriceError } = useIcpPrice();
-  const { allTokensError } = useAllTokens();
-  const { getTokensPricesError } = usePrices(allTokensList, icpPrice);
-  const {} = useBalances(isWalletConnected, principalID, accoundID, supportedTokens);
 
+  // TODO: set a timer taht call all these hooks every 15 seconds to fetch new data
+
+  // Fetch Icp price
+  const { icpPriceError } = useIcpPrice();
+  // Fetch IC all token from sonic
+  const { allTokensError } = useAllTokens();
+  // Fetch all tokens prices and remove 0$ tokens
+  const { getTokensPricesError } = usePrices(allTokensList, icpPrice);
+  // Fetch token balances and usd balance of each user
+  const { principalAssetsError } = useBalances(isWalletConnected, principalID, accoundID, supportedTokens);
+
+  // TODO: Handle errors via a notification bar
   // Events
 
   // Connect to selected wallet
@@ -59,13 +68,11 @@ function WalletConnectM() {
             walletName: selectedWallet.name,
             isWalletConnected: true,
             assets: [],
+            totalBalance: 0,
           })
         );
         dispatch(closeConnectWalletModal());
         setConnectWalletStatus(null);
-        // const actor = await artemisWalletAdapter.getCanisterActor(canistersIDs.APPIC_ROOT, AppicIdlFactory, false);
-        // let icrc1Name = await actor.retreiveCaller();
-        // console.log(icrc1Name.toText());
       } else {
         setConnectWalletStatus('Failed');
       }
@@ -89,6 +96,7 @@ function WalletConnectM() {
             walletName: selectedWallet.name,
             isWalletConnected: true,
             assets: [],
+            totalBalance: 0,
           })
         );
         dispatch(closeConnectWalletModal());

@@ -1,63 +1,36 @@
-import { netWorkConfig } from "@/config/network";
-// import { walletConfig } from "@/config/wallet";
-// import { MetaMaskConnector } from "wagmi/connectors/metaMask";
-// import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
-// import { CoinbaseWalletConnector } from "wagmi/connectors/coinbaseWallet";
-// import { InjectedConnector } from "wagmi/connectors/injected";
-// import {
-//   mainnet,
-//   polygon,
-//   bsc,
-//   arbitrum,
-//   optimism,
-//   avalanche,
-//   fantom,
-// } from "wagmi/chains";
-
-// Create an object that maps conditions to connectors
-// const connectorMap = {
-//   walletconnect: new WalletConnectConnector({
-//     options: {
-//       projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECTID,
-//       showQrModal: true,
-//       metadata: {
-//         name: "Alpha Vault",
-//         description: "app.alphavault.io",
-//         url: "https://alphavault.io",
-//         icons: ["https://wagmi.sh/icon.png"],
-//       },
-//     },
-//   }),
-//   metamask: new MetaMaskConnector({}),
-//   coinbase: new CoinbaseWalletConnector({}),
-//   binance: new InjectedConnector({}),
-//   trustwallet: new InjectedConnector({}),
-// };
-// Enum-like function to get a connector based on a condition
-// export function getConnector(walletType) {
-//   // const connector = connectorMap[walletType];
-//   // return connector;
-//   return new MetaMaskConnector({
-//     chains: [mainnet, polygon, bsc, arbitrum, optimism, avalanche, fantom],
-//   });
-// }
-// Create a utility function to find network configuration
-export function findNetworkConfig(chainId) {
-  return netWorkConfig.find((config) => config.networkId === chainId);
-}
-// // Create a utility function to find wallet configuration
-// export function findWalletConfig(walletName) {
-//   return walletConfig.find((config) => config.walletId === walletName);
-// }
-// function for formating walletAddress
+// Function for formating principal address
 export const formatAddress = (address) => {
-  let newAddress = address?.substr(0, 6) + "..." + address?.substr(address?.length - 5);
-  return newAddress;
+  // Split the address into segments separated by "-"
+  const segments = address.split('-');
+
+  // Keep the first and last segments
+  const firstSegment = segments[0];
+  const lastSegment = segments[segments.length - 1];
+
+  // Replace middle segments with ellipses
+  const middleSegmentsCount = segments.length - 2;
+  const middleSegments = middleSegmentsCount > 0 ? '...' : '';
+
+  // Join the segments with ellipses
+  const shortenedAddress = `${firstSegment}${middleSegments}${lastSegment}`;
+
+  return shortenedAddress;
 };
 
-//CHECK FOR SUPPORTIVE CHAIN
-export const checkForSupportiveChains = (chainId) => {
-  let supportedChainIds = [1, 10, 89, 137, 250, 42161, 43114];
+//  Format account id
+export function formatAccountId(accountId) {
+  // Check if the account id is valid
+  if (typeof accountId !== 'string' || accountId.length !== 64) {
+    return 'Invalid account id';
+  }
 
-  return supportedChainIds.includes(chainId);
-};
+  // Extract the first 6 characters and the last 6 characters of the account id
+  const firstPart = accountId.substring(0, 5);
+  const lastPart = accountId.substring(accountId.length - 3);
+
+  // Combine the first part, ellipses, and the last part
+  const shortenedAccountId = `${firstPart}...${lastPart}`;
+
+  return shortenedAccountId;
+}
+
