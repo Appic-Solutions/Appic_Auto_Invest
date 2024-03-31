@@ -346,6 +346,10 @@ actor AlphavaultRoot {
     return utils.nanoToSecond(Time.now());
   };
 
+  public shared ({ caller }) func retreiveCaller() : async Principal {
+    return caller;
+  };
+
   // Timer function for triggering the swap on time
   // Runs every one hour and checks the transactionTime value of each transaction
   // If current time in unix format is bigger than transactionTime and transactionStauts is #notTriggered, it will trigger a new swap transaction

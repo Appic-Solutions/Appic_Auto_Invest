@@ -39,8 +39,6 @@ export const artemisWalletAdapter = new Artemis(connectObj);
 //   },
 // };
 
-export async function connectWallet() {}
-
 // export const batchTransactionObject = new BatchTransact(transactions, artemisWalletAdapter);
 
 // const resp = await batchTransactionObject.execute();

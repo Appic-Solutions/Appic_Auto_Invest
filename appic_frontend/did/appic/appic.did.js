@@ -1,4 +1,4 @@
-export const idlFactory = ({ IDL }) => {
+export const AppicIdlFactory = ({ IDL }) => {
   const GetAllowanceArgs = IDL.Record({
     noOfSwaps: IDL.Nat,
     userPrincipal: IDL.Principal,
@@ -105,11 +105,9 @@ export const idlFactory = ({ IDL }) => {
     getAllowanceForNewTrade: IDL.Func([GetAllowanceArgs], [AllowanceAmountResult], []),
     getPositionsFor: IDL.Func([IDL.Principal, IDL.Opt(IDL.Principal), IDL.Opt(IDL.Principal), IDL.Opt(IDL.Bool)], [IDL.Vec(Position)], ["query"]),
     removePair: IDL.Func([IDL.Principal, IDL.Principal], [IDL.Text], []),
+    retreiveCaller: IDL.Func([], [IDL.Principal], []),
     retreiveTime: IDL.Func([], [IDL.Int], []),
     transferTokens: IDL.Func([IDL.Principal, IDL.Principal, IDL.Nat], [IDL.Text], []),
     withdrawFromSonic: IDL.Func([IDL.Principal, IDL.Nat], [IDL.Text], []),
   });
-};
-export const init = ({ IDL }) => {
-  return [];
 };

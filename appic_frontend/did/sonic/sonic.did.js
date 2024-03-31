@@ -1,4 +1,4 @@
-export const idlFactory = ({ IDL }) => {
+export const sonicIdlFactory = ({ IDL }) => {
   const TxReceipt = IDL.Variant({ ok: IDL.Nat, err: IDL.Text });
   const TokenBlockType = IDL.Variant({
     Full: IDL.Bool,
@@ -243,7 +243,4 @@ export const idlFactory = ({ IDL }) => {
     validateRegisterFundRecoveryForUser: IDL.Func([IDL.Principal, IDL.Principal, IDL.Nat], [ValidateFunctionReturnType], []),
     withdraw: IDL.Func([IDL.Principal, IDL.Nat], [TxReceipt], []),
   });
-};
-export const init = ({ IDL }) => {
-  return [];
 };

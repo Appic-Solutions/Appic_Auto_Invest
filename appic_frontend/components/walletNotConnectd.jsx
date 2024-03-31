@@ -15,7 +15,7 @@ function WalletNotConnected() {
     <div className={darkModeClassnamegenerator("walletNotConnected")}>
       <div className="ic_wallets">
         {artemisWalletAdapter.wallets.map((wallet) => {
-          return <img src={wallet.icon} />;
+          return <img key={wallet.id} src={wallet.icon} />;
         })}
       </div>
 
