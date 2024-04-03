@@ -1,7 +1,7 @@
 .walletNotConnected {
   background-color: $light-box-bg;
   margin-top: 1rem;
-  border-radius: clamp(0px, calc(4px * 9), 44px);
+  border-radius: $border-radius;
   padding: 1.5rem 1rem;
   border: 1px solid $light-border;
   // box-shadow: 0 2px 26px rgba(0, 0, 0, 0.1);
@@ -66,7 +66,7 @@
   .walletNotConnected {
     background-color: $light-box-bg;
     margin-top: 2rem;
-    border-radius: clamp(0px, calc(4px * 9), 44px);
+    border-radius: $border-radius;
     padding: 3rem 5rem;
     border: 1px solid $light-border;
 
@@ -113,3 +113,4 @@
     }
   }
 }
+

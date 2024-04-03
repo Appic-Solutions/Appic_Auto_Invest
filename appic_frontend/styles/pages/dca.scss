@@ -1,717 +1,1439 @@
 .DcaPositions {
-
-    .position {
-        width: 100%;
-        background-color: $light-box-bg;
-        border-radius: 15px;
-        box-shadow: 0 2px 26px rgba(0, 0, 0, 0.1);
-        margin-top: 1rem;
-        padding: 1.5rem 1rem;
-
-        .tokens {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 1.5rem;
-
-            .token {
-                display: flex;
-                align-items: center;
-                gap: 1rem;
-
-                img {
-                    width: 30px;
-                    height: 30px;
-                }
-
-                p {
-                    color: $light-primary;
-                    font-family: Poppins;
-                    font-size: 16px;
-                    font-style: normal;
-                    font-weight: 500;
-                    line-height: normal;
-                }
-            }
-
-            svg {
-                fill: $light-primary;
-            }
-        }
-
-        .detailsBox {
-            margin: 2rem 0;
-            background-color: #fafafa;
-            border-radius: 15px;
-            border: 1px solid #edeef2;
-            padding: 0.7rem 1.2rem;
-            display: flex;
-            justify-content: space-between;
-
-            .flex {
-                display: flex;
-                align-items: center;
-                gap: 1rem;
-
-                .figures {
-                    color: $light-tertiary;
-                    font-family: Poppins;
-                    font-size: 14px;
-                    font-style: normal;
-                    font-weight: 500;
-                    line-height: normal;
-                }
-
-                .figures.Up {
-                    color: $light-percentageUP;
-                }
-
-                .figures.Down {
-                    color: $light-percentageDown;
-                }
-
-                .percentage {
-                    background-color: $light-tertiary;
-                    color: $light-box-bg;
-                    font-family: Poppins;
-                    font-size: 12px;
-                    font-style: normal;
-                    font-weight: 500;
-                    line-height: normal;
-                    padding: 0.4rem;
-                    border-radius: 15px;
-                }
-
-                .percentage.Up {
-                    background-color: $light-percentageUP;
-                }
-
-                .percentage.Down {
-                    background-color: $light-percentageDown;
-                }
-            }
-        }
-
-        .seprator {
-            width: 100%;
-        }
-
-        .dataRow {
-            margin: 1rem 0;
-            padding: 0.7rem 1.2rem;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            row-gap: 2rem;
-            align-items: center;
-        }
-
-        .dataPart {
-            h3 {
-                color: $light-primary;
-                font-family: Poppins;
-                font-size: 15px;
-                font-style: normal;
-                font-weight: 500;
-                line-height: normal;
-
-                &.delete_Btn {
-                    color: #e63f66;
-                    cursor: pointer;
-                }
-            }
-
-            h4 {
-                color: $light-tertiary;
-                font-family: Poppins;
-                font-size: 14px;
-                font-style: normal;
-                font-weight: 500;
-                line-height: normal;
-            }
-        }
-
-        .dataPart:nth-child(even) {
-            justify-self: end;
-        }
-    }
-
-    &.dark {
-        .header {
-
-            .statusChanger {
-                button {
-                    color: $dark-primary;
-                }
-
-                button.active {
-                    background-color: $light-secondary;
-                    color: $dark-primary;
-                }
-            }
-        }
-
-        .position {
-            background-color: $dark-box-bg;
-
-            box-shadow: 0 2px 26px rgba(255, 255, 255, 0.1);
-
-            .tokens {
-                .token {
-                    display: flex;
-                    align-items: center;
-                    gap: 1rem;
-
-                    img {}
-
-                    p {
-                        color: $dark-primary;
-                    }
-                }
-
-                svg {
-                    fill: $dark-primary;
-                }
-            }
-
-            .detailsBox {
-                border: 1px solid #3a4151;
-                background: #0c101c;
-
-                .flex {
-                    .figures {
-                        color: $dark-tertiary;
-                    }
-
-                    .figures.Up {
-                        color: $dark-percentageUP;
-                    }
-
-                    .figures.Down {
-                        color: $dark-percentageDown;
-                    }
-
-                    .percentage {
-                        background-color: $dark-tertiary;
-                        color: $dark-box-bg;
-                    }
-
-                    .percentage.Up {
-                        background-color: $dark-percentageUP;
-                    }
-
-                    .percentage.Down {
-                        background-color: $dark-percentageDown;
-                    }
-                }
-            }
-
-            .seprator {
-                width: 100%;
-                fill: #1a222f;
-            }
-
-            .dataRow {}
-
-            .dataPart {
-                h3 {
-                    color: $dark-primary;
-
-                    &.delete_Btn {
-                        color: #e63f66;
-                    }
-                }
-
-                h4 {
-                    color: $dark-tertiary;
-                }
-            }
-        }
-    }
-}
-
-@media screen and (min-width: 1024px) {
-    .DcaPositions {
-
-        .position {
-            width: 100%;
-            background-color: $light-box-bg;
-            border-radius: 15px;
-            box-shadow: 0 2px 26px rgba(0, 0, 0, 0.1);
-            margin-top: 1rem;
-            padding: 3rem 5rem;
-
-            .tokens {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 2rem;
-
-                .token {
-                    display: flex;
-                    align-items: center;
-                    gap: 1.5rem;
-
-                    img {
-                        width: 35px;
-                        height: 35px;
-                    }
-
-                    p {
-                        color: $light-primary;
-                        font-family: Poppins;
-                        font-size: 20px;
-                        font-style: normal;
-                        font-weight: 500;
-                        line-height: normal;
-                    }
-                }
-
-                svg {
-                    fill: $light-primary;
-                }
-            }
-
-            .detailsBox {
-                margin: 2rem 0;
-                background-color: #fafafa;
-                border-radius: 15px;
-                border: 1px solid #edeef2;
-                padding: 1rem 2rem;
-                display: flex;
-                justify-content: space-between;
-
-                .dataPart {
-                    h3 {
-                        color: $light-primary;
-                        font-family: Poppins;
-                        font-size: 19px;
-                        font-style: normal;
-                        font-weight: 500;
-                        line-height: normal;
-
-                        &.delete_Btn {
-                            color: #e63f66;
-                            cursor: pointer;
-                        }
-                    }
-
-                    h4 {
-                        margin-top: 0.5rem;
-
-                        color: $light-tertiary;
-                        font-family: Poppins;
-                        font-size: 18px;
-                        font-style: normal;
-                        font-weight: 500;
-                        line-height: normal;
-                    }
-                }
-
-                .flex {
-                    display: flex;
-                    align-items: center;
-                    gap: 1rem;
-                    margin-top: 0.5rem;
-
-                    .figures {
-                        color: $light-tertiary;
-                        font-family: Poppins;
-                        font-size: 18px;
-                        font-style: normal;
-                        font-weight: 500;
-                        line-height: normal;
-                    }
-
-                    .figures.Up {
-                        color: $light-percentageUP;
-                    }
-
-                    .figures.Down {
-                        color: $light-percentageDown;
-                    }
-
-                    .percentage {
-                        background-color: $light-tertiary;
-                        color: $light-box-bg;
-                        font-family: Poppins;
-                        font-size: 14px;
-                        font-style: normal;
-                        font-weight: 500;
-                        line-height: normal;
-                        padding: 0.5rem 1rem;
-                        border-radius: 15px;
-                    }
-
-                    .percentage.Up {
-                        background-color: $light-percentageUP;
-                    }
-
-                    .percentage.Down {
-                        background-color: $light-percentageDown;
-                    }
-                }
-            }
-
-            .seprator {
-                width: 100%;
-            }
-
-            .dataRow {
-                margin: 1rem 0;
-                padding: 0.7rem 1.2rem;
-                display: grid;
-                grid-template-columns: 1fr 1fr 1fr;
-                row-gap: 2rem;
-                align-items: center;
-                column-gap: 4rem;
-            }
-
-            .dataPart {
-                h3 {
-                    color: $light-primary;
-                    font-family: Poppins;
-                    font-size: 18px;
-                    font-style: normal;
-                    font-weight: 500;
-                    line-height: normal;
-
-                    &.delete_Btn {
-                        color: #e63f66;
-                        cursor: pointer;
-                    }
-                }
-
-                h4 {
-                    color: $light-tertiary;
-                    font-family: Poppins;
-                    font-size: 16px;
-                    font-style: normal;
-                    font-weight: 400;
-                    line-height: normal;
-                }
-            }
-
-            .dataPart:nth-child(even) {
-                justify-self: auto;
-            }
-        }
-
-        &.dark {
-            .header {
-                .statusChanger {
-                    button {
-                        color: $dark-primary;
-                    }
-
-                    button.active {
-                        background-color: $dark-secondary;
-                        color: $dark-primary;
-                    }
-                }
-            }
-
-            .position {
-                background-color: $dark-box-bg;
-
-                box-shadow: 0 2px 26px rgba(255, 255, 255, 0.1);
-
-                .tokens {
-                    .token {
-                        display: flex;
-                        align-items: center;
-                        gap: 1rem;
-
-                        img {}
-
-                        p {
-                            color: $dark-primary;
-                        }
-                    }
-
-                    svg {
-                        fill: $dark-primary;
-                    }
-                }
-
-                .detailsBox {
-                    border: 1px solid #3a4151;
-                    background: #0c101c;
-
-                    .flex {
-                        .figures {
-                            color: $dark-tertiary;
-                        }
-
-                        .figures.Up {
-                            color: $dark-percentageUP;
-                        }
-
-                        .figures.Down {
-                            color: $dark-percentageDown;
-                        }
-
-                        .percentage {
-                            background-color: $dark-tertiary;
-                            color: $dark-box-bg;
-                        }
-
-                        .percentage.Up {
-                            background-color: $dark-percentageUP;
-                        }
-
-                        .percentage.Down {
-                            background-color: $dark-percentageDown;
-                        }
-                    }
-                }
-
-                .seprator {
-                    width: 100%;
-                    fill: #1a222f;
-                }
-
-                .dataRow {}
-
-                .dataPart {
-                    h3 {
-                        color: $dark-primary;
-
-                        &.delete_Btn {
-                            color: #e63f66;
-                        }
-                    }
-
-                    h4 {
-                        color: $dark-tertiary;
-                    }
-                }
-            }
-        }
-    }
-}
-
-
-// new dca
-.dca__list {
+  .position {
     width: 100%;
     background-color: $light-box-bg;
     border-radius: 15px;
-    box-shadow: 0 2px 26px rgba(0, 0, 0, 0.1);
-    margin-top: 2rem;
+    margin-top: 1rem;
     padding: 1.5rem 1rem;
-    width: 100%;
-    .empty_history{
-        text-align: center;
-       img {
-           width: 12rem;
-           height: 12rem;
-       }
-       p {
-           font-weight: 500;
-           font-size: 12px;
-           color: $light-primary;
-       }
-   }
-    .header {
-        width: 100%;
-        display: grid;
-        grid-template-columns: 20% 20% 20% 20% 20% 20%;
-        margin: 0;
-        font-weight: 600;
-        color: $light-secondary;
-        font-size: 1.3rem;
-        justify-items: center;
-        padding-bottom: 1rem;
-        border-bottom: 1px solid #d9d9d9;
 
-        .buyingDesktop {
-            display: none;
+    .tokens {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+
+      .token {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+
+        img {
+          width: 30px;
+          height: 30px;
         }
+
+        p {
+          color: $light-primary;
+          font-family: Poppins;
+          font-size: 16px;
+          font-style: normal;
+          font-weight: 500;
+          line-height: normal;
+        }
+      }
+
+      svg {
+        fill: $light-primary;
+      }
+    }
+
+    .detailsBox {
+      margin: 2rem 0;
+      background-color: #fafafa;
+      border-radius: 15px;
+      border: 1px solid #edeef2;
+      padding: 0.7rem 1.2rem;
+      display: flex;
+      justify-content: space-between;
+
+      .flex {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+
+        .figures {
+          color: $light-tertiary;
+          font-family: Poppins;
+          font-size: 14px;
+          font-style: normal;
+          font-weight: 500;
+          line-height: normal;
+        }
+
+        .figures.Up {
+          color: $light-percentageUP;
+        }
+
+        .figures.Down {
+          color: $light-percentageDown;
+        }
+
+        .percentage {
+          background-color: $light-tertiary;
+          color: $light-box-bg;
+          font-family: Poppins;
+          font-size: 12px;
+          font-style: normal;
+          font-weight: 500;
+          line-height: normal;
+          padding: 0.4rem;
+          border-radius: 15px;
+        }
+
+        .percentage.Up {
+          background-color: $light-percentageUP;
+        }
+
+        .percentage.Down {
+          background-color: $light-percentageDown;
+        }
+      }
+    }
+
+    .seprator {
+      width: 100%;
+    }
+
+    .dataRow {
+      margin: 1rem 0;
+      padding: 0.7rem 1.2rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      row-gap: 2rem;
+      align-items: center;
+    }
+
+    .dataPart {
+      h3 {
+        color: $light-primary;
+        font-family: Poppins;
+        font-size: 15px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+
+        &.delete_Btn {
+          color: #e63f66;
+          cursor: pointer;
+        }
+      }
+
+      h4 {
+        color: $light-tertiary;
+        font-family: Poppins;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+      }
+    }
+
+    .dataPart:nth-child(even) {
+      justify-self: end;
+    }
+  }
+
+  &.dark {
+    .header {
+      .statusChanger {
+        button {
+          color: $dark-primary;
+        }
+
+        button.active {
+          background-color: $light-secondary;
+          color: $dark-primary;
+        }
+      }
     }
 
     .position {
-        background: none;
-        border-bottom: 1px solid #d9d9d9;
-        border-radius: 0;
-        box-shadow: none;
-        display: grid;
-        grid-template-columns: 20% 20% 20% 20% 20% 20%;
-        justify-items: center;
-        align-items: center;
-        padding: 0;
-        color: $light-primary;
-        padding: 1rem 0;
-        font-weight: 500;
-        font-size: 1.2rem;
-        margin: 0;
-
-        .sellingToken {
-
-            // display: flex;
-            // gap: 1rem;
-            // align-items: center;
-            img {
-                width: 26px;
-                height: 26px;
-            }
-
-            h3 {
-                font-weight: 500;
-                font-size: 1.2rem;
-            }
-        }
-
-        .position__delete {
-            button {
-
-                background: none;
-                border: none;
-                padding: 4px 8px;
-                background-color: #c5163f;
-                border-radius: 5px;
-                color: $light-box-bg;
-                cursor: pointer;
-            }
-        }
-    }
-
-    .position:hover {
-        background-color: rgba(12, 16, 28, 0.06);
-    }
-  &.dark {
-   
       background-color: $dark-box-bg;
-      box-shadow: 0 2px 26px rgba(255, 255, 255, 0.1);
-      p {
-        color: $dark-primary;
+
+      .tokens {
+        .token {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+
+          img {
+          }
+
+          p {
+            color: $dark-primary;
+          }
+        }
+
+        svg {
+          fill: $dark-primary;
+        }
       }
+
+      .detailsBox {
+        border: 1px solid #3a4151;
+        background: #0c101c;
+
+        .flex {
+          .figures {
+            color: $dark-tertiary;
+          }
+
+          .figures.Up {
+            color: $dark-percentageUP;
+          }
+
+          .figures.Down {
+            color: $dark-percentageDown;
+          }
+
+          .percentage {
+            background-color: $dark-tertiary;
+            color: $dark-box-bg;
+          }
+
+          .percentage.Up {
+            background-color: $dark-percentageUP;
+          }
+
+          .percentage.Down {
+            background-color: $dark-percentageDown;
+          }
+        }
+      }
+
+      .seprator {
+        width: 100%;
+        fill: #1a222f;
+      }
+
+      .dataRow {
+      }
+
+      .dataPart {
+        h3 {
+          color: $dark-primary;
+
+          &.delete_Btn {
+            color: #e63f66;
+          }
+        }
+
+        h4 {
+          color: $dark-tertiary;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .DcaPositions {
+    .position {
+      width: 100%;
+      background-color: $light-box-bg;
+      border-radius: 15px;
+      margin-top: 1rem;
+      padding: 3rem 5rem;
+
+      .tokens {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 2rem;
+
+        .token {
+          display: flex;
+          align-items: center;
+          gap: 1.5rem;
+
+          img {
+            width: 35px;
+            height: 35px;
+          }
+
+          p {
+            color: $light-primary;
+            font-family: Poppins;
+            font-size: 20px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: normal;
+          }
+        }
+
+        svg {
+          fill: $light-primary;
+        }
+      }
+
+      .detailsBox {
+        margin: 2rem 0;
+        background-color: #fafafa;
+        border-radius: 15px;
+        border: 1px solid #edeef2;
+        padding: 1rem 2rem;
+        display: flex;
+        justify-content: space-between;
+
+        .dataPart {
+          h3 {
+            color: $light-primary;
+            font-family: Poppins;
+            font-size: 19px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: normal;
+
+            &.delete_Btn {
+              color: #e63f66;
+              cursor: pointer;
+            }
+          }
+
+          h4 {
+            margin-top: 0.5rem;
+
+            color: $light-tertiary;
+            font-family: Poppins;
+            font-size: 18px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: normal;
+          }
+        }
+
+        .flex {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          margin-top: 0.5rem;
+
+          .figures {
+            color: $light-tertiary;
+            font-family: Poppins;
+            font-size: 18px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: normal;
+          }
+
+          .figures.Up {
+            color: $light-percentageUP;
+          }
+
+          .figures.Down {
+            color: $light-percentageDown;
+          }
+
+          .percentage {
+            background-color: $light-tertiary;
+            color: $light-box-bg;
+            font-family: Poppins;
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: normal;
+            padding: 0.5rem 1rem;
+            border-radius: 15px;
+          }
+
+          .percentage.Up {
+            background-color: $light-percentageUP;
+          }
+
+          .percentage.Down {
+            background-color: $light-percentageDown;
+          }
+        }
+      }
+
+      .seprator {
+        width: 100%;
+      }
+
+      .dataRow {
+        margin: 1rem 0;
+        padding: 0.7rem 1.2rem;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        row-gap: 2rem;
+        align-items: center;
+        column-gap: 4rem;
+      }
+
+      .dataPart {
+        h3 {
+          color: $light-primary;
+          font-family: Poppins;
+          font-size: 18px;
+          font-style: normal;
+          font-weight: 500;
+          line-height: normal;
+
+          &.delete_Btn {
+            color: #e63f66;
+            cursor: pointer;
+          }
+        }
+
+        h4 {
+          color: $light-tertiary;
+          font-family: Poppins;
+          font-size: 16px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: normal;
+        }
+      }
+
+      .dataPart:nth-child(even) {
+        justify-self: auto;
+      }
+    }
+
+    &.dark {
       .header {
-        color: $dark-secondary;
+        .statusChanger {
+          button {
+            color: $dark-primary;
+          }
+
+          button.active {
+            background-color: $dark-secondary;
+            color: $dark-primary;
+          }
+        }
       }
+
       .position {
-        color: $dark-primary;
+        background-color: $dark-box-bg;
+
+        .tokens {
+          .token {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+
+            img {
+            }
+
+            p {
+              color: $dark-primary;
+            }
+          }
+
+          svg {
+            fill: $dark-primary;
+          }
+        }
+
+        .detailsBox {
+          border: 1px solid #3a4151;
+          background: #0c101c;
+
+          .flex {
+            .figures {
+              color: $dark-tertiary;
+            }
+
+            .figures.Up {
+              color: $dark-percentageUP;
+            }
+
+            .figures.Down {
+              color: $dark-percentageDown;
+            }
+
+            .percentage {
+              background-color: $dark-tertiary;
+              color: $dark-box-bg;
+            }
+
+            .percentage.Up {
+              background-color: $dark-percentageUP;
+            }
+
+            .percentage.Down {
+              background-color: $dark-percentageDown;
+            }
+          }
+        }
+
+        .seprator {
+          width: 100%;
+          fill: #1a222f;
+        }
+
+        .dataRow {
+        }
+
+        .dataPart {
+          h3 {
+            color: $dark-primary;
+
+            &.delete_Btn {
+              color: #e63f66;
+            }
+          }
+
+          h4 {
+            color: $dark-tertiary;
+          }
+        }
       }
-  
+    }
+  }
+}
+
+// new dca
+.dca__list {
+  width: 100%;
+  background-color: $light-box-bg;
+  border-radius: 15px;
+
+  margin-top: 2rem;
+  padding: 1.5rem 1rem;
+  width: 100%;
+  .empty_history {
+    text-align: center;
+    img {
+      width: 12rem;
+      height: 12rem;
+    }
+    p {
+      font-weight: 500;
+      font-size: 12px;
+      color: $light-primary;
+    }
+  }
+  .header {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 20% 20% 20% 20% 20% 20%;
+    margin: 0;
+    font-weight: 600;
+    color: $light-secondary;
+    font-size: 1.3rem;
+    justify-items: center;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #d9d9d9;
+
+    .buyingDesktop {
+      display: none;
+    }
   }
 
+  .position {
+    background: none;
+    border-bottom: 1px solid #d9d9d9;
+    border-radius: 0;
+    box-shadow: none;
+    display: grid;
+    grid-template-columns: 20% 20% 20% 20% 20% 20%;
+    justify-items: center;
+    align-items: center;
+    padding: 0;
+    color: $light-primary;
+    padding: 1rem 0;
+    font-weight: 500;
+    font-size: 1.2rem;
+    margin: 0;
 
+    .sellingToken {
+      // display: flex;
+      // gap: 1rem;
+      // align-items: center;
+      img {
+        width: 26px;
+        height: 26px;
+      }
+
+      h3 {
+        font-weight: 500;
+        font-size: 1.2rem;
+      }
+    }
+
+    .position__delete {
+      button {
+        background: none;
+        border: none;
+        padding: 4px 8px;
+        background-color: #c5163f;
+        border-radius: 5px;
+        color: $light-box-bg;
+        cursor: pointer;
+      }
+    }
+  }
+
+  .position:hover {
+    background-color: rgba(12, 16, 28, 0.06);
+  }
+  &.dark {
+    background-color: $dark-box-bg;
+    p {
+      color: $dark-primary;
+    }
+    .header {
+      color: $dark-secondary;
+    }
+    .position {
+      color: $dark-primary;
+    }
+  }
 }
 
 .DcaCreation {
-    .dcaBox {
-        width: 100%;
-        background-color: $light-box-bg;
-        border-radius: 15px;
-        box-shadow: 0 2px 26px rgba(0, 0, 0, 0.1);
-        margin-top: 2rem;
-        padding: 1.5rem 1rem;
+  .dcaBox {
+    width: 100%;
+    background-color: $light-box-bg;
+    border-radius: $border-radius;
+    border: 1px solid $light-border;
+    margin-top: 2rem;
+    padding: 1.5rem 1rem;
 
-        .title {
+    .title {
+      font-weight: 700;
+      color: $light-primary;
+      font-size: 1.6rem;
+      margin-bottom: 1rem;
+    }
+
+    .infoAndClearAll {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 0.5rem 0;
+
+      p {
+        font-weight: 500;
+        font-size: 1.2rem;
+        color: $light-primary;
+
+        span {
+          color: $light-percentageUP;
+        }
+      }
+
+      button {
+        color: $light-secondary;
+        font-weight: 600;
+        font-size: 1.4rem;
+        background: none;
+        border: none;
+      }
+    }
+
+    .buyToken {
+      display: flex;
+      align-items: center;
+      margin: 1rem 0;
+
+      .token {
+        width: 90%;
+        display: flex;
+        align-items: center;
+        background: $light-bg;
+        padding: 0 0.7rem;
+        border-radius: 10px;
+
+        .tokenInfo {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          width: 30%;
+
+          img {
+            width: 28px;
+            height: 28px;
+          }
+
+          h2 {
+            text-transform: capitalize;
+          }
+        }
+
+        .tokenPercentage {
+          width: 70%;
+
+          input {
+            width: 100%;
+            background: none;
+            padding: 1.3rem 0.5rem;
+            text-align: center;
+            outline: none;
+          }
+
+          input:focus {
+            border: none;
+          }
+        }
+
+        .Percentage {
+          font-weight: 700;
+          font-size: 1.4rem;
+          color: $light-secondary;
+        }
+      }
+
+      svg {
+        width: 10%;
+        fill: $light-percentageDown;
+      }
+    }
+    .noToken {
+      width: 100%;
+      text-align: center;
+      img {
+        width: 12rem;
+        height: 12rem;
+      }
+      p {
+        font-weight: 500;
+        font-size: 1.2rem;
+        color: $light-primary;
+      }
+    }
+
+    .seprator {
+      background-color: $light-tertiary;
+      margin: 1.5rem auto;
+      width: 90%;
+      height: 1px;
+    }
+
+    .smallTitle {
+      font-weight: 700;
+      color: $light-tertiary;
+      font-size: 1.3rem;
+      margin: 0.5rem 0 1rem 0;
+    }
+
+    .monthDate {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+
+      h4 {
+        font-weight: 700;
+        color: $light-primary;
+        font-size: 1.3rem;
+        width: 40%;
+      }
+
+      .localTimeInputs {
+        border-radius: 10px;
+        background-color: $light-bg;
+        display: flex;
+        align-items: center;
+        width: 60%;
+
+        input {
+          background: none;
+          padding: 1rem 0;
+          width: 100%;
+          text-align: center;
+          font-weight: 600;
+          font-size: 1.3rem;
+          outline: none;
+        }
+      }
+    }
+
+    .weekdays {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+      grid-gap: 0.8rem;
+      justify-items: center;
+
+      .weekday {
+        padding: 1rem 0;
+        border: 1px solid $light-secondary;
+        width: 100%;
+        text-align: center;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 1.2rem;
+      }
+
+      .weekday.active {
+        border: 1px solid $light-secondary;
+        background-color: $light-secondary;
+        color: $light-box-bg;
+      }
+    }
+
+    .localTime {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+
+      h4 {
+        font-weight: 700;
+        color: $light-primary;
+        font-size: 1.3rem;
+        width: 30%;
+      }
+
+      .localTimeInputs {
+        border-radius: 10px;
+        background-color: $light-bg;
+        display: flex;
+        align-items: center;
+        width: 50%;
+
+        .localTime_seprator {
+          width: 20%;
+          text-align: center;
+          font-weight: 600;
+          font-size: 1.3rem;
+        }
+
+        input {
+          background: none;
+          padding: 1rem 0;
+          width: 40%;
+          text-align: center;
+          font-weight: 600;
+          font-size: 1.3rem;
+        }
+      }
+    }
+
+    .smallTimeLine {
+      margin: 1rem 0;
+      font-weight: 500;
+      font-size: 1rem;
+    }
+
+    .reviewBTN {
+      margin-top: 1rem;
+      @include button-responsive(mobile);
+      width: 100%;
+      border-radius: 10px;
+      padding: 1rem 0;
+    }
+  }
+
+  .reviewDca {
+    padding: 0 0.3rem;
+    // h3 {
+    //     font-family: Poppins;
+    //     font-size: 16px;
+    //     font-style: normal;
+    //     font-weight: 500;
+    //     line-height: normal;
+    //     color: $light-primary;
+    //     margin: 0.5rem 0 1rem 0;
+    // }
+    .logoContainer {
+      // display: flex;
+      // justify-content: flex-start;
+      // align-items: center;
+      //
+      // gap: 1rem;
+      // margin: 2rem 0;
+
+      .sellToken {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+
+        img {
+          width: 2.5rem;
+          height: 2.5rem;
+        }
+        p {
+          color: $light-primary;
+          font-family: Poppins;
+          font-size: 16px;
+          font-style: normal;
+          font-weight: 500;
+
+          line-height: normal;
+        }
+      }
+      img {
+        width: 2.5rem;
+        height: 2.5rem;
+      }
+      .buyTokens {
+        display: flex;
+        flex-wrap: wrap;
+
+        // grid-template-columns: 1fr 1fr 1fr 1fr;
+        align-items: center;
+        gap: 1.5rem;
+
+        .tokenItem {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          img {
+            width: 2.5rem;
+            height: 2.5rem;
+          }
+          p {
+            color: $dark-primary;
+            font-family: Poppins;
+            font-size: 16px;
+            font-style: normal;
+            font-weight: 500;
+
+            line-height: normal;
+          }
+        }
+      }
+      h3 {
+        font-family: Poppins;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+        color: $light-primary;
+      }
+      p {
+        // width: 95%;
+        color: $dark-primary;
+        font-family: Poppins;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 500;
+        // line-height: normal;
+
+        span {
+          color: #00de3b;
+        }
+      }
+    }
+    .text {
+      padding: 0 1rem;
+
+      margin: 1rem 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      .bulletContainer {
+        width: 5%;
+
+        svg {
+          width: 6px;
+          height: 6px;
+        }
+      }
+
+      p {
+        // width: 95%;
+        color: #14172cb3;
+        font-family: Poppins;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 500;
+        // line-height: normal;
+
+        span {
+          color: #00de3b;
+        }
+      }
+    }
+
+    .revieweDcaBTNContinaer {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+
+      button {
+        @include button-responsive(mobile);
+        width: 100%;
+        border-radius: 10px;
+        padding: 1rem 0;
+        margin-top: 1rem;
+      }
+
+      .confirm {
+      }
+
+      .edit {
+        background-color: $light-tertiary;
+      }
+    }
+  }
+
+  &.dark {
+    .dcaBox {
+      background-color: $dark-box-bg;
+      border: 1px solid $dark-border;
+      .title {
+        color: $dark-primary;
+      }
+
+      .infoAndClearAll {
+        p {
+          color: $dark-primary;
+
+          span {
+            color: $dark-percentageUP;
+          }
+        }
+
+        button {
+          color: $dark-secondary;
+        }
+      }
+
+      .buyToken {
+        .token {
+          background: $dark-bg;
+
+          .tokenInfo {
+            img {
+            }
+
+            h2 {
+              color: $dark-primary;
+            }
+          }
+
+          .tokenPercentage {
+            width: 70%;
+
+            input {
+              color: $dark-primary;
+            }
+
+            input:focus {
+              border: none;
+            }
+          }
+
+          .Percentage {
+            color: $dark-secondary;
+          }
+        }
+
+        svg {
+          fill: $dark-percentageDown;
+        }
+      }
+      .noToken {
+        p {
+          color: $dark-primary;
+        }
+      }
+
+      .addTokenButton {
+        img {
+        }
+      }
+
+      .seprator {
+        background-color: $dark-tertiary;
+      }
+
+      .smallTitle {
+        color: $dark-tertiary;
+      }
+
+      .sellInput {
+        background-color: $dark-bg;
+
+        input {
+          color: $dark-primary;
+        }
+
+        input:focus {
+          // border: 1px solid $dark-secondary;
+        }
+
+        .inputSeprator {
+          background-color: $dark-tertiary;
+        }
+
+        .sellTokenInfo {
+          img {
+          }
+
+          h3 {
+            color: $dark-primary;
+          }
+
+          svg {
+            width: 25px;
+            height: 25px;
+            fill: $dark-primary;
+          }
+        }
+      }
+
+      .sellInputTrade {
+        background-color: $dark-bg !important;
+
+        input {
+          border-radius: 10px;
+          background-color: $dark-bg !important;
+
+          color: $dark-primary;
+        }
+
+        input:focus {
+          // border: 1px solid $dark-secondary;
+        }
+
+        .inputSeprator {
+          background-color: $dark-tertiary;
+        }
+
+        .sellTokenInfo {
+          img {
+          }
+
+          h3 {
+            color: $dark-primary;
+          }
+
+          svg {
+            width: 25px;
+            height: 25px;
+            fill: $dark-primary;
+          }
+        }
+      }
+
+      // .cycle_container {
+      //     .cycle {
+      //         border: 1px solid $dark-secondary;
+      //         color: $dark-primary;
+      //     }
+
+      //     .cycle.active {
+      //         border: 1px solid $dark-secondary;
+      //         background-color: $dark-secondary;
+      //         color: $dark-primary;
+      //     }
+      // }
+
+      .monthDate {
+        h4 {
+          color: $dark-primary;
+        }
+
+        .localTimeInputs {
+          background-color: $dark-bg;
+
+          input {
+            color: $dark-primary;
+          }
+        }
+      }
+
+      .weekdays {
+        .weekday {
+          border: 1px solid $dark-secondary;
+          color: $dark-primary;
+        }
+
+        .weekday.active {
+          border: 1px solid $dark-secondary;
+          background-color: $dark-secondary;
+          color: $dark-primary;
+        }
+      }
+
+      .localTime {
+        h4 {
+          color: $dark-primary;
+        }
+
+        .localTimeInputs {
+          background-color: $dark-bg;
+
+          .localTime_seprator {
+          }
+
+          input {
+            color: $dark-primary;
+          }
+        }
+      }
+
+      .smallTimeLine {
+        color: $dark-primary;
+      }
+
+      .reviewBTN {
+      }
+    }
+
+    .reviewDca {
+      h3 {
+        color: $dark-primary;
+      }
+
+      .text {
+        .bulletContainer {
+          svg {
+          }
+        }
+
+        p {
+          color: #ffffffb3;
+
+          span {
+            color: #00de3b;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .DcaCreation {
+    .dcaBox {
+      width: 100%;
+      background-color: $light-box-bg;
+      border-radius: $border-radius;
+      border: 1px solid $light-border;
+      margin-top: 2rem;
+      padding: 3rem 5rem;
+
+      .flex {
+        display: flex;
+        gap: 5%;
+        .creationContainer {
+          width: 40%;
+
+          position: relative;
+          .title {
             font-weight: 700;
             color: $light-primary;
-            font-size: 1.6rem;
+            font-size: 1.8rem;
             margin-bottom: 1rem;
-        }
+          }
 
-        .infoAndClearAll {
-            display: flex;
+          .tokenSelectionTitle {
+            display: grid;
+            grid-template-columns: 1fr 0.1fr 1fr;
             align-items: center;
-            justify-content: space-between;
-            margin: 0.5rem 0;
-
-            p {
-                font-weight: 500;
-                font-size: 1.2rem;
-                color: $light-primary;
-
-                span {
-                    color: $light-percentageUP;
-                }
-            }
-
-            button {
-                color: $light-secondary;
-                font-weight: 600;
+            gap: 1rem;
+          }
+          .tokenSelection {
+            display: grid;
+            grid-template-columns: 1fr 0.1fr 1fr;
+            gap: 1rem;
+            align-items: center;
+            .tokenContainer {
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              background-color: $light-bg;
+              padding: 1rem 0.8rem;
+              border-radius: $border-radius;
+              cursor: pointer;
+              img {
+                width: 25px;
+                height: 25px;
+              }
+              h1 {
                 font-size: 1.4rem;
-                background: none;
-                border: none;
+              }
+              svg {
+                width: 25px;
+                height: 25px;
+                fill: $light-secondary;
+              }
             }
-        }
+            .sellContainer {
+            }
+            .right-arrow {
+              fill: $light-primary;
+              width: 100%;
+            }
 
-        .buyToken {
-            display: flex;
-            align-items: center;
-            margin: 1rem 0;
-
-            .token {
-                width: 90%;
-                display: flex;
-                align-items: center;
+            .buyContainer {
+            }
+          }
+          .repetitionAndAmountContainer {
+            margin-top: 2rem;
+            .inputGroup {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              width: 100%;
+              margin-top: 2rem;
+              h4 {
+                font-weight: 700;
+                color: $light-primary;
+                font-size: 1.5rem;
+                width: 40%;
+              }
+              input {
                 background: $light-bg;
-                padding: 0 0.7rem;
+                padding: 1rem 0;
+                width: 50%;
                 border-radius: 10px;
+                text-align: center;
+                font-weight: 600;
+                font-size: 1.5rem;
+                outline: none;
+              }
+            }
+            .repetition {
+            }
+            .amount {
+            }
+          }
 
-                .tokenInfo {
-                    display: flex;
-                    align-items: center;
-                    gap: 1rem;
-                    width: 30%;
+          .seprator {
+            background-color: $light-tertiary;
+            margin: 1.5rem auto;
+            width: 95%;
+            height: 1px;
+          }
 
-                    img {
-                        width: 28px;
-                        height: 28px;
-                    }
+          .smallTitle {
+            font-weight: 700;
+            color: $light-primary;
+            font-size: 1.5rem;
+            margin: 0.5rem 0 1rem 0;
+          }
 
-                    h2 {
-                        text-transform: capitalize;
-                    }
-                }
-
-                .tokenPercentage {
-                    width: 70%;
-
-                    input {
-                        width: 100%;
-                        background: none;
-                        padding: 1.3rem 0.5rem;
-                        text-align: center;
-                        outline: none;
-                    }
-
-                    input:focus {
-                        border: none;
-                    }
-                }
-
-                .Percentage {
-                    font-weight: 700;
-                    font-size: 1.4rem;
-                    color: $light-secondary;
-                }
+          .cycle_container {
+            width: 100%;
+            display: grid;
+            grid-template-columns: 31% 31% 31%;
+            justify-content: space-between;
+            justify-items: center;
+            margin-bottom: 2rem;
+            .cycle {
+              padding: 1rem 0;
+              // margin-bottom: 1rem;
+              border: 1px solid $light-secondary;
+              width: 100%;
+              text-align: center;
+              border-radius: 10px;
+              font-weight: 600;
+              font-size: 1.4rem;
+              cursor: pointer;
+              color: $light-primary;
             }
 
-            svg {
-                width: 10%;
-                fill: $light-percentageDown;
+            .cycle.active {
+              border: 1px solid $light-secondary;
+              background-color: $light-secondary;
+              color: $light-box-bg;
             }
-        }
-        .noToken {
-            width: 100%;
-            text-align: center;
-           img {
-               width: 12rem;
-               height: 12rem;
-           }
-           p {
-               font-weight: 500;
-               font-size: 1.2rem;
-               color: $light-primary;
-           }
-       }
+          }
 
-        .addTokenButton {
+          .monthDate {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             width: 100%;
-            margin: 1rem 0;
+
+            h4 {
+              font-weight: 700;
+              color: $light-primary;
+              font-size: 1.5rem;
+              width: 40%;
+            }
+
+            .localTimeInputs {
+              border-radius: 10px;
+              background-color: $light-bg;
+              display: flex;
+
+              align-items: center;
+              width: 50%;
+
+              input {
+                background: none;
+                padding: 1rem 0;
+                width: 100%;
+                text-align: center;
+                font-weight: 600;
+                font-size: 1.5rem;
+                outline: none;
+              }
+            }
+          }
+
+          .weekdays {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+            grid-gap: 1rem;
+            justify-items: center;
+
+            .weekday {
+              padding: 1rem 0;
+              border: 1px solid $light-secondary;
+              width: 100%;
+              text-align: center;
+              border-radius: 10px;
+              font-weight: 600;
+              font-size: 1.4rem;
+            }
+
+            .weekday.active {
+              border: 1px solid $light-secondary;
+              background-color: $light-secondary;
+              color: $light-box-bg;
+            }
+          }
+
+          .localTime {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-top: 2rem;
+
+            h4 {
+              font-weight: 700;
+              color: $light-primary;
+              font-size: 1.5rem;
+              width: 30%;
+            }
+
+            .localTimeInputs {
+              border-radius: 10px;
+              background-color: $light-bg;
+              display: flex;
+              align-items: center;
+              width: 50%;
+
+              .localTime_seprator {
+                width: 20%;
+                text-align: center;
+                font-weight: 600;
+                font-size: 1.5rem;
+              }
+
+              input {
+                background: none;
+                padding: 1rem 0;
+                width: 40%;
+                text-align: center;
+                font-weight: 600;
+                font-size: 1.5rem;
+                outline: none;
+              }
+            }
+          }
+
+          .smallTimeLine {
+            margin: 2rem 0;
+            font-weight: 500;
+            font-size: 1.3rem;
+          }
+
+          .reviewBTN {
+            margin-top: 1rem;
             @include button-responsive(mobile);
             display: flex;
             border-radius: 10px;
@@ -720,1919 +1442,874 @@
             align-items: center;
             justify-content: center;
             font-weight: 600;
-            font-size: 1.3rem;
-            background: none;
-            border: 1px solid $light-secondary;
+            font-size: 1.5rem;
+          }
+          .reviewDca {
+            padding: 0 0.3rem;
+            position: absolute;
+            width: 47%;
+            bottom: 0;
 
-            img {
-                width: 20px;
-                height: 20px;
-            }
-        }
+            // border: 2px solid white;
 
-        .seprator {
-            background-color: $light-tertiary;
-            margin: 1.5rem auto;
-            width: 90%;
-            height: 1px;
-        }
+            // h3 {
+            //     font-family: Poppins;
+            //     font-size: 18px;
+            //     font-style: normal;
+            //     font-weight: 500;
 
-        .inputGroupContainer {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-          
+            //     line-height: normal;
+            //     color: $light-primary;
+            //     margin: 0rem 0rem 1rem 0rem;
 
-            .inputGroup {
-                width: 49%;
-                .sellInputTrade {
-                    display: flex;
-                    align-items: center;
-                    background-color: $light-bg;
-                    border-radius: 10px;
-                    border: 1px solid $light-secondary;
+            // }
+            .logoContainer {
+              // display: flex;
+              // justify-content: flex-start;
+              // align-items: center;
+              //
+              // gap: 1rem;
+              // margin: 2rem 0;
 
-                    input {
-                        width: 100%;
-                        text-align: center;
-                        padding: 1.2rem 0.8rem;
-                        background: none;
-                        border: none;
-                        outline: none;
-                    }
-                }
-            }
-        }
-
-        .smallTitle {
-            font-weight: 700;
-            color: $light-tertiary;
-            font-size: 1.3rem;
-            margin: 0.5rem 0 1rem 0;
-        }
-
-        .sellInput {
-            display: flex;
-            align-items: center;
-            background-color: $light-bg;
-            border-radius: 10px;
-            border: 1px solid $light-secondary;
-
-            input {
-                width: 35%;
-                text-align: center;
-                padding: 1.5rem 0.8rem;
-                background: none;
-                border: none;
-                outline: none;
-            }
-
-            input:focus {
-                // border: 1px solid $light-secondary;
-            }
-
-            .inputSeprator {
-                width: 1px;
-                height: 28px;
-                margin: 0.3rem;
-                background-color: $light-tertiary;
-            }
-
-            .sellTokenInfo {
+              .sellToken {
                 display: flex;
                 align-items: center;
-                width: 65%;
-                justify-content: center;
                 gap: 1rem;
 
                 img {
-                    width: 30px;
-                    width: 30px;
+                  width: 2.5rem;
+                  height: 2.5rem;
                 }
-
-                h3 {}
-
-                svg {
-                    width: 25px;
-                    height: 25px;
-                }
-            }
-        }
-
-        // .cycle_container {
-        //     width: 100%;
-        //     display: grid;
-        //     grid-template-columns: 31% 31% 31%;
-        //     justify-content: space-between;
-        //     justify-items: center;
-
-        //     .cycle {
-        //         padding: 1rem 0;
-        //         border: 1px solid $light-secondary;
-        //         width: 100%;
-        //         text-align: center;
-        //         border-radius: 10px;
-        //         font-weight: 600;
-        //         font-size: 1.2rem;
-        //     }
-
-        //     .cycle.active {
-        //         border: 1px solid $light-secondary;
-        //         background-color: $light-secondary;
-        //         color: $light-box-bg;
-        //     }
-        // }
-
-        .monthDate {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-
-            h4 {
-                font-weight: 700;
-                color: $light-primary;
-                font-size: 1.3rem;
-                width: 40%;
-            }
-
-            .localTimeInputs {
-                border-radius: 10px;
-                background-color: $light-bg;
-                display: flex;
-                align-items: center;
-                width: 60%;
-
-                input {
-                    background: none;
-                    padding: 1rem 0;
-                    width: 100%;
-                    text-align: center;
-                    font-weight: 600;
-                    font-size: 1.3rem;
-                    outline: none;
-                }
-            }
-        }
-
-        .weekdays {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-            grid-gap: 0.8rem;
-            justify-items: center;
-
-            .weekday {
-                padding: 1rem 0;
-                border: 1px solid $light-secondary;
-                width: 100%;
-                text-align: center;
-                border-radius: 10px;
-                font-weight: 600;
-                font-size: 1.2rem;
-            }
-
-            .weekday.active {
-                border: 1px solid $light-secondary;
-                background-color: $light-secondary;
-                color: $light-box-bg;
-            }
-        }
-
-        .localTime {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-
-            h4 {
-                font-weight: 700;
-                color: $light-primary;
-                font-size: 1.3rem;
-                width: 30%;
-            }
-
-            .localTimeInputs {
-                border-radius: 10px;
-                background-color: $light-bg;
-                display: flex;
-                align-items: center;
-                width: 50%;
-
-                .localTime_seprator {
-                    width: 20%;
-                    text-align: center;
-                    font-weight: 600;
-                    font-size: 1.3rem;
-                }
-
-                input {
-                    background: none;
-                    padding: 1rem 0;
-                    width: 40%;
-                    text-align: center;
-                    font-weight: 600;
-                    font-size: 1.3rem;
-                }
-            }
-        }
-
-        .smallTimeLine {
-            margin: 1rem 0;
-            font-weight: 500;
-            font-size: 1rem;
-        }
-
-        .reviewBTN {
-            margin-top: 1rem;
-            @include button-responsive(mobile);
-            width: 100%;
-            border-radius: 10px;
-            padding: 1rem 0;
-        }
-    }
-
-    .reviewDca {
-        padding: 0 0.3rem;
-        // h3 {
-        //     font-family: Poppins;
-        //     font-size: 16px;
-        //     font-style: normal;
-        //     font-weight: 500;
-        //     line-height: normal;
-        //     color: $light-primary;
-        //     margin: 0.5rem 0 1rem 0;
-        // }
-       .logoContainer {
-            // display: flex;
-            // justify-content: flex-start;
-            // align-items: center;
-            //
-            // gap: 1rem;
-            // margin: 2rem 0;
-            
-           .sellToken{
-                display: flex;
-                align-items: center;
-                gap: 1rem;
-               
-            img {
-                width: 2.5rem;
-                height: 2.5rem;
-            }
-            p {
-    
-                color: $light-primary;
-                font-family: Poppins;
-                font-size: 16px;
-                font-style: normal;
-                font-weight: 500;
-
-                line-height: normal;
-
-            }
-           }
-           img{
-                width: 2.5rem;
-                height: 2.5rem;
-           }
-           .buyTokens{
-            display: flex;
-            flex-wrap: wrap;
-            
-            // grid-template-columns: 1fr 1fr 1fr 1fr;
-            ;
-            align-items: center;
-            gap: 1.5rem;
-           
-         .tokenItem{
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            img {
-                width: 2.5rem;
-                height: 2.5rem;
-            }
-            p {
-    
-                color: $dark-primary;
-                font-family: Poppins;
-                font-size: 16px;
-                font-style: normal;
-                font-weight: 500;
-    
-                line-height: normal;
-    
-            }
-         }
-       }
-            h3 {
-                font-family: Poppins;
-                font-size: 16px;
-                font-style: normal;
-                font-weight: 500;
-                line-height: normal;
-                color: $light-primary;
-            }
-            p {
-                // width: 95%;
-                color: $dark-primary;
-                font-family: Poppins;
-                font-size: 14px;
-                font-style: normal;
-                font-weight: 500;
-                // line-height: normal;
-               
-
-                span {
-                    color: #00de3b;
-                }
-            }
-            
-        }
-        .text {
-            padding: 0 1rem;
-
-            margin: 1rem 0;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            
-
-            .bulletContainer {
-                width: 5%;
-
-                svg {
-                    width: 6px;
-                    height: 6px;
-                }
-            }
-
-            p {
-                // width: 95%;
-                color: #14172cb3;
-                font-family: Poppins;
-                font-size: 14px;
-                font-style: normal;
-                font-weight: 500;
-                // line-height: normal;
-
-                span {
-                    color: #00de3b;
-                }
-            }
-        }
-
-        .revieweDcaBTNContinaer {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-
-            button {
-                @include button-responsive(mobile);
-                width: 100%;
-                border-radius: 10px;
-                padding: 1rem 0;
-                margin-top: 1rem;
-            }
-
-            .confirm {
-            }
-               
-            .edit {
-                background-color: $light-tertiary;
-            }
-        }
-    }
-
-    &.dark {
-        .dcaBox {
-            background-color: $dark-box-bg;
-
-            box-shadow: 0 2px 26px rgba(255, 255, 255, 0.1);
-
-            .title {
-                color: $dark-primary;
-            }
-
-            .infoAndClearAll {
                 p {
-                    color: $dark-primary;
+                  color: $light-primary;
+                  font-family: Poppins;
+                  font-size: 16px;
+                  font-style: normal;
+                  font-weight: 500;
 
-                    span {
-                        color: $dark-percentageUP;
-                    }
+                  line-height: normal;
                 }
-
-                button {
-                    color: $dark-secondary;
-                }
-            }
-
-            .buyToken {
-                .token {
-                    background: $dark-bg;
-
-                    .tokenInfo {
-                        img {}
-
-                        h2 {
-                            color: $dark-primary;
-                        }
-                    }
-
-                    .tokenPercentage {
-                        width: 70%;
-
-                        input {
-                            color: $dark-primary;
-                        }
-
-                        input:focus {
-                            border: none;
-                        }
-                    }
-
-                    .Percentage {
-                        color: $dark-secondary;
-                    }
-                }
-
-                svg {
-                    fill: $dark-percentageDown;
-                }
-            }
-            .noToken {
-               p {
-                
-                   color: $dark-primary;
-               }
               }
-
-            .addTokenButton {
-                img {}
-            }
-
-            .seprator {
-                background-color: $dark-tertiary;
-            }
-
-            .smallTitle {
-                color: $dark-tertiary;
-            }
-
-            .sellInput {
-                background-color: $dark-bg;
-
-                input {
-                    color: $dark-primary;
-                }
-
-                input:focus {
-                    // border: 1px solid $dark-secondary;
-                }
-
-                .inputSeprator {
-                    background-color: $dark-tertiary;
-                }
-
-                .sellTokenInfo {
-                    img {}
-
-                    h3 {
-                        color: $dark-primary;
-                    }
-
-                    svg {
-                        width: 25px;
-                        height: 25px;
-                        fill: $dark-primary;
-                    }
-                }
-            }
-
-            .sellInputTrade {
-
-                background-color: $dark-bg !important;
-
-                input {
-                    border-radius: 10px;
-                    background-color: $dark-bg !important;
-
-                    color: $dark-primary;
-                }
-
-                input:focus {
-                    // border: 1px solid $dark-secondary;
-                }
-
-                .inputSeprator {
-                    background-color: $dark-tertiary;
-                }
-
-                .sellTokenInfo {
-                    img {}
-
-                    h3 {
-                        color: $dark-primary;
-                    }
-
-                    svg {
-                        width: 25px;
-                        height: 25px;
-                        fill: $dark-primary;
-                    }
-                }
-
-            }
-
-            // .cycle_container {
-            //     .cycle {
-            //         border: 1px solid $dark-secondary;
-            //         color: $dark-primary;
-            //     }
-
-            //     .cycle.active {
-            //         border: 1px solid $dark-secondary;
-            //         background-color: $dark-secondary;
-            //         color: $dark-primary;
-            //     }
-            // }
-
-            .monthDate {
-                h4 {
-                    color: $dark-primary;
-                }
-
-                .localTimeInputs {
-                    background-color: $dark-bg;
-
-                    input {
-                        color: $dark-primary;
-                    }
-                }
-            }
-
-            .weekdays {
-                .weekday {
-                    border: 1px solid $dark-secondary;
-                    color: $dark-primary;
-                }
-
-                .weekday.active {
-                    border: 1px solid $dark-secondary;
-                    background-color: $dark-secondary;
-                    color: $dark-primary;
-                }
-            }
-
-            .localTime {
-                h4 {
-                    color: $dark-primary;
-                }
-
-                .localTimeInputs {
-                    background-color: $dark-bg;
-
-                    .localTime_seprator {}
-
-                    input {
-                        color: $dark-primary;
-                    }
-                }
-            }
-
-            .smallTimeLine {
-                color: $dark-primary;
-            }
-
-            .reviewBTN {}
-        }
-
-        .reviewDca {
-            h3 {
-                color: $dark-primary;
-            }
-
-            .text {
-                .bulletContainer {
-                    svg {}
-                }
-
-                p {
-                    color: #ffffffb3;
-
-                    span {
-                        color: #00de3b;
-                    }
-                }
-            }
-        }
-    }
-}
-
-@media screen and (min-width: 1024px) {
-    .DcaCreation {
-        .dcaBox {
-            width: 100%;
-            background-color: $light-box-bg;
-            border-radius: 15px;
-            box-shadow: 0 2px 26px rgba(0, 0, 0, 0.1);
-            margin-top: 2rem;
-            padding: 3rem 5rem;
-
-            .flex {
-                display: grid;
-                grid-template-columns: 1fr;
-                
-                //
-            //    .sellContainer{
-            //     width: 45%;
-            //     // display: flex;
-            //     // align-items: center;
-            //     // gap: 2rem;
-            //     margin-bottom: 1rem;
-            //     .inputGroupContainer {
-            //         width: 100%;
-            //         display: flex;
-            //         justify-content: flex-start;
-            //         gap: 2.5rem;
-            //         margin-bottom: 1rem;
-                   
-
-            //         .inputGroup {
-            //             width: 45%;
-
-            //             .sellInputTrade {
-            //                 width: 90%;
-            //                 display: flex;
-            //                 align-items: center;
-            //                 background-color: $light-bg;
-            //                 border-radius: 10px;
-            //                 //
-
-            //                 input {
-            //                     width: 100%;
-            //                     text-align: center;
-            //                     padding: 1.2rem 0.8rem;
-            //                     background: none;
-            //                     border: none;
-            //                     outline: none;
-            //                 }
-            //             }
-
-            //         }
-            //         .sellInput {
-            //             display: flex;
-            //             align-items: center;
-            //             background-color: $light-bg;
-            //             border-radius: 10px;
-
-            //             input {
-            //                 width: 40%;
-            //                 padding: 1.2rem 0.8rem;
-            //                 background: none;
-            //                 border: none;
-            //                 outline: none;
-            //             }
-
-            //             input:focus {
-            //                 // border: 1px solid $light-secondary;
-            //             }
-
-            //             .inputSeprator {
-            //                 width: 1px;
-            //                 height: 30px;
-            //                 margin: 0.5rem;
-            //                 background-color: $light-tertiary;
-            //             }
-
-            //             .sellTokenInfo {
-            //                 display: flex;
-            //                 align-items: center;
-            //                 justify-content: center;
-            //                 width: 60%;
-            //                 gap: 1rem;
-            //                 // justify-content: space-between;
-            //                 cursor: pointer;
-            //                 padding: 0 0.5rem;
-
-            //                 img {
-            //                     width: 20px;
-            //                     width: 20px;
-            //                 }
-
-            //                 h3 {}
-
-            //                 svg {
-            //                     width: 25px;
-            //                     height: 25px;
-            //                 }
-            //             }
-            //         }
-
-            //     }
-            //    }
-                .creationContainer {
-                    width: 100%;
-                    height: 430px;
-                    display: grid;
-                    grid-template-columns: 45% 45%;
-                    column-gap: 4%;
-                
-                    position: relative;
-                    .title {
-                        font-weight: 700;
-                        color: $light-primary;
-                        font-size: 1.8rem;
-                        margin-bottom: 1rem;
-                    }
-
-                    .infoAndClearAll {
-                        width:95%;
-                        display: flex;
-                        align-items: center;
-                        justify-content: space-between;
-                        margin: 0.5rem 0;
-                        //
-
-                        p {
-                            font-weight: 500;
-                            font-size: 1.4rem;
-                            color: $light-primary;
-
-                            span {
-                                color: $light-percentageUP;
-                            }
-                        }
-
-                        button {
-                            color: $light-secondary;
-                            font-weight: 600;
-                            font-size: 1.5rem;
-                            background: none;
-                            border: none;
-                            cursor: pointer;
-                        }
-                    }
-
-                    .tokensContainer {
-                        display: grid;
-                        grid-template-columns: 46% 46%;
-                        height: 205px;
-                        overflow: scroll;
-                        column-gap: 5%;
-
-                        row-gap: 0;
-                        //
-                    //  height: 35vh;
-                        overflow-y: scroll;
-                        margin: 0;
-
-                     
-
-                        .buyToken {
-                            display: flex;
-                            align-items: center;
-                            margin: 0.5rem 0;
-
-                            .token {
-                                width: 90%;
-                                display: flex;
-                                align-items: center;
-                                background: $light-bg;
-                                padding: 0 0.7rem;
-                                //
-                                border-radius: 10px;
-
-                                .tokenInfo {
-                                    display: flex;
-                                    align-items: center;
-                                    gap: 1rem;
-                                    width: 50%;
-                          
-
-                                    img {
-                                        width: 20px;
-                                        height: 20px;
-                                    }
-
-                                    h2 {
-                                        text-transform: capitalize;
-                                        font-size: 1.5rem;
-                                    }
-                                }
-
-                                .tokenPercentage {
-                                    width: 50%;
-                                 
-
-                                    input {
-                                        width: 100%;
-                                        background: none;
-                                        padding: 1.2rem 0.5rem;
-                                        text-align: center;
-                                        outline: none;
-                                    }
-
-                                    input:focus {
-                                        border: none;
-                                    }
-                                }
-
-                                .Percentage {
-                                    font-weight: 700;
-                                    font-size: 1.5rem;
-                                    color: $light-secondary;
-                                }
-                            }
-
-                            svg {
-                                width: 10%;
-                                fill: $light-percentageDown;
-                                cursor: pointer;
-                            }
-                        }
-                    }
-                    .noToken {
-                        width: 100%;
-                        text-align: center;
-                       img {
-                           width: 12rem;
-                           height: 12rem;
-                       }
-                       p {
-                           font-weight: 500;
-                           font-size: 15px;
-                           color: $light-primary;
-                       }
-                   }
-
-                    .addTokenButton {
-                        position: absolute;
-                        bottom: 0;
-                        left: 12%;
-                        width: 20%;
-                        
-                        margin: auto;
-                        @include button-responsive(mobile);
-                        display: flex;
-                        border-radius: 10px;
-                        padding: 1rem;
-                        gap: 1rem;
-                        align-items: center;
-                        justify-content: center;
-                        font-weight: 600;
-                        font-size: 1.5rem;
-                        background-color: none ;
-                        border: 1px solid $light-secondary;
-
-                        img {
-                            width: 20px;
-                            height: 20px;
-                        }
-                    }
-
-                    .seprator {
-                        background-color: $light-tertiary;
-                        margin: 1.5rem auto;
-                        width: 95%;
-                        height: 1px;
-                    }
-
-                    .inputGroupContainer {
-                        width: 100%;
-                        display: flex;
-                        justify-content: flex-start;
-                        gap: 3rem;
-                        margin-bottom: 1rem;
-                       
-                        //
-
-                        .inputGroup {
-                            width: 45%;
-                        
-                            .sellInputTrade {
-                                display: flex;
-                                align-items: center;
-                                background-color: $light-bg;
-                                border-radius: 10px;
-                                border: 1px solid $light-secondary;
-                              
-
-                                input {
-                                    width: 100%;
-                                    text-align: center;
-                                    padding: 1.2rem 0.8rem;
-                                    background: none;
-                                    border: none;
-                                    outline: none;
-                                }
-                            }
-                        }
-
-                    }
-
-                    .smallTitle {
-                        font-weight: 700;
-                        color: $light-tertiary;
-                        font-size: 1.5rem;
-                        margin: 0.5rem 0 1rem 0;
-                    }
-
-                    .sellInput {
-                        display: flex;
-                        align-items: center;
-                        background-color: $light-bg;
-                        border: 1px solid $light-secondary;
-                        border-radius: 10px;
-
-                        input {
-                            width: 40%;
-                            padding: 1rem 0.8rem;
-                            background: none;
-                            border: none;
-                            outline: none;
-                        }
-
-                        input:focus {
-                            // border: 1px solid $light-secondary;
-                        }
-
-                        .inputSeprator {
-                            width: 1px;
-                            height: 30px;
-                            margin: 0.5rem;
-                            background-color: $light-tertiary;
-                        }
-
-                        .sellTokenInfo {
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            width: 60%;
-                            gap: 1rem;
-                            // justify-content: space-between;
-                            cursor: pointer;
-                            padding: 0 0.5rem;
-
-                            img {
-                                width: 32px;
-                                width: 32px;
-                            }
-
-                            h3 {}
-
-                            svg {
-                                width: 25px;
-                                height: 25px;
-                            }
-                        }
-                    }
-
-                    .cycle_container {
-                        width: 100%;
-                        display: grid;
-                        grid-template-columns: 31% 31% 31%;
-                        justify-content: space-between;
-                        justify-items: center;
-                        margin-bottom: 2rem;
-                      
-                        
-
-                        .cycle {
-                            padding: 1rem 0;
-                            // margin-bottom: 1rem;
-                            border: 1px solid $light-secondary;
-                            width: 100%;
-                            text-align: center;
-                            border-radius: 10px;
-                            font-weight: 600;
-                            font-size: 1.4rem;
-                            cursor: pointer;
-                            color: $light-primary;
-                        }
-
-                        .cycle.active {
-                            border: 1px solid $light-secondary;
-                            background-color: $light-secondary;
-                            color: $light-box-bg;
-                        }
-                    }
-
-// .cycle_container {
-//   position: relative;
-//   width: 30%;
-
-
-//   .selected_cycle {
-//     padding: 1rem;
-//     background-color: $light-bg;
-//     border-radius: 5px;
-//     cursor: pointer;
-//     width: 100%;
-//     display: flex;
-//     justify-content: space-around;
-//     align-items: center;
-
-//     p {
-//         font-weight: 600;
-//         font-size: 1.5rem;
-//         color: $light-primary;
-//     }
-//   }
-
-//   .options_container {
-//     // display: none;
-//     position: absolute;
-//     width: 100%;
-//     top:0;
-//     left: 0px;
-//     background-color: $light-bg;
-//     // border: 1px solid $light-tertiary;
-//     z-index: 100;
-
-//     .option {
-//       padding: 10px;
-//       cursor: pointer;
-//       text-align: center;
-//       border-bottom: 0.5px solid $light-tertiary;
-//         font-weight: 600;
-//         font-size: 1.5rem;
-//         color: $light-primary;
-
-
-//       &:hover {
-//         background-color:$light-box-bg;
-//       }
-
-//       &:last-child {
-//         border-bottom: none;
-//       }
-//     }
-//   }
-// }
-
-
-                    .monthDate {
-                        display: flex;
-                        justify-content: space-between;
-                        align-items: center;
-                        width: 100%;
-
-                        h4 {
-                            font-weight: 700;
-                            color: $light-primary;
-                            font-size: 1.5rem;
-                            width: 40%;
-                        }
-
-                        .localTimeInputs {
-                            border-radius: 10px;
-                            background-color: $light-bg;
-                            display: flex;
-                            
-                            align-items: center;
-                            width: 50%;
-
-                            input {
-                                background: none;
-                                padding: 1rem 0;
-                                width: 100%;
-                                text-align: center;
-                                font-weight: 600;
-                                font-size: 1.5rem;
-                                outline: none;
-                            }
-                        }
-                    }
-
-                    .weekdays {
-                        display: grid;
-                        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-                        grid-gap: 1rem;
-                        justify-items: center;
-
-                        .weekday {
-                            padding: 1rem 0;
-                            border: 1px solid $light-secondary;
-                            width: 100%;
-                            text-align: center;
-                            border-radius: 10px;
-                            font-weight: 600;
-                            font-size: 1.4rem;
-                        }
-
-                        .weekday.active {
-                            border: 1px solid $light-secondary;
-                            background-color: $light-secondary;
-                            color: $light-box-bg;
-                        }
-                    }
-
-                    .localTime {
-                        display: flex;
-                        justify-content: space-between;
-                        align-items: center;
-                        width: 100%;
-                        margin-top: 2rem;
-                      
-
-                        h4 {
-                            font-weight: 700;
-                            color: $light-primary;
-                            font-size: 1.5rem;
-                            width: 30%;
-                        }
-
-                        .localTimeInputs {
-                            border-radius: 10px;
-                            background-color: $light-bg;
-                            display: flex;
-                            align-items: center;
-                            width: 50%;
-
-                            .localTime_seprator {
-                                width: 20%;
-                                text-align: center;
-                                font-weight: 600;
-                                font-size: 1.5rem;
-                            }
-
-                            input {
-                                background: none;
-                                padding: 1rem 0;
-                                width: 40%;
-                                text-align: center;
-                                font-weight: 600;
-                                font-size: 1.5rem;
-                                outline: none;
-                            }
-                        }
-                    }
-
-                    .smallTimeLine {
-                        margin: 2rem 0;
-                        font-weight: 500;
-                        font-size: 1.3rem;
-                    }
-
-                    .reviewBTN {
-                        margin-top: 1rem;
-                        @include button-responsive(mobile);
-                        display: flex;
-                        border-radius: 10px;
-                        padding: 1rem;
-                        gap: 1rem;
-                        align-items: center;
-                        justify-content: center;
-                        font-weight: 600;
-                        font-size: 1.5rem;
-                    }
-                    .reviewDca {
-                        padding: 0 0.3rem;
-                        position: absolute;
-                        width: 47%;
-                        bottom: 0;
-
-                        // border: 2px solid white;
-            
-                        // h3 {
-                        //     font-family: Poppins;
-                        //     font-size: 18px;
-                        //     font-style: normal;
-                        //     font-weight: 500;
-            
-                        //     line-height: normal;
-                        //     color: $light-primary;
-                        //     margin: 0rem 0rem 1rem 0rem;
-                            
-                        // }
-                        .logoContainer {
-                            // display: flex;
-                            // justify-content: flex-start;
-                            // align-items: center;
-                            //
-                            // gap: 1rem;
-                            // margin: 2rem 0;
-                            
-                           .sellToken{
-                                display: flex;
-                                align-items: center;
-                                gap: 1rem;
-                               
-                            img {
-                                width: 2.5rem;
-                                height: 2.5rem;
-                            }
-                            p {
-                                color: $light-primary;
-                                font-family: Poppins;
-                                font-size: 16px;
-                                font-style: normal;
-                                font-weight: 500;
-                
-                                line-height: normal;
-                
-                            }
-                           }
-                           img{
-                                width: 2.5rem;
-                                height: 2.5rem;
-                           }
-                           .buyTokens{
-                            display: flex;
-                            flex-wrap: wrap;
-                            
-                            // grid-template-columns: 1fr 1fr 1fr 1fr;
-                            ;
-                            align-items: center;
-                            gap: 1.5rem;
-                           
-                         .tokenItem{
-                            display: flex;
-                            align-items: center;
-                            gap: 1rem;
-                            img {
-                                width: 2.5rem;
-                                height: 2.5rem;
-                            }
-                            p {
-                    
-                                color: $dark-primary;
-                                font-family: Poppins;
-                                font-size: 16px;
-                                font-style: normal;
-                                font-weight: 500;
-                    
-                                line-height: normal;
-                    
-                            }
-                         }
-                       }
-                            h3 {
-                                font-family: Poppins;
-                                font-size: 16px;
-                                font-style: normal;
-                                font-weight: 500;
-                                line-height: normal;
-                                color: $light-primary;
-                            }
-                            p {
-                                // width: 95%;
-                                color: $light-primary;
-                                font-family: Poppins;
-                                font-size: 14px;
-                                font-style: normal;
-                                font-weight: 500;
-                                // line-height: normal;
-                               
-                
-                                span {
-                                    color: #00de3b;
-                                }
-                            }
-                            
-                        }
-                     
-                        .revieweDcaBTNContinaer {
-                            width: 100%;
-                            display: flex;
-                            gap: 1rem;
-            
-                            button {
-                                @include button-responsive(laptop);
-                                width: 80%;
-                                border-radius: 10px;
-                                padding: 1rem 0;
-                                margin-top: 1rem;
-                                font-size: 1.5rem;
-                                font-weight: 600;
-                            }
-            
-                            .confirm {
-
-                            }
-            
-                            .edit {
-                                background-color: $light-tertiary;
-                            }
-                        }
-                    }
-                }
-
-                .actions {
-                    width: 45%;
-                }
-            }
-
-        }
-
-        // .reviewDca {
-        //     padding: 0 0.3rem;
-        //     // border: 2px solid white;
-
-        //     // h3 {
-        //     //     font-family: Poppins;
-        //     //     font-size: 18px;
-        //     //     font-style: normal;
-        //     //     font-weight: 500;
-
-        //     //     line-height: normal;
-        //     //     color: $light-primary;
-        //     //     margin: 0rem 0rem 1rem 0rem;
-        //        
-        //     // }
-        //     .logoContainer {
-        //         // display: flex;
-        //         // justify-content: flex-start;
-        //         // align-items: center;
-        //         //
-        //         // gap: 1rem;
-        //         // margin: 2rem 0;
-                
-        //        .sellToken{
-        //             display: flex;
-        //             align-items: center;
-        //             gap: 1rem;
-                   
-        //         img {
-        //             width: 2.5rem;
-        //             height: 2.5rem;
-        //         }
-        //         p {
-        //             color: $light-primary;
-        //             font-family: Poppins;
-        //             font-size: 16px;
-        //             font-style: normal;
-        //             font-weight: 500;
-    
-        //             line-height: normal;
-    
-        //         }
-        //        }
-        //        img{
-        //             width: 2.5rem;
-        //             height: 2.5rem;
-        //        }
-        //        .buyTokens{
-        //         display: flex;
-        //         flex-wrap: wrap;
-                
-        //         // grid-template-columns: 1fr 1fr 1fr 1fr;
-        //         ;
-        //         align-items: center;
-        //         gap: 1.5rem;
-               
-        //      .tokenItem{
-        //         display: flex;
-        //         align-items: center;
-        //         gap: 1rem;
-        //         img {
-        //             width: 2.5rem;
-        //             height: 2.5rem;
-        //         }
-        //         p {
-        
-        //             color: $dark-primary;
-        //             font-family: Poppins;
-        //             font-size: 16px;
-        //             font-style: normal;
-        //             font-weight: 500;
-        
-        //             line-height: normal;
-        
-        //         }
-        //      }
-        //    }
-        //         h3 {
-        //             font-family: Poppins;
-        //             font-size: 16px;
-        //             font-style: normal;
-        //             font-weight: 500;
-        //             line-height: normal;
-        //             color: $light-primary;
-        //         }
-        //         p {
-        //             // width: 95%;
-        //             color: $light-primary;
-        //             font-family: Poppins;
-        //             font-size: 14px;
-        //             font-style: normal;
-        //             font-weight: 500;
-        //             // line-height: normal;
-                   
-    
-        //             span {
-        //                 color: #00de3b;
-        //             }
-        //         }
-                
-        //     }
-        //     .text {
-        //         padding: 0 1rem;
- 
-        //         margin: 1rem 0;
-        //         display: flex;
-        //         align-items: center;
-        //         justify-content: space-between;
-
-        //         // .bulletContainer {
-        //         //     width: 5%;
-
-        //         //     svg {
-        //         //         width: 6px;
-        //         //         height: 6px;
-        //         //     }
-        //         // }
-
-        //         p {
-        //             // width: 95%;
-        //             color: #14172cb3;
-        //             //
-        //             font-family: Poppins;
-        //             font-size: 16px;
-        //             font-style: normal;
-        //             font-weight: 500;
-
-        //             // line-height: normal;
-
-        //             span {
-        //                 color: #00de3b;
-        //             }
-        //         }
-        //     }
-
-        //     .revieweDcaBTNContinaer {
-        //         width: 100%;
-        //         display: flex;
-        //         gap: 1rem;
-
-        //         button {
-        //             @include button-responsive(laptop);
-        //             width: 50%;
-        //             border-radius: 10px;
-        //             padding: 1rem 0;
-        //             margin-top: 1rem;
-        //             font-size: 1.5rem;
-        //             font-weight: 600;
-        //         }
-
-        //         .confirm {}
-
-        //         .edit {
-        //             background-color: $light-tertiary;
-        //         }
-        //     }
-        // }
-
-        &.dark {
-            .dcaBox {
-                background-color: $dark-box-bg;
-            }
-
-            .dcaBox {
-                background-color: $dark-box-bg;
-
-                box-shadow: 0 2px 26px rgba(255, 255, 255, 0.1);
-
-               .creationContainer{
-                .title {
-                    color: $dark-primary !important;
-                }
-
-                .infoAndClearAll {
-                    p {
-                        color: $dark-primary !important;
-
-                        span {
-                            color: $dark-percentageUP !important;
-                        }
-                    }
-
-                    button {
-                        color: $dark-secondary !important;
-                    }
-                }
-                .tokensContainer{
-                 
-                }
-
-                .buyToken {
-                    .token {
-                        background: $dark-bg !important;
-
-                        .tokenInfo {
-                            img {}
-
-                            h2 {
-                                color: $dark-primary !important;
-                            }
-                        }
-
-                        .tokenPercentage {
-                            input {
-                                color: $dark-primary !important;
-                            }
-
-                            input:focus {
-                                border: none;
-                            }
-                        }
-
-                        .Percentage {
-                            color: $dark-secondary !important;
-                        }
-                    }
-
-                    svg {
-                        fill: $dark-percentageDown !important;
-                    }
-                }
-                .noToken {
-                    p{
-                        color: $dark-primary 
-                    
-                    }
-                }
-
-                .addTokenButton {
-                    img {}
-                }
-
-                .seprator {
-                    background-color: $dark-tertiary !important;
-                }
-
-                .smallTitle {
-                    color: $dark-tertiary !important;
-                }
-
-                .sellInput {
-                    background-color: $dark-bg !important;
-                    border: 1px solid $dark-secondary !important;
-
-                    input {
-                        color: $dark-primary !important;
-                    }
-
-                    input:focus {
-                        // border: 1px solid $dark-secondary;
-                    }
-
-                    .inputSeprator {
-                        background-color: $dark-tertiary !important;
-                    }
-
-                    .sellTokenInfo {
-                        img {}
-
-                        h3 {
-                            color: $dark-primary !important;
-                        }
-
-                        svg {
-
-                            fill: $dark-primary !important;
-                        }
-                    }
-                }
-
-                .cycle_container {
-                    .cycle {
-                        border: 1px solid $dark-secondary !important;
-                        color: $dark-primary !important;
-                    }
-
-                    .cycle.active {
-                        border: 1px solid $dark-secondary !important;
-                        background-color: $dark-secondary !important;
-                        color: $dark-primary !important;
-                    }
-                }
-        //    .cycle_container {
-        //         .selected_cycle {
-        //             background-color: $dark-bg;
-        //             p {
-        //                 color: $dark-primary;
-        //             }
-        //         }
-        //         .options_container {
-        //             background-color: $dark-bg;
-        //             .option {
-        //                 color: $dark-primary;
-        //                 &:hover {
-        //                     background-color: $dark-tertiary;
-        //                 }
-        //             }
-        //         }  
-        //     } 
-
-                .monthDate {
-                    h4 {
-                        color: $dark-primary !important;
-                    }
-
-                    .localTimeInputs {
-                        background-color: $dark-bg !important;
-
-                        input {
-                            color: $dark-primary !important;
-                        }
-                    }
-                }
-
-                .weekdays {
-                    .weekday {
-                        border: 1px solid $dark-secondary !important;
-                        color: $dark-primary !important;
-                    }
-
-                    .weekday.active {
-                        border: 1px solid $dark-secondary !important;
-                        background-color: $dark-secondary !important;
-                        color: $dark-primary !important;
-                    }
-                }
-
-                .localTime {
-                    h4 {
-                        color: $dark-primary !important;
-                    }
-
-                    .localTimeInputs {
-                        background-color: $dark-bg !important;
-
-                        .localTime_seprator {}
-
-                        input {
-                            color: $dark-primary !important;
-                        }
-                    }
-                }
-
-                .smallTimeLine {
-                    color: $dark-primary !important;
-                }
-
-                .reviewBTN {}
-                .reviewDca {
-                    .logoContainer {
-                        p {
-                            color: $dark-primary;
-                        }
-                    }
-
-                }
-               }
-            }
-        }
-    }
-
-    .dca__list {
-        width: 100%;
-        background-color: $light-box-bg;
-        border-radius: 15px;
-        box-shadow: 0 2px 26px rgba(0, 0, 0, 0.1);
-        margin-top: 2rem;
-        padding: 3rem 5rem;
-        width: 100%;
-        .empty_history{
-            text-align: center;
-           img {
-               width: 12rem;
-               height: 12rem;
-           }
-           p {
-               font-weight: 500;
-               font-size: 15px;
-               color: $light-primary;
-           }
-       }
-        .header {
-            width: 100%;
-            display: grid;
-            grid-template-columns: 14% 14% 14% 14% 14% 14% 14%;
-            margin: 0;
-            font-weight: 600;
-            color: $light-secondary;
-            font-size: 1.6rem;
-            justify-items: center;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid #d9d9d9;
-
-            .buyingDesktop {
-                display: block;
-            }
-        }
-
-        .position {
-            background: none;
-            border-bottom: 1px solid #d9d9d9;
-            border-radius: 0;
-            box-shadow: none;
-            display: grid;
-            grid-template-columns: 14% 14% 14% 14% 14% 14% 14%;
-            justify-items: center;
-            align-items: center;
-
-            img {
-                width: 26px;
-                height: 26px;
-            }
-
-            h3 {
-                font-weight: 500;
-                font-size: 1.2rem;
-            }
-
-            p {}
-        }
-
-        .position__delete {
-            button {
-
-                background: none;
-                border: none;
-                padding: 4px 8px;
-                background-color: #c5163f;
-                border-radius: 5px;
-                color: $light-box-bg;
-                cursor: pointer;
-            }
-        }
-
-        .position__buyingDesktop {
-            display: flex !important;
-            gap: 0.2rem;
-            align-items: center;
-
-            img {
-                width: 18px;
-                height: 18px;
-            }
-
-        }
-
-        &.dark {
-            background-color: $dark-box-bg;
-
-            box-shadow: 0 2px 26px rgba(255, 255, 255, 0.1);
-            p{
-                color: $dark-primary;
-            }
-            .header {
-
-                color: $dark-secondary;
-
-                border-bottom: 1px solid #d9d9d9;
-            }
-
-            .position {
-                box-shadow: none;
-                border-bottom: 1px solid #d9d9d9;
-
-                color: $dark-primary;
-
-                .sellingToken {
-
-                    img {
-                        width: 26px;
-                        height: 26px;
-                    }
-
-                    h3 {}
-                }
-            }
-
-        }
-    }
-
-
-
-
-
-
-}
-
-
-
-
-
-.dca__page {
-    .titleAndHeader {
-        .header {
-            width: unset !important;
-        }
-    }
-
-    .headerSwitcher {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-top: 1rem;
-        width: 100%;
-
-        .statusChanger {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 1rem;
-
-            button {
-                background: none;
-                cursor: pointer;
-                font-family: Poppins;
-                font-size: 12px;
-                font-style: normal;
-                font-weight: 500;
-                line-height: normal;
-                color: $light-primary;
-                padding: 1rem;
-            }
-
-            button.active {
-                background-color: $light-secondary;
-                color: $light-bg;
-                border-radius: 12px;
-            }
-        }
-     
-    }
-    &.dark {
-        .headerSwitcher {
-            .statusChanger {
-                button {
-                    color: $dark-primary;
-                }
-                button.active {
-                    background-color: $dark-secondary;
-                    color: $dark-bg;
-                }
-            }
-
-        }
-    }
-}
-
-@media screen and (min-width:1024px) {
-    .dca__page {
-        .titleAndHeader {
-            .header {
-                width: unset !important;
-            }
-        }
-
-        .headerSwitcher {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 2rem;
-            width: 100%;
-
-            .statusChanger {
+              img {
+                width: 2.5rem;
+                height: 2.5rem;
+              }
+              .buyTokens {
                 display: flex;
-                justify-content: space-between;
+                flex-wrap: wrap;
+
+                // grid-template-columns: 1fr 1fr 1fr 1fr;
                 align-items: center;
                 gap: 1.5rem;
 
-                button {
-                    background: none;
-                    cursor: pointer;
+                .tokenItem {
+                  display: flex;
+                  align-items: center;
+                  gap: 1rem;
+                  img {
+                    width: 2.5rem;
+                    height: 2.5rem;
+                  }
+                  p {
+                    color: $dark-primary;
                     font-family: Poppins;
-                    font-size: 1.5rem;
+                    font-size: 16px;
                     font-style: normal;
                     font-weight: 500;
+
                     line-height: normal;
-                    color: $light-tertiary;
-                    padding: 1rem 1.5rem;
+                  }
+                }
+              }
+              h3 {
+                font-family: Poppins;
+                font-size: 16px;
+                font-style: normal;
+                font-weight: 500;
+                line-height: normal;
+                color: $light-primary;
+              }
+              p {
+                // width: 95%;
+                color: $light-primary;
+                font-family: Poppins;
+                font-size: 14px;
+                font-style: normal;
+                font-weight: 500;
+                // line-height: normal;
+
+                span {
+                  color: #00de3b;
+                }
+              }
+            }
+
+            .revieweDcaBTNContinaer {
+              width: 100%;
+              display: flex;
+              gap: 1rem;
+
+              button {
+                @include button-responsive(laptop);
+                width: 80%;
+                border-radius: 10px;
+                padding: 1rem 0;
+                margin-top: 1rem;
+                font-size: 1.5rem;
+                font-weight: 600;
+              }
+
+              .confirm {
+              }
+
+              .edit {
+                background-color: $light-tertiary;
+              }
+            }
+          }
+        }
+        .reviewDca {
+          width: 50%;
+          .title {
+            font-weight: 700;
+            color: $light-primary;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+          }
+          .explanation {
+            font-size: 1.4rem;
+          }
+        }
+      }
+    }
+
+    &.dark {
+      .dcaBox {
+        background-color: $dark-box-bg;
+        border: 1px solid $dark-border;
+      }
+
+      .dcaBox {
+        background-color: $dark-box-bg;
+
+        .creationContainer {
+          .title {
+            color: $dark-primary !important;
+          }
+
+          .infoAndClearAll {
+            p {
+              color: $dark-primary !important;
+
+              span {
+                color: $dark-percentageUP !important;
+              }
+            }
+
+            button {
+              color: $dark-secondary !important;
+            }
+          }
+          .tokensContainer {
+          }
+
+          .buyToken {
+            .token {
+              background: $dark-bg !important;
+
+              .tokenInfo {
+                img {
                 }
 
-                button.active {
-                    background-color: $light-secondary;
-                    color: $dark-primary;
-                    border-radius: 12px;
+                h2 {
+                  color: $dark-primary !important;
                 }
+              }
+
+              .tokenPercentage {
+                input {
+                  color: $dark-primary !important;
+                }
+
+                input:focus {
+                  border: none;
+                }
+              }
+
+              .Percentage {
+                color: $dark-secondary !important;
+              }
             }
-        
+
+            svg {
+              fill: $dark-percentageDown !important;
+            }
+          }
+          .noToken {
+            p {
+              color: $dark-primary;
+            }
+          }
+
+          .addTokenButton {
+            img {
+            }
+          }
+
+          .seprator {
+            background-color: $dark-tertiary !important;
+          }
+
+          .smallTitle {
+            color: $dark-tertiary !important;
+          }
+
+          .sellInput {
+            background-color: $dark-bg !important;
+            border: 1px solid $dark-secondary !important;
+
+            input {
+              color: $dark-primary !important;
+            }
+
+            input:focus {
+              // border: 1px solid $dark-secondary;
+            }
+
+            .inputSeprator {
+              background-color: $dark-tertiary !important;
+            }
+
+            .sellTokenInfo {
+              img {
+              }
+
+              h3 {
+                color: $dark-primary !important;
+              }
+
+              svg {
+                fill: $dark-primary !important;
+              }
+            }
+          }
+
+          .cycle_container {
+            .cycle {
+              border: 1px solid $dark-secondary !important;
+              color: $dark-primary !important;
+            }
+
+            .cycle.active {
+              border: 1px solid $dark-secondary !important;
+              background-color: $dark-secondary !important;
+              color: $dark-primary !important;
+            }
+          }
+          //    .cycle_container {
+          //         .selected_cycle {
+          //             background-color: $dark-bg;
+          //             p {
+          //                 color: $dark-primary;
+          //             }
+          //         }
+          //         .options_container {
+          //             background-color: $dark-bg;
+          //             .option {
+          //                 color: $dark-primary;
+          //                 &:hover {
+          //                     background-color: $dark-tertiary;
+          //                 }
+          //             }
+          //         }
+          //     }
+
+          .monthDate {
+            h4 {
+              color: $dark-primary !important;
+            }
+
+            .localTimeInputs {
+              background-color: $dark-bg !important;
+
+              input {
+                color: $dark-primary !important;
+              }
+            }
+          }
+
+          .weekdays {
+            .weekday {
+              border: 1px solid $dark-secondary !important;
+              color: $dark-primary !important;
+            }
+
+            .weekday.active {
+              border: 1px solid $dark-secondary !important;
+              background-color: $dark-secondary !important;
+              color: $dark-primary !important;
+            }
+          }
+
+          .localTime {
+            h4 {
+              color: $dark-primary !important;
+            }
+
+            .localTimeInputs {
+              background-color: $dark-bg !important;
+
+              .localTime_seprator {
+              }
+
+              input {
+                color: $dark-primary !important;
+              }
+            }
+          }
+
+          .smallTimeLine {
+            color: $dark-primary !important;
+          }
+
+          .reviewBTN {
+          }
+          .reviewDca {
+            .logoContainer {
+              p {
+                color: $dark-primary;
+              }
+            }
+          }
         }
-        &.dark {
-           
-                .headerSwitcher {
-                    .statusChanger {
-                        button {
-                            color: $dark-tertiary;
-                        }
-                        button.active {
-                            background-color: $dark-secondary;
-                            color: $dark-primary;
-                        }
-                    }
-             
-                }
-    
-       
-        }
+      }
     }
-  
+  }
+
+  .dca__list {
+    width: 100%;
+    background-color: $light-box-bg;
+    border-radius: 15px;
+
+    margin-top: 2rem;
+    padding: 3rem 5rem;
+    width: 100%;
+    .empty_history {
+      text-align: center;
+      img {
+        width: 12rem;
+        height: 12rem;
+      }
+      p {
+        font-weight: 500;
+        font-size: 15px;
+        color: $light-primary;
+      }
+    }
+    .header {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 14% 14% 14% 14% 14% 14% 14%;
+      margin: 0;
+      font-weight: 600;
+      color: $light-secondary;
+      font-size: 1.6rem;
+      justify-items: center;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #d9d9d9;
+
+      .buyingDesktop {
+        display: block;
+      }
+    }
+
+    .position {
+      background: none;
+      border-bottom: 1px solid #d9d9d9;
+      border-radius: 0;
+      box-shadow: none;
+      display: grid;
+      grid-template-columns: 14% 14% 14% 14% 14% 14% 14%;
+      justify-items: center;
+      align-items: center;
+
+      img {
+        width: 26px;
+        height: 26px;
+      }
+
+      h3 {
+        font-weight: 500;
+        font-size: 1.2rem;
+      }
+
+      p {
+      }
+    }
+
+    .position__delete {
+      button {
+        background: none;
+        border: none;
+        padding: 4px 8px;
+        background-color: #c5163f;
+        border-radius: 5px;
+        color: $light-box-bg;
+        cursor: pointer;
+      }
+    }
+
+    .position__buyingDesktop {
+      display: flex !important;
+      gap: 0.2rem;
+      align-items: center;
+
+      img {
+        width: 18px;
+        height: 18px;
+      }
+    }
+
+    &.dark {
+      background-color: $dark-box-bg;
+
+      p {
+        color: $dark-primary;
+      }
+      .header {
+        color: $dark-secondary;
+
+        border-bottom: 1px solid #d9d9d9;
+      }
+
+      .position {
+        box-shadow: none;
+        border-bottom: 1px solid #d9d9d9;
+
+        color: $dark-primary;
+
+        .sellingToken {
+          img {
+            width: 26px;
+            height: 26px;
+          }
+
+          h3 {
+          }
+        }
+      }
+    }
+  }
 }
+
+.addTokenModal {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  .topSection {
+    display: grid;
+    grid-template-columns: 0.5fr 1fr 0.5fr;
+    width: 100%;
+    .backBTN {
+      background: none;
+      color: $light-primary;
+      cursor: pointer;
+
+      svg {
+        fill: none;
+        width: 16px;
+        height: 16px;
+      }
+    }
+    .closeBTN {
+      background: none;
+      color: $light-primary;
+      svg {
+        fill: none;
+        width: 16px;
+        height: 16px;
+      }
+    }
+    .title {
+      text-align: center;
+      font-weight: 700;
+      color: $light-primary;
+      font-size: 1.5rem;
+    }
+  }
+  .searchContainer {
+    margin-top: 1rem;
+    border: 1px solid $light-border;
+    width: 90%;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    border-radius: $border-radius;
+    background-color: $light-box-bg;
+    gap: 1rem;
+    .searchIcon {
+      fill: $light-secondary;
+    }
+    input {
+      color: $light-primary;
+      font-size: 1.2rem;
+      background: none;
+      width: 100%;
+      outline: none;
+      &::placeholder {
+        color: $light-placeholder;
+        font-size: 1.2rem;
+      }
+    }
+  }
+  .seprator {
+    width: 100%;
+    height: 2px !important;
+    background-color: $light-border;
+    margin: 1rem 0;
+    margin-bottom: 2rem;
+  }
+  .tokens {
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    overflow-y: scroll;
+
+    .token {
+      cursor: pointer;
+      display: flex;
+      gap: 1.2rem;
+      align-items: center;
+      background-color: $light-box-bg;
+      border-radius: $border-radius;
+      padding: 0.7rem 1.6rem;
+      .token_info {
+        display: flex;
+        align-items: center;
+        gap: 1.2rem;
+        .token_logo {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        .token_details {
+          .token_name {
+            color: $light-primary;
+            font-size: 1.2rem;
+          }
+          .token_symbol {
+            color: $light-secondary;
+            font-size: 1rem;
+          }
+        }
+      }
+
+      .token_balance {
+      }
+    }
+    &::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background-color: #e4e4e4;
+      border-radius: 20px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-image: linear-gradient(180deg, #d0368a 0%, #708ad4 99%);
+      box-shadow: inset 2px 2px 5px 0 rgba(#fff, 0.5);
+      border-radius: 20px;
+    }
+  }
+
+  &.dark {
+    .topSection {
+      .backBTN {
+        color: $dark-primary;
+
+        svg {
+        }
+      }
+      .closeBTN {
+        color: $dark-primary;
+        svg {
+        }
+      }
+      .title {
+        color: $dark-primary;
+      }
+    }
+    .seprator {
+      background-color: $dark-tertiary;
+    }
+  }
+}
+@media screen and (min-width: 1024px) {
+  .addTokenModal {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    overflow-y: hidden;
+    .topSection {
+      display: grid;
+      grid-template-columns: 0.5fr 1fr 0.5fr;
+      width: 100%;
+      .backBTN {
+        background: none;
+        color: $light-primary;
+        cursor: pointer;
+
+        svg {
+          fill: none;
+          width: 20px;
+          height: 20px;
+        }
+      }
+      .closeBTN {
+        background: none;
+        cursor: pointer;
+        color: $light-primary;
+        svg {
+          fill: none;
+          width: 20px;
+          height: 20px;
+        }
+      }
+      .title {
+        text-align: center;
+        font-weight: 700;
+        color: $light-primary;
+        font-size: 1.7rem;
+      }
+    }
+    .searchContainer {
+      margin-top: 1rem;
+      border: 1px solid $light-border;
+      width: 90%;
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      border-radius: $border-radius;
+      background-color: $light-box-bg;
+      gap: 1rem;
+      .searchIcon {
+        width: 25px;
+        height: 25px;
+        fill: $light-secondary;
+      }
+      input {
+        color: $light-primary;
+        font-size: 1.5rem;
+        background: none;
+        width: 100%;
+        outline: none;
+        &::placeholder {
+          color: $light-placeholder;
+          font-size: 1.5rem;
+        }
+      }
+    }
+    .seprator {
+      width: 100%;
+      height: 2px !important;
+      background-color: $light-tertiary;
+      margin: 1rem 0;
+      margin-bottom: 2rem;
+    }
+    .tokens {
+      width: 90%;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      overflow-y: scroll;
+
+      .token {
+        cursor: pointer;
+        display: flex;
+        gap: 1.2rem;
+        align-items: center;
+        background-color: $light-box-bg;
+        border-radius: $border-radius;
+        padding: 0.7rem 1.6rem;
+        .token_info {
+          display: flex;
+          align-items: center;
+          gap: 1.2rem;
+          .token_logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+          }
+          .token_details {
+            .token_name {
+              color: $light-primary;
+              font-size: 1.3rem;
+            }
+            .token_symbol {
+              color: $light-secondary;
+              font-size: 1.1rem;
+            }
+          }
+        }
+
+        .token_balance {
+        }
+      }
+
+      &::-webkit-scrollbar {
+        width: 10px;
+      }
+
+      &::-webkit-scrollbar-track {
+        background-color: #e4e4e4;
+        border-radius: 20px;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background-image: linear-gradient(180deg, #d0368a 0%, #708ad4 99%);
+        box-shadow: inset 2px 2px 5px 0 rgba(#fff, 0.5);
+        border-radius: 20px;
+      }
+    }
+
+    &.dark {
+      .topSection {
+        .backBTN {
+          color: $dark-primary;
+          svg {
+          }
+        }
+        .closeBTN {
+          color: $dark-primary;
+          svg {
+          }
+        }
+        .title {
+          color: $dark-primary;
+        }
+      }
+      .seprator {
+        background-color: $dark-tertiary;
+      }
+    }
+  }
+}
+
+.dca__page {
+  .titleAndHeader {
+    .header {
+      width: unset !important;
+    }
+  }
+
+  .headerSwitcher {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+    width: 100%;
+
+    .statusChanger {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+
+      button {
+        background: none;
+        cursor: pointer;
+        font-family: Poppins;
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: normal;
+        color: $dark-bg;
+        padding: 1rem;
+      }
+
+      button.active {
+        background-color: $light-secondary;
+        color: $light-primary;
+        border-radius: $border-radius;
+      }
+    }
+  }
+  &.dark {
+    .headerSwitcher {
+      .statusChanger {
+        button {
+          color: $dark-primary;
+        }
+        button.active {
+          background-color: $dark-secondary;
+          color: $dark-bg;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .dca__page {
+    .titleAndHeader {
+      .header {
+        width: unset !important;
+      }
+    }
+
+    .headerSwitcher {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 2rem;
+      width: 100%;
+
+      .statusChanger {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1.5rem;
+
+        button {
+          background: none;
+          cursor: pointer;
+          font-family: Poppins;
+          font-size: 1.5rem;
+          font-style: normal;
+          font-weight: 600;
+          line-height: normal;
+          color: $light-primary;
+          padding: 1rem 1.5rem;
+        }
+
+        button.active {
+          background-color: $light-secondary;
+          color: $dark-primary;
+          border-radius: $border-radius;
+        }
+      }
+    }
+    &.dark {
+      .headerSwitcher {
+        .statusChanger {
+          button {
+            color: $dark-primary;
+          }
+          button.active {
+            background-color: $dark-secondary;
+            color: $dark-primary;
+          }
+        }
+      }
+    }
+  }
+}
+

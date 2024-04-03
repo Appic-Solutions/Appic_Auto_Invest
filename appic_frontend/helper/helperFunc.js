@@ -1,6 +1,8 @@
 // Function for formating principal address
 export const formatAddress = (address) => {
-  // Split the address into segments separated by "-"
+  if (typeof address !== 'string') {
+    return 'Invalid principal id';
+  } // Split the address into segments separated by "-"
   const segments = address.split('-');
 
   // Keep the first and last segments

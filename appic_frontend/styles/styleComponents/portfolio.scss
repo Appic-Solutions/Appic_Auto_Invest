@@ -4,8 +4,8 @@
   .portfolio__box {
     position: relative;
     background-color: $light-box-bg;
-    box-shadow: 0 2px 26px rgba(0, 0, 0, 0.1);
-    border-radius: 15px;
+    border: 1px solid $light-border;
+    border-radius: $border-radius;
     padding: 1.5rem 1rem;
 
     .refreshButton {
@@ -38,8 +38,8 @@
       .addressContainer {
         display: flex;
         flex-direction: row;
-        align-items: start;
-        justify-content: start;
+        align-items: flex-start;
+        justify-content: flex-start;
         gap: 1rem;
         width: 100%;
         .addressWithCopy {
@@ -174,7 +174,7 @@
   &.dark {
     .portfolio__box {
       background-color: $dark-box-bg;
-      box-shadow: 0 2px 26px rgba(255, 255, 255, 0.1);
+      border: 1px solid $dark-border;
 
       .refreshButton {
       }
@@ -260,8 +260,8 @@
     .portfolio__box {
       position: relative;
       background-color: $light-box-bg;
-      box-shadow: 0 2px 26px rgba(0, 0, 0, 0.1);
-      border-radius: 15px;
+      border: 1px solid $light-border;
+      border-radius: $border-radius;
       padding: 3rem 5rem 3rem 5rem;
       // margin-top: 1rem;
 
@@ -279,7 +279,7 @@
         display: flex;
         align-items: center;
         gap: 2rem;
-        justify-content: start;
+        justify-content: flex-start;
 
         .avatarImage {
           width: 50px;
@@ -292,8 +292,8 @@
           width: auto;
           display: flex;
           flex-direction: column;
-          align-items: start;
-          justify-content: start;
+          align-items: flex-start;
+          justify-content: flex-start;
           gap: 1rem;
           .addressWithCopy {
             display: flex;
@@ -348,8 +348,8 @@
           }
 
           .chainIMG {
-            width: 25px;
-            height: 25px;
+            width: 20px;
+            height: 20px;
           }
         }
 
@@ -523,7 +523,7 @@
     &.dark {
       .portfolio__box {
         background-color: $dark-box-bg;
-        box-shadow: 0 2px 26px rgba(0, 0, 0, 0.1);
+        border: 1px solid $dark-border;
 
         .refreshButton {
         }

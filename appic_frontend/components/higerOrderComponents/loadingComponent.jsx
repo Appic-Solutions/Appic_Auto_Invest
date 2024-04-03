@@ -1,7 +1,10 @@
 function LoadingComponent() {
-    return (
-        <div className='loadingcomponent'><img src="/assets/images/loader.svg" alt="" /></div>
-    )
+  return (
+    <div className="loadingcomponent">
+      <img src="/loader.svg" alt="" />
+    </div>
+  );
 }
 
 export default LoadingComponent;
+

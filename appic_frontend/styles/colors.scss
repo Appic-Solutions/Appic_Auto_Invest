@@ -10,9 +10,10 @@ $light-buttons: #843ea1;
 $light-percentageUP: #00de3b;
 $light-percentageDown: #e63f66;
 $light-border: rgba(0, 0, 0, 0.05);
+$light-placeholder: #707070;
 
 // Dark Mode Colors
-$dark-bg: color-mix(in srgb, #fff 0%, #191a1a);
+$dark-bg: #0c101c;
 $dark-box-bg: rgba(255, 255, 255, 0.02);
 $dark-primary: color-mix(in srgb, #fff 0%, #e4e7e7);
 $dark-secondary: #843ea1;
@@ -21,5 +22,7 @@ $dark-buttons: #843ea1;
 $dark-percentageUP: #00de3b;
 $dark-percentageDown: #e63f66;
 $dark-border: rgba(255, 255, 255, 0.05);
+$dark-placeholder: #d9d9d9;
 
 $border-radius: clamp(0px, calc(4px * 9), 44px);
+

@@ -1,13 +1,13 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;300;500;700;900&family=Poppins:wght@100;200;300;400;500;600;700;800;900&family=Rubik:wght@300;400;500&display=swap");
-@import "./mixins.scss";
-@import "./colors.scss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;300;500;700;900&family=Poppins:wght@100;200;300;400;500;600;700;800;900&family=Rubik:wght@300;400;500&display=swap');
+@import './mixins.scss';
+@import './colors.scss';
 
 * {
   margin: 0;
   padding: 0;
   border: 0;
 
-  font-family: "Inter", sans-serif;
+  font-family: 'Inter', sans-serif;
   vertical-align: baseline;
   box-sizing: border-box;
 }
@@ -33,7 +33,7 @@ blockquote:before,
 blockquote:after,
 q:before,
 q:after {
-  content: "";
+  content: '';
   content: none;
 }
 
@@ -83,21 +83,7 @@ body {
   width: 100%;
   height: 100%;
 }
-.suggestion {
-  position: fixed;
-  right: -3rem;
-  border-top-left-radius: 15px;
-  border-top-right-radius: 15px;
-  top: 45vh;
-  transform: rotate(-90deg);
-  transform-origin: top;
-  cursor: pointer;
-  color: $light-primary;
-  font-size: 1.2rem;
-  padding: 1rem 1rem;
-  background-color: $light-secondary;
-  // Add styles for the suggestion button
-}
+
 @media screen and (min-width: 1024px) {
   .background {
     // overflow-x: hidden;
@@ -114,21 +100,6 @@ body {
       height: 100%;
       @include layout-centered(laptop);
     }
-  }
-  .suggestion {
-    position: fixed;
-    right: -3rem;
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
-    top: 45vh;
-    transform: rotate(-90deg);
-    transform-origin: top;
-    cursor: pointer;
-    color: $light-primary;
-    font-size: 1.5rem;
-    padding: 1.2rem 1.2rem;
-    background-color: $light-secondary;
-    // Add styles for the suggestion button
   }
 }
 
@@ -240,27 +211,17 @@ a {
 }
 
 //components
-@import "./styleComponents/navbar.scss";
-@import "./styleComponents/sidebar.scss";
-@import "./styleComponents//higherOrderComponents/mobileModals.scss";
-@import "./styleComponents/higherOrderComponents/dekstopModals.scss";
-@import "./styleComponents/higherOrderComponents/templateModal.scss";
-@import "./styleComponents/higherOrderComponents/titles.scss";
-@import "./styleComponents/walletConnectM.scss";
-@import "./styleComponents/walletTokens.scss";
-@import "./styleComponents/supportedTokens.scss";
-@import "./styleComponents/higherOrderComponents/alphaButton.scss";
-@import "./styleComponents/higherOrderComponents/pagination.scss";
-@import "./styleComponents/walletNotConnected.scss";
-@import "./styleComponents/totalBalance.scss";
-@import "./styleComponents/editVault.scss";
-@import "./styleComponents/sameChainAndCalculator.scss";
-@import "./styleComponents/portfolio.scss";
-@import "./styleComponents/crossChain.scss";
-@import "./styleComponents/higherOrderComponents/desktopFinalModal.scss";
-@import "./styleComponents/nukebutton.scss";
+@import './styleComponents/sidebar.scss';
+@import './styleComponents/higherOrderComponents/titles.scss';
+@import './styleComponents/wallet_connect_modal.scss';
+@import './styleComponents/wallet_tokens.scss';
+@import './styleComponents/supported_tokens.scss';
+@import './styleComponents/wallet_not_connected.scss';
+@import './styleComponents/total_balance.scss';
+@import './styleComponents/portfolio.scss';
+@import './styleComponents/higherOrderComponents/modal.scss';
 
 //pages
-@import "./pages/main.scss";
-@import "./pages/vaultDetails.scss";
-@import "./pages/dca.scss";
+@import './pages/main.scss';
+@import './pages/dca.scss';
+
