@@ -7,6 +7,7 @@ import { pageReducer } from './features/pageData';
 import { connectWalletModalReducer } from './features/walletsModal';
 import { icpPriceReducer } from './features/icpPrice';
 import { supportedTokensReducer } from './features/supportedTokensSlice';
+import { supportedPairsReducer } from './features/supportedPairs';
 
 export const store = configureStore({
   reducer: {
@@ -18,6 +19,7 @@ export const store = configureStore({
     page: pageReducer,
     connectWalletModal: connectWalletModalReducer,
     icpPrice: icpPriceReducer,
+    supportedPairs: supportedPairsReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

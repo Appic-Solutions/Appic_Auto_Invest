@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import BigNumber from 'bignumber.js';
 import WalletNotConnected from './walletNotConnectd';
 import Modal from './higerOrderComponents/modal';
+import { applyDecimals } from '@/helper/number_formatter';
 
 export default function DcaCreation({ isExpanded, toggleScreen }) {
   const dispatch = useDispatch();
@@ -14,8 +15,18 @@ export default function DcaCreation({ isExpanded, toggleScreen }) {
   const [Hours, setHours] = useState(new Date().getHours());
   const [Minutes, setMinutes] = useState(new Date().getMinutes());
   const [errorMessage, setErrorMessage] = useState('');
-  const [isTokenModalActive, setIsTokenModalActive] = useState(false);
-
+  const [tokeModal, setTokenModal] = useState({ isActive: false, modalType: 'sell' });
+  const [DCAData, setDCAData] = useState({
+    sellToken: null,
+    buyToken: null,
+    swapsNo: null,
+    amoutPerSwap: null,
+    frequency: 'Daily', // Daily, Weekly, Monthly
+    monthDate: null,
+    weekDay: 'Sun',
+    localHour: new Date().getHours(),
+    localMinute: new Date().getMinutes(),
+  });
   //   Redux state
   const isDark = useSelector((state) => state.theme.isDark);
   const isWalletConnected = useSelector((state) => state.wallet.items.isWalletConnected);
@@ -26,6 +37,10 @@ export default function DcaCreation({ isExpanded, toggleScreen }) {
   const totalBalance = useSelector((state) => state.wallet.items.totalBalance);
   const loader = useSelector((state) => state.wallet.items.loader);
   const supportedTokens = useSelector((state) => state.supportedTokens.tokens);
+  const supportedPairs = useSelector((state) => state.supportedPairs.pairs);
+  const handleButtonDisablity = () => {
+    if (!DCAData.sellToken.id || !DCAData.buyToken.id || !DCAData) return false;
+  };
 
   return (
     <div className={darkModeClassnamegenerator('DcaCreation')}>
@@ -46,7 +61,7 @@ export default function DcaCreation({ isExpanded, toggleScreen }) {
             <div className="tokenSelection">
               <div
                 onClick={() => {
-                  setIsTokenModalActive(true);
+                  setTokenModal({ isActive: true, modalType: 'sell' });
                 }}
                 className="sellContainer tokenContainer"
               >
@@ -66,7 +81,12 @@ export default function DcaCreation({ isExpanded, toggleScreen }) {
                   d="M10.245864,3.68413591 L13.7813979,7.21966982 C14.0742911,7.51256304 14.0742911,7.98743677 13.7813979,8.28032999 L10.245864,11.8158639 C9.95297077,12.1087571 9.47809704,12.1087571 9.18520382,11.8158639 C8.8923106,11.5229707 8.8923106,11.0480969 9.18520382,10.7552037 L11.44,8.499466 L2.75,8.5 C2.37030423,8.5 2.05650904,8.21784612 2.00684662,7.85177056 L2,7.75 C2,7.33578644 2.33578644,7 2.75,7 L2.75,7 L11.44,6.999466 L9.18520382,4.74479609 C8.8923106,4.45190287 8.8923106,3.97702913 9.18520382,3.68413591 C9.47809704,3.3912427 9.95297077,3.3912427 10.245864,3.68413591 Z"
                 ></path>
               </svg>
-              <div className="buyContainer tokenContainer">
+              <div
+                className="buyContainer tokenContainer"
+                onClick={() => {
+                  setTokenModal({ isActive: true, modalType: 'buy' });
+                }}
+              >
                 <img src="/ckBTC.png" alt="" />
                 <h3>ckBTC</h3>
                 <svg width="800px" height="800px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -165,31 +185,155 @@ export default function DcaCreation({ isExpanded, toggleScreen }) {
                 </div>
               </div>
             </div>
+
+            {/* Create position button */}
+            <button className="createPosition">Create Auto-invest position</button>
             {/* Interval  */}
           </div>
           {/* Review part */}
           <div className="reviewDCA">
-            <div className="reviewDca">
-              <h3 className="title">Your Scheduled Details</h3>
-              <div className="logoContainer"></div>
+            {/* Details */}
+            <div className="details">
+              <h3 className="title">Details</h3>
+              {/* Details Box  */}
+              <div className="detailsContainer">
+                <div className="detail">
+                  <div className="titleContainer">
+                    <div className="dot"></div>
+                    <h1>Amount Per Transaction</h1>
+                  </div>
+                  <h1>4 ICP</h1>
+                </div>
+
+                <div className="detail">
+                  <div className="titleContainer">
+                    <div className="dot"></div>
+                    <h1>Buy cycle</h1>
+                  </div>
+                  <h1>Weekly</h1>
+                </div>
+
+                <div className="detail">
+                  <div className="titleContainer">
+                    <div className="dot"></div>
+                    <h1>Investment Period</h1>
+                  </div>
+                  <h1>9 Weeks</h1>
+                </div>
+                <div className="detail">
+                  <div className="titleContainer">
+                    <div className="dot"></div>
+                    <h1>Total Investment Amount</h1>
+                  </div>
+                  <h1>36 ICP</h1>
+                </div>
+              </div>
+              <p className="explanation">
+                please make sure before each swap yopu will have at least <span>4 ICP</span> in your wallet.
+              </p>
             </div>
-            <p>
-              You are depositing <span> </span> to our secure smart contract. Over the next <span></span> from <span></span>, We will purchase{' '}
-              <span> </span> worth <span></span> on your behalf and instant transfer into your wallet.{' '}
-            </p>
+
+            {/* Time line */}
+            <div className="timeline">
+              <h3 className="title">Timeline</h3>
+              <div className="timelineContainer">
+                <div className="timelineHolder">
+                  <div className="timelineShape"></div>
+                  <div className="swapTime first">
+                    <div className="tailCover"></div>
+                    <div className="connectedTitle">
+                      <div className="connector"></div>
+                      <h3>{new Date().toUTCString()}</h3>
+                    </div>
+
+                    <h2>First Swap </h2>
+                  </div>
+
+                  <div className="swapTime ">
+                    <div className="connectedTitle">
+                      <div className="connector"></div>
+                      <h3>{new Date().toUTCString()}</h3>
+                    </div>
+
+                    <h2>Second Swap </h2>
+                  </div>
+
+                  <div className="swapTime">
+                    <div className="connectedTitle">
+                      <div className="connector"></div>
+                      <h3>{new Date().toUTCString()}</h3>
+                    </div>
+
+                    <h2>Third Swap </h2>
+                  </div>
+
+                  <div className="swapTime">
+                    <div className="connectedTitle">
+                      <div className="connector"></div>
+                      <h3>{new Date().toUTCString()}</h3>
+                    </div>
+
+                    <h2>Fourth Swap </h2>
+                  </div>
+
+                  <div className="swapTime ">
+                    <div className="connectedTitle">
+                      <div className="connector"></div>
+                      <h3>{new Date().toUTCString()}</h3>
+                    </div>
+
+                    <h2>Fifth Swap </h2>
+                  </div>
+                  <div className="swapTime ">
+                    <div className="connectedTitle">
+                      <div className="connector"></div>
+                      <h3>{new Date().toUTCString()}</h3>
+                    </div>
+
+                    <h2>Sixth Swap </h2>
+                  </div>
+                  <div className="swapTime ">
+                    <div className="connectedTitle">
+                      <div className="connector"></div>
+                      <h3>{new Date().toUTCString()}</h3>
+                    </div>
+
+                    <h2>Seventh Swap </h2>
+                  </div>
+                  <div className="swapTime ">
+                    <div className="connectedTitle">
+                      <div className="connector"></div>
+                      <h3>{new Date().toUTCString()}</h3>
+                    </div>
+
+                    <h2>Eighth Swap </h2>
+                  </div>
+                  <div className="swapTime last">
+                    <div className="tailCover"></div>
+
+                    <div className="connectedTitle">
+                      <div className="connector"></div>
+                      <h3>{new Date().toUTCString()}</h3>
+                    </div>
+
+                    <h2>Final Swap </h2>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Add token modal */}
-      <Modal active={isTokenModalActive}>
+      <Modal active={tokeModal.isActive}>
         <div className="addTokenModal">
           <div className="topSection">
             <button className="backBTN"></button>
             <h3 className="title">Select a token</h3>
             <button
               onClick={() => {
-                setIsTokenModalActive(false);
+                setTokenModal({ ...tokeModal, isActive: false });
               }}
               className="closeBTN"
             >
@@ -213,22 +357,46 @@ export default function DcaCreation({ isExpanded, toggleScreen }) {
             <span></span>
           </div>
           <div className="tokens">
-            {supportedTokens.map((token) => {
-              return (
-                <div key={token.id} className="token">
-                  <div className="token_info">
-                    <img className="token_logo" src={token.logo} alt="" />
-                    <div className="token_details">
-                      <h3 className="token_name">{token.name}</h3>
-                      <h4 className="token_symbol">{token.symbol}</h4>
+            {/* Sell Token Modal */}
+            {tokeModal.modalType == 'sell' && (
+              <>
+                {supportedPairs.map((pair) => {
+                  return (
+                    <div key={pair.sellToken.id} className="token">
+                      <div className="token_info">
+                        <img className="token_logo" src={pair.sellToken.logo} alt="" />
+                        <div className="token_details">
+                          <h3 className="token_name">{pair.sellToken.name}</h3>
+                          <h4 className="token_symbol">{pair.sellToken.symbol}</h4>
+                        </div>
+                      </div>
+                      <div className="token_balance">
+                        <h3>{applyDecimals(pair.sellToken.balance, pair.sellToken.decimals)}</h3>
+                      </div>
                     </div>
-                  </div>
-                  <div className="token_balance">
-                    <h3>{token.balance}</h3>
-                  </div>
-                </div>
-              );
-            })}
+                  );
+                })}
+              </>
+            )}
+            {/* Buy Token Modal */}
+            {tokeModal.modalType == 'buy' && (
+              <>
+                {supportedPairs.map((pair) => {
+                  return (
+                    <div key={pair.buyToken.id} className="token">
+                      <div className="token_info">
+                        <img className="token_logo" src={pair.buyToken.logo} alt="" />
+                        <div className="token_details">
+                          <h3 className="token_name">{pair.buyToken.name}</h3>
+                          <h4 className="token_symbol">{pair.buyToken.symbol}</h4>
+                        </div>
+                      </div>
+                      <div className="token_balance"></div>
+                    </div>
+                  );
+                })}
+              </>
+            )}
           </div>
         </div>
       </Modal>

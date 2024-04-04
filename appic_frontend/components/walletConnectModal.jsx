@@ -15,6 +15,7 @@ import { useIcpPrice } from '@/hooks/getIcpPrice';
 import { useBalances } from '@/hooks/getPrincipalBalances';
 import { usePrices } from '@/hooks/getTokenPrices';
 import Modal from './higerOrderComponents/modal';
+import { useSupportedPairs } from '@/hooks/getSupportedPairs';
 
 function WalletConnectM() {
   const dispatch = useDispatch();
@@ -45,7 +46,8 @@ function WalletConnectM() {
   const { getTokensPricesError } = usePrices(allTokensList, icpPrice);
   // Fetch token balances and usd balance of each user
   const { principalAssetsError } = useBalances(isWalletConnected, principalID, accoundID, supportedTokens);
-
+  //  Fetch Supported pairs from Appic canister
+  const { getSupportedPairsError } = useSupportedPairs(assets, supportedTokens);
   // TODO: Handle errors via a notification bar
   // Events
 

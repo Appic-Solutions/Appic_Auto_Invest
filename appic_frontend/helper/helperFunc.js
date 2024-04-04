@@ -1,3 +1,5 @@
+import BigNumber from 'bignumber.js';
+
 // Function for formating principal address
 export const formatAddress = (address) => {
   if (typeof address !== 'string') {
