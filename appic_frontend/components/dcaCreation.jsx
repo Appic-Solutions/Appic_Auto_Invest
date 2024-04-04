@@ -15,7 +15,7 @@ export default function DcaCreation({ isExpanded, toggleScreen }) {
   const [Hours, setHours] = useState(new Date().getHours());
   const [Minutes, setMinutes] = useState(new Date().getMinutes());
   const [errorMessage, setErrorMessage] = useState('');
-  const [tokeModal, setTokenModal] = useState({ isActive: false, modalType: 'sell' });
+  const [tokenModal, setTokenModal] = useState({ isActive: false, modalType: 'sell' }); // modalType: buy, sell
   const [DCAData, setDCAData] = useState({
     sellToken: null,
     buyToken: null,
@@ -40,6 +40,57 @@ export default function DcaCreation({ isExpanded, toggleScreen }) {
   const supportedPairs = useSelector((state) => state.supportedPairs.pairs);
   const handleButtonDisablity = () => {
     if (!DCAData.sellToken.id || !DCAData.buyToken.id || !DCAData) return false;
+  };
+
+  // Filter Token for token selection modal based on type
+  const filterBuyAndSellTokens = (modalType) => {
+    //  If token modal type is sell
+    if (modalType == 'sell') {
+      // If there is no buy token show all the tokens that could be sold
+      if (DCAData.buyToken == null) {
+        const allSellTokens = supportedPairs.map((pair) => pair.sellToken);
+
+        // Removing duplication
+        let uniqueSellIds = {};
+        let uniqueSellTokens = allSellTokens.filter((token) => {
+          if (!uniqueSellIds[token.id]) {
+            uniqueSellIds[token.id] = true;
+            return true;
+          }
+          return false;
+        });
+
+        return uniqueSellTokens;
+      }
+      // If there is a buy token show only the tokens that could be sold to buy this token
+      else {
+        const allPairsWithBuyToken = supportedPairs.filter((pair) => pair.buyToken.id == DCAData.buyToken);
+        return allPairsWithBuyToken.map((pair) => pair.sellToken);
+      }
+    }
+    //  If token modal type is Buy
+    else if (modalType == 'buy') {
+      // If there is no sell token show all the tokens that could be bought
+      if (DCAData.sellToken == null) {
+        const allBuyTokens = supportedPairs.map((pair) => pair.buyToken);
+        // Removing duplication
+        let uniqueBuyIds = {};
+        let uniqueBuyTokens = allBuyTokens.filter((token) => {
+          if (!uniqueBuyIds[token.id]) {
+            uniqueBuyIds[token.id] = true;
+            return true;
+          }
+          return false;
+        });
+
+        return uniqueBuyTokens;
+      }
+      // If there is a sell token show only the tokens that could be bought by selling the sell token
+      else {
+        const allPairsWithSellToken = supportedPairs.filter((pair) => pair.sellToken.id == DCAData.sellToken);
+        return allPairsWithSellToken.map((pair) => pair.buyToken);
+      }
+    }
   };
 
   return (
@@ -326,14 +377,14 @@ export default function DcaCreation({ isExpanded, toggleScreen }) {
       </div>
 
       {/* Add token modal */}
-      <Modal active={tokeModal.isActive}>
+      <Modal active={tokenModal.isActive}>
         <div className="addTokenModal">
           <div className="topSection">
             <button className="backBTN"></button>
             <h3 className="title">Select a token</h3>
             <button
               onClick={() => {
-                setTokenModal({ ...tokeModal, isActive: false });
+                setTokenModal({ ...tokenModal, isActive: false });
               }}
               className="closeBTN"
             >
@@ -357,46 +408,22 @@ export default function DcaCreation({ isExpanded, toggleScreen }) {
             <span></span>
           </div>
           <div className="tokens">
-            {/* Sell Token Modal */}
-            {tokeModal.modalType == 'sell' && (
-              <>
-                {supportedPairs.map((pair) => {
-                  return (
-                    <div key={pair.sellToken.id} className="token">
-                      <div className="token_info">
-                        <img className="token_logo" src={pair.sellToken.logo} alt="" />
-                        <div className="token_details">
-                          <h3 className="token_name">{pair.sellToken.name}</h3>
-                          <h4 className="token_symbol">{pair.sellToken.symbol}</h4>
-                        </div>
-                      </div>
-                      <div className="token_balance">
-                        <h3>{applyDecimals(pair.sellToken.balance, pair.sellToken.decimals)}</h3>
-                      </div>
+            {filterBuyAndSellTokens(tokenModal.modalType)?.map((token) => {
+              return (
+                <div key={token.id} className="token">
+                  <div className="token_info">
+                    <img className="token_logo" src={token.logo} alt="" />
+                    <div className="token_details">
+                      <h3 className="token_name">{token.name}</h3>
+                      <h4 className="token_symbol">{token.symbol}</h4>
                     </div>
-                  );
-                })}
-              </>
-            )}
-            {/* Buy Token Modal */}
-            {tokeModal.modalType == 'buy' && (
-              <>
-                {supportedPairs.map((pair) => {
-                  return (
-                    <div key={pair.buyToken.id} className="token">
-                      <div className="token_info">
-                        <img className="token_logo" src={pair.buyToken.logo} alt="" />
-                        <div className="token_details">
-                          <h3 className="token_name">{pair.buyToken.name}</h3>
-                          <h4 className="token_symbol">{pair.buyToken.symbol}</h4>
-                        </div>
-                      </div>
-                      <div className="token_balance"></div>
-                    </div>
-                  );
-                })}
-              </>
-            )}
+                  </div>
+                  <div className="token_balance">
+                    <h3>{applyDecimals(token.balance, token.decimals)}</h3>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </Modal>

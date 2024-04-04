@@ -22,7 +22,6 @@ export const useSupportedPairs = (assets, supportedTokens) => {
         const appicActor = await artemisWalletAdapter.getCanisterActor(canistersIDs.APPIC_ROOT, AppicIdlFactory, true);
         const supportedPairs = await appicActor.getAllPairs();
         const parsedsupportedPairs = _parseSupportedPairs(supportedPairs, assets, supportedTokens);
-        console.log(parsedsupportedPairs);
         dispatch(initPairs(parsedsupportedPairs));
         // console.log(supportedPairs);
       } catch (error) {
