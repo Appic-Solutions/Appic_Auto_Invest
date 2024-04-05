@@ -16,7 +16,7 @@ export const useSupportedPairs = (assets, supportedTokens) => {
   const [getSupportedPairsError, setGetSupportedPairsError] = useState(null);
   useEffect(() => {
     // Fetch all Pairs from Appic canister
-    if ((supportedTokens.length == 0, supportedTokens == null)) return;
+    if (supportedTokens.length == 0 || supportedTokens == null) return;
     async function setAllTokensWithtPrices() {
       try {
         const appicActor = await artemisWalletAdapter.getCanisterActor(canistersIDs.APPIC_ROOT, AppicIdlFactory, true);

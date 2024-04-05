@@ -6,26 +6,23 @@ import { useSelector, useDispatch } from 'react-redux';
 import BigNumber from 'bignumber.js';
 import WalletNotConnected from './walletNotConnectd';
 import Modal from './higerOrderComponents/modal';
-import { applyDecimals } from '@/helper/number_formatter';
+import { applyDecimals, formatDecimalValue } from '@/helper/number_formatter';
 
 export default function DcaCreation({ isExpanded, toggleScreen }) {
   const dispatch = useDispatch();
-  const [dcaTimeFrame, setDcaTimeFrame] = useState('Monthly'); // Daily, Monthly , Weekly
   const [selectedDay, setSelectedDay] = useState('Sunday'); // Default selected day is Sunday
-  const [Hours, setHours] = useState(new Date().getHours());
-  const [Minutes, setMinutes] = useState(new Date().getMinutes());
-  const [errorMessage, setErrorMessage] = useState('');
-  const [tokenModal, setTokenModal] = useState({ isActive: false, modalType: 'sell' }); // modalType: buy, sell
+  const [tokenModal, setTokenModal] = useState({ isActive: false, modalType: 'sell', tokens: [] }); // modalType: buy, sell
   const [DCAData, setDCAData] = useState({
     sellToken: null,
     buyToken: null,
-    swapsNo: null,
-    amoutPerSwap: null,
-    frequency: 'Daily', // Daily, Weekly, Monthly
-    monthDate: null,
-    weekDay: 'Sun',
-    localHour: new Date().getHours(),
-    localMinute: new Date().getMinutes(),
+    swapsNo: '',
+    amoutPerSwap: '',
+    frequency: '', // Daily, Weekly, Monthly
+    monthDate: '',
+    weekDay: '',
+    localHour: '',
+    localMinute: '',
+    timeLine: [],
   });
   //   Redux state
   const isDark = useSelector((state) => state.theme.isDark);
@@ -64,7 +61,7 @@ export default function DcaCreation({ isExpanded, toggleScreen }) {
       }
       // If there is a buy token show only the tokens that could be sold to buy this token
       else {
-        const allPairsWithBuyToken = supportedPairs.filter((pair) => pair.buyToken.id == DCAData.buyToken);
+        const allPairsWithBuyToken = supportedPairs.filter((pair) => pair.buyToken.id == DCAData.buyToken.id);
         return allPairsWithBuyToken.map((pair) => pair.sellToken);
       }
     }
@@ -87,294 +84,420 @@ export default function DcaCreation({ isExpanded, toggleScreen }) {
       }
       // If there is a sell token show only the tokens that could be bought by selling the sell token
       else {
-        const allPairsWithSellToken = supportedPairs.filter((pair) => pair.sellToken.id == DCAData.sellToken);
+        const allPairsWithSellToken = supportedPairs.filter((pair) => pair.sellToken.id == DCAData.sellToken.id);
         return allPairsWithSellToken.map((pair) => pair.buyToken);
       }
     }
   };
 
+  // Foramt frequency
+  const formatFrequency = (frequency) => {
+    switch (frequency) {
+      case 'Weekly':
+        return 'Weeks';
+      case 'Daily':
+        return 'Days';
+      case 'Monthly':
+        return 'Months';
+      default:
+        return 'Months';
+    }
+  };
+
+  // Event Handler for Token slection
+  const handleTokenSelection = (token) => {
+    if (tokenModal.modalType == 'sell') {
+      setDCAData({ ...DCAData, sellToken: token });
+    }
+    if (tokenModal.modalType == 'buy') {
+      setDCAData({ ...DCAData, buyToken: token });
+    }
+    setTokenModal({ ...tokenModal, isActive: false });
+  };
+
+  // Generating dates for
+  const generateDataForTimelineSkeleton = (index) => {
+    // Get the current date
+    let date = new Date();
+    let indexDate = new Date(date.getYear(), date.getMonth(), date.getDate() + index * 7);
+
+    // Extract day, month, and year
+    let day = indexDate.getDate();
+    let month = indexDate.getMonth() + 1; // Months are zero-indexed, so we add 1
+    let year = indexDate.getFullYear();
+
+    // Format the date in non-American way (day-month-year)
+    return `${day}/${month}/${year}, 17:00`;
+  };
   return (
     <div className={darkModeClassnamegenerator('DcaCreation')}>
       {/* <CenteredMainTitle show={creationStatus == "configDca" ? false : true} onClick={handleBackButton}>Create DCA</CenteredMainTitle> */}
 
       {!isWalletConnected && <WalletNotConnected />}
-      {isWalletConnected && <></>}
-      <div className="dcaBox">
-        <div className="flex">
-          {/* Creation part */}
-          <div className="creationContainer">
-            {/* Token selection */}
-            <div className="tokenSelectionTitle">
-              <div className="title">Sell</div>
-              <div></div>
-              <div className="title">Buy</div>
-            </div>
-            <div className="tokenSelection">
-              <div
-                onClick={() => {
-                  setTokenModal({ isActive: true, modalType: 'sell' });
-                }}
-                className="sellContainer tokenContainer"
-              >
-                <img src="/ICP.png" alt="" />
-                <h3>ICP</h3>
-                <svg width="800px" height="800px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <rect x="0" fill="none" width="24" height="24"></rect>
-                  <g>
-                    <path d="M7 10l5 5 5-5"></path>
-                  </g>
-                </svg>
-              </div>
-              {/* Arrow left */}
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" id="right-arrow">
-                <path
-                  className="right-arrow"
-                  d="M10.245864,3.68413591 L13.7813979,7.21966982 C14.0742911,7.51256304 14.0742911,7.98743677 13.7813979,8.28032999 L10.245864,11.8158639 C9.95297077,12.1087571 9.47809704,12.1087571 9.18520382,11.8158639 C8.8923106,11.5229707 8.8923106,11.0480969 9.18520382,10.7552037 L11.44,8.499466 L2.75,8.5 C2.37030423,8.5 2.05650904,8.21784612 2.00684662,7.85177056 L2,7.75 C2,7.33578644 2.33578644,7 2.75,7 L2.75,7 L11.44,6.999466 L9.18520382,4.74479609 C8.8923106,4.45190287 8.8923106,3.97702913 9.18520382,3.68413591 C9.47809704,3.3912427 9.95297077,3.3912427 10.245864,3.68413591 Z"
-                ></path>
-              </svg>
-              <div
-                className="buyContainer tokenContainer"
-                onClick={() => {
-                  setTokenModal({ isActive: true, modalType: 'buy' });
-                }}
-              >
-                <img src="/ckBTC.png" alt="" />
-                <h3>ckBTC</h3>
-                <svg width="800px" height="800px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <rect x="0" fill="none" width="24" height="24"></rect>
-                  <g>
-                    <path d="M7 10l5 5 5-5"></path>
-                  </g>
-                </svg>
-              </div>
-            </div>
-            {/* Inputs for amount and number of trades*/}
+      {isWalletConnected && (
+        <>
+          {' '}
+          <div className="dcaBox">
+            <div className="flex">
+              {/* Creation part */}
+              <div className="creationContainer">
+                <div>
+                  {/* Token selection */}
+                  <div className="tokenSelectionTitle">
+                    <div className="title">Sell</div>
+                    <div></div>
+                    <div className="title">Buy</div>
+                  </div>
+                  <div className="tokenSelection">
+                    <div
+                      onClick={() => {
+                        setTokenModal({ isActive: true, modalType: 'sell', tokens: filterBuyAndSellTokens('sell') });
+                      }}
+                      className="sellContainer tokenContainer"
+                    >
+                      {DCAData.sellToken == null ? <div className="emptyLogo"></div> : <img src={DCAData.sellToken.logo} alt="" />}
+                      {DCAData.sellToken == null ? <h3 className="emtpyText">Select a token</h3> : <h3>{DCAData.sellToken.symbol}</h3>}
+                      <svg width="800px" height="800px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="0" fill="none" width="24" height="24"></rect>
+                        <g>
+                          <path d="M7 10l5 5 5-5"></path>
+                        </g>
+                      </svg>
+                    </div>
+                    {/* Arrow left */}
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" id="right-arrow">
+                      <path
+                        className="right-arrow"
+                        d="M10.245864,3.68413591 L13.7813979,7.21966982 C14.0742911,7.51256304 14.0742911,7.98743677 13.7813979,8.28032999 L10.245864,11.8158639 C9.95297077,12.1087571 9.47809704,12.1087571 9.18520382,11.8158639 C8.8923106,11.5229707 8.8923106,11.0480969 9.18520382,10.7552037 L11.44,8.499466 L2.75,8.5 C2.37030423,8.5 2.05650904,8.21784612 2.00684662,7.85177056 L2,7.75 C2,7.33578644 2.33578644,7 2.75,7 L2.75,7 L11.44,6.999466 L9.18520382,4.74479609 C8.8923106,4.45190287 8.8923106,3.97702913 9.18520382,3.68413591 C9.47809704,3.3912427 9.95297077,3.3912427 10.245864,3.68413591 Z"
+                      ></path>
+                    </svg>
+                    <div
+                      className="buyContainer tokenContainer"
+                      onClick={() => {
+                        setTokenModal({ isActive: true, modalType: 'buy', tokens: filterBuyAndSellTokens('buy') });
+                      }}
+                    >
+                      {DCAData.buyToken == null ? <div className="emptyLogo"></div> : <img src={DCAData.buyToken.logo} alt="" />}
+                      {DCAData.buyToken == null ? <h3 className="emtpyText">Select a token</h3> : <h3>{DCAData.buyToken.symbol}</h3>}
+                      <svg width="800px" height="800px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="0" fill="none" width="24" height="24"></rect>
+                        <g>
+                          <path d="M7 10l5 5 5-5"></path>
+                        </g>
+                      </svg>
+                    </div>
+                  </div>
+                  {/* Inputs for amount and number of trades*/}
 
-            <div className="repetitionAndAmountContainer">
-              <div className="amount inputGroup">
-                <h4>No of swaps</h4>
+                  <div className="repetitionAndAmountContainer">
+                    <div className="amount inputGroup">
+                      <h4>No of swaps</h4>
 
-                <input type="number" placeholder="No of swaps e.g 4" />
-              </div>
-              <div className="repetition inputGroup">
-                <h4>Sell amount per swap</h4>
-                <input type="number" placeholder="Amount e.g 2" />
-              </div>
-            </div>
-            <div className="seprator"></div>
-
-            {/* Cycle part */}
-            <div className="cycleContainer">
-              <div className="title">Buy cycle</div>
-
-              {/* <p className="smallTitle">Purchase</p> */}
-              <div className="cycle_container">
-                <div
-                  onClick={() => {
-                    setDcaTimeFrame('Daily');
-                  }}
-                  className={`cycle ${dcaTimeFrame == 'Daily' && 'active'}`}
-                >
-                  Daily
-                </div>
-                <div
-                  onClick={() => {
-                    setDcaTimeFrame('Weekly');
-                  }}
-                  className={`cycle ${dcaTimeFrame == 'Weekly' && 'active'}`}
-                >
-                  Weekly
-                </div>
-                <div
-                  onClick={() => {
-                    setDcaTimeFrame('Monthly');
-                  }}
-                  className={`cycle ${dcaTimeFrame == 'Monthly' && 'active'}`}
-                >
-                  Monthly
-                </div>
-              </div>
-
-              {/* Daily */}
-
-              {dcaTimeFrame == 'Daily' && <></>}
-
-              {/* Weekly */}
-
-              {dcaTimeFrame == 'Weekly' && (
-                <>
-                  <p className="smallTitle">Repeats every</p>
-                  <div className="weekdays">
-                    {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
-                      <div key={day} className={`weekday ${day === selectedDay ? 'active' : ''}`} onClick={() => handleDayClick(day)}>
-                        {day}
+                      <input
+                        type="number"
+                        max={10}
+                        min={0}
+                        step={1}
+                        value={DCAData.swapsNo}
+                        onChange={(e) => {
+                          if (e.target.value > 10) {
+                            setDCAData({ ...DCAData, swapsNo: 10 });
+                          } else if (e.target.value < 1) {
+                            setDCAData({ ...DCAData, swapsNo: 1 });
+                          } else setDCAData({ ...DCAData, swapsNo: Math.floor(e.target.value) });
+                        }}
+                        placeholder="No of swaps e.g 4"
+                      />
+                    </div>
+                    <div className="repetition inputGroup">
+                      <h4>Sell amount per swap</h4>
+                      <div className="inputAndPriceContainer">
+                        <input
+                          type="number"
+                          onChange={(e) => {
+                            setDCAData({ ...DCAData, amoutPerSwap: e.target.value });
+                          }}
+                          placeholder="Amount e.g 2"
+                        />
+                        {/* Token value in dollors */}
+                        <p className="price">
+                          ~$
+                          {DCAData.sellToken != null && DCAData.amoutPerSwap != ''
+                            ? formatDecimalValue(BigNumber(DCAData.sellToken.price).multipliedBy(DCAData.amoutPerSwap).toString())
+                            : 0}
+                        </p>
                       </div>
-                    ))}
-                  </div>
-                </>
-              )}
-
-              {/* Monthly  */}
-              {dcaTimeFrame == 'Monthly' && (
-                <>
-                  {/* <p className="smallTitle">Repeats On</p> */}
-                  <div className="monthDate">
-                    <h4>Date of the month</h4>
-                    <div className="localTimeInputs">
-                      <input type="number" placeholder="1-28" min={1} max={28} />
                     </div>
                   </div>
-                </>
-              )}
-              {/* Local time  */}
-              <div className="localTime">
-                <h4>Time</h4>
-                <div className="localTimeInputs">
-                  <input type="Number" placeholder="17" min={0} max={24} />
-                  <p className="localTime_seprator">:</p>
-                  <input type="Number" placeholder="00" min={0} max={59} />
+                  <div className="seprator"></div>
+
+                  {/* Cycle part */}
+                  <div className="cycleContainer">
+                    <div className="title">Buy cycle</div>
+
+                    {/* <p className="smallTitle">Purchase</p> */}
+                    <div className="cycle_container">
+                      <div
+                        onClick={() => {
+                          setDCAData({ ...DCAData, frequency: 'Daily' });
+                        }}
+                        className={`cycle ${DCAData.frequency == 'Daily' && 'active'}`}
+                      >
+                        Daily
+                      </div>
+                      <div
+                        onClick={() => {
+                          setDCAData({ ...DCAData, frequency: 'Weekly' });
+                        }}
+                        className={`cycle ${DCAData.frequency == 'Weekly' && 'active'}`}
+                      >
+                        Weekly
+                      </div>
+                      <div
+                        onClick={() => {
+                          setDCAData({ ...DCAData, frequency: 'Monthly' });
+                        }}
+                        className={`cycle ${DCAData.frequency == 'Monthly' && 'active'}`}
+                      >
+                        Monthly
+                      </div>
+                    </div>
+
+                    {/* Daily */}
+
+                    {DCAData.frequency == 'Daily' && <></>}
+
+                    {/* Weekly */}
+
+                    {DCAData.frequency == 'Weekly' && (
+                      <>
+                        <p className="smallTitle">Repeats every</p>
+                        <div className="weekdays">
+                          {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
+                            <div
+                              key={day}
+                              className={`weekday ${day == DCAData.weekDay ? 'active' : ''}`}
+                              onClick={() => setDCAData({ ...DCAData, weekDay: day })}
+                            >
+                              {day}
+                            </div>
+                          ))}
+                        </div>
+                      </>
+                    )}
+
+                    {/* Monthly  */}
+                    {DCAData.frequency == 'Monthly' && (
+                      <>
+                        {/* <p className="smallTitle">Repeats On</p> */}
+                        <div className="monthDate">
+                          <h4>Date of the month</h4>
+                          <div className="localTimeInputs">
+                            <input type="number" placeholder="1-28" min={1} max={28} />
+                          </div>
+                        </div>
+                      </>
+                    )}
+                    {/* Local time  */}
+                    <div className="localTime">
+                      <p className="localTimeTitle">Local Time</p>
+
+                      <div className="localTimeInputs">
+                        <input
+                          type="Number"
+                          value={DCAData.localHour}
+                          onChange={(e) => {
+                            console.log(Number(e.target.value));
+                            if (Number(e.target.value) > 23) {
+                              setDCAData({ ...DCAData, localHour: 23 });
+                            } else if (Number(e.target.value) < 0) {
+                              setDCAData({ ...DCAData, localHour: 0 });
+                            } else {
+                              setDCAData({ ...DCAData, localHour: Number(e.target.value) });
+                            }
+                          }}
+                          placeholder="17"
+                          step={1}
+                          min={0}
+                          max={24}
+                        />
+                        <p className="localTime_seprator">:</p>
+                        <input
+                          type="number"
+                          value={DCAData.localMinute}
+                          onChange={(e) => {
+                            console.log(Number(e.target.value));
+                            if (Number(e.target.value) > 59) {
+                              setDCAData({ ...DCAData, localMinute: 59 });
+                            } else if (Number(e.target.value) < 0) {
+                              setDCAData({ ...DCAData, localMinute: 0 });
+                            } else {
+                              setDCAData({ ...DCAData, localMinute: Number(e.target.value) });
+                            }
+                          }}
+                          placeholder="00"
+                          step={1}
+                          min={0}
+                          max={59}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {/* Create position button */}
+                <button className="createPosition">Create Auto-invest position</button>
+              </div>
+              {/* Review part */}
+              <div className="reviewDCA">
+                {/* Details */}
+                <div className="details">
+                  <h3 className="title">Details</h3>
+                  {/* Details Box  */}
+                  <div className="detailsContainer">
+                    <div className="detail">
+                      <div className="titleContainer">
+                        <div className="dot"></div>
+
+                        <h1>Amount Per Swap</h1>
+                      </div>
+
+                      <h1>
+                        {DCAData.amoutPerSwap != '' ? <span>{DCAData.amoutPerSwap}</span> : <span className="skeleton">4</span>}{' '}
+                        {DCAData.sellToken != null ? <span>{DCAData.sellToken.symbol}</span> : <span className="skeleton">ICP</span>}
+                      </h1>
+                    </div>
+
+                    <div className="detail">
+                      <div className="titleContainer">
+                        <div className="dot"></div>
+                        <h1>Buy cycle</h1>
+                      </div>
+                      <h1> {DCAData.frequency != '' ? <span>{DCAData.frequency}</span> : <span className="skeleton">Weekly</span>}</h1>
+                    </div>
+
+                    <div className="detail">
+                      <div className="titleContainer">
+                        <div className="dot"></div>
+                        <h1>Investment Period</h1>
+                      </div>
+                      <h1>
+                        {DCAData.swapsNo != '' ? <span>{DCAData.swapsNo}</span> : <span className="skeleton">9</span>}{' '}
+                        {DCAData.frequency != '' ? <span>{formatFrequency(DCAData.frequency)}</span> : <span className="skeleton">Weeks</span>}
+                      </h1>
+                    </div>
+                    <div className="detail">
+                      <div className="titleContainer">
+                        <div className="dot"></div>
+                        <h1>Total Investment Amount</h1>
+                      </div>
+                      <h1>
+                        {DCAData.swapsNo != '' && DCAData.amoutPerSwap != '' ? (
+                          <span>{BigNumber(DCAData.swapsNo).multipliedBy(DCAData.amoutPerSwap).toString()}</span>
+                        ) : (
+                          <span className="skeleton">9</span>
+                        )}{' '}
+                        {DCAData.sellToken != null ? <span>{DCAData.sellToken.symbol}</span> : <span className="skeleton">ICP</span>}
+                      </h1>
+                    </div>
+                  </div>
+                  <p className="explanation">
+                    Please make sure before each swap yopu will have at least{' '}
+                    <span>
+                      {DCAData.amoutPerSwap != '' ? <span>{DCAData.amoutPerSwap}</span> : <span className="skeleton">4</span>}{' '}
+                      {DCAData.sellToken != null ? <span>{DCAData.sellToken.symbol}</span> : <span className="skeleton">ICP</span>}
+                    </span>{' '}
+                    in your wallet. After swap is completed, fuds will be transfered to your wallet imidietly.
+                  </p>
+                </div>
+
+                {/* Time line */}
+                <div className="timeline">
+                  <h3 className="title">Timeline</h3>
+                  <div className="timelineContainer">
+                    <div className="timelineHolder">
+                      <div className={`timelineShape ${DCAData.timeLine.length == 0 && 'skeleton'}`}></div>
+
+                      {/* Timeline swaps */}
+                      {DCAData.timeLine.length == 0 && (
+                        <>
+                          {' '}
+                          <div className="swapTime skeleton first">
+                            <div className="tailCover"></div>
+                            <div className="connectedTitle">
+                              <div className="connector"></div>
+                              <h3>{generateDataForTimelineSkeleton(0)}</h3>
+                            </div>
+
+                            <h2>First Swap </h2>
+                          </div>
+                          <div className="swapTime skeleton ">
+                            <div className="connectedTitle">
+                              <div className="connector"></div>
+                              <h3>{generateDataForTimelineSkeleton(1)}</h3>
+                            </div>
+
+                            <h2>Second Swap </h2>
+                          </div>
+                          <div className="swapTime skeleton">
+                            <div className="connectedTitle">
+                              <div className="connector"></div>
+                              <h3>{generateDataForTimelineSkeleton(2)}</h3>
+                            </div>
+
+                            <h2>Third Swap </h2>
+                          </div>
+                          <div className="swapTime skeleton">
+                            <div className="connectedTitle">
+                              <div className="connector"></div>
+                              <h3>{generateDataForTimelineSkeleton(3)}</h3>
+                            </div>
+
+                            <h2>Fourth Swap </h2>
+                          </div>
+                          <div className="swapTime skeleton">
+                            <div className="connectedTitle">
+                              <div className="connector"></div>
+                              <h3>{generateDataForTimelineSkeleton(4)}</h3>
+                            </div>
+
+                            <h2>Fifth Swap </h2>
+                          </div>
+                          <div className="swapTime skeleton">
+                            <div className="connectedTitle">
+                              <div className="connector"></div>
+                              <h3>{generateDataForTimelineSkeleton(5)}</h3>
+                            </div>
+
+                            <h2>Sixth Swap </h2>
+                          </div>
+                          <div className="swapTime skeleton">
+                            <div className="connectedTitle">
+                              <div className="connector"></div>
+                              <h3>{generateDataForTimelineSkeleton(6)}</h3>
+                            </div>
+
+                            <h2>Seventh Swap </h2>
+                          </div>
+                          <div className="swapTime skeleton last">
+                            <div className="tailCover"></div>
+
+                            <div className="connectedTitle">
+                              <div className="connector"></div>
+                              <h3>{generateDataForTimelineSkeleton(8)}</h3>
+                            </div>
+
+                            <h2>Final Swap </h2>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-
-            {/* Create position button */}
-            <button className="createPosition">Create Auto-invest position</button>
-            {/* Interval  */}
           </div>
-          {/* Review part */}
-          <div className="reviewDCA">
-            {/* Details */}
-            <div className="details">
-              <h3 className="title">Details</h3>
-              {/* Details Box  */}
-              <div className="detailsContainer">
-                <div className="detail">
-                  <div className="titleContainer">
-                    <div className="dot"></div>
-                    <h1>Amount Per Transaction</h1>
-                  </div>
-                  <h1>4 ICP</h1>
-                </div>
-
-                <div className="detail">
-                  <div className="titleContainer">
-                    <div className="dot"></div>
-                    <h1>Buy cycle</h1>
-                  </div>
-                  <h1>Weekly</h1>
-                </div>
-
-                <div className="detail">
-                  <div className="titleContainer">
-                    <div className="dot"></div>
-                    <h1>Investment Period</h1>
-                  </div>
-                  <h1>9 Weeks</h1>
-                </div>
-                <div className="detail">
-                  <div className="titleContainer">
-                    <div className="dot"></div>
-                    <h1>Total Investment Amount</h1>
-                  </div>
-                  <h1>36 ICP</h1>
-                </div>
-              </div>
-              <p className="explanation">
-                please make sure before each swap yopu will have at least <span>4 ICP</span> in your wallet.
-              </p>
-            </div>
-
-            {/* Time line */}
-            <div className="timeline">
-              <h3 className="title">Timeline</h3>
-              <div className="timelineContainer">
-                <div className="timelineHolder">
-                  <div className="timelineShape"></div>
-                  <div className="swapTime first">
-                    <div className="tailCover"></div>
-                    <div className="connectedTitle">
-                      <div className="connector"></div>
-                      <h3>{new Date().toUTCString()}</h3>
-                    </div>
-
-                    <h2>First Swap </h2>
-                  </div>
-
-                  <div className="swapTime ">
-                    <div className="connectedTitle">
-                      <div className="connector"></div>
-                      <h3>{new Date().toUTCString()}</h3>
-                    </div>
-
-                    <h2>Second Swap </h2>
-                  </div>
-
-                  <div className="swapTime">
-                    <div className="connectedTitle">
-                      <div className="connector"></div>
-                      <h3>{new Date().toUTCString()}</h3>
-                    </div>
-
-                    <h2>Third Swap </h2>
-                  </div>
-
-                  <div className="swapTime">
-                    <div className="connectedTitle">
-                      <div className="connector"></div>
-                      <h3>{new Date().toUTCString()}</h3>
-                    </div>
-
-                    <h2>Fourth Swap </h2>
-                  </div>
-
-                  <div className="swapTime ">
-                    <div className="connectedTitle">
-                      <div className="connector"></div>
-                      <h3>{new Date().toUTCString()}</h3>
-                    </div>
-
-                    <h2>Fifth Swap </h2>
-                  </div>
-                  <div className="swapTime ">
-                    <div className="connectedTitle">
-                      <div className="connector"></div>
-                      <h3>{new Date().toUTCString()}</h3>
-                    </div>
-
-                    <h2>Sixth Swap </h2>
-                  </div>
-                  <div className="swapTime ">
-                    <div className="connectedTitle">
-                      <div className="connector"></div>
-                      <h3>{new Date().toUTCString()}</h3>
-                    </div>
-
-                    <h2>Seventh Swap </h2>
-                  </div>
-                  <div className="swapTime ">
-                    <div className="connectedTitle">
-                      <div className="connector"></div>
-                      <h3>{new Date().toUTCString()}</h3>
-                    </div>
-
-                    <h2>Eighth Swap </h2>
-                  </div>
-                  <div className="swapTime last">
-                    <div className="tailCover"></div>
-
-                    <div className="connectedTitle">
-                      <div className="connector"></div>
-                      <h3>{new Date().toUTCString()}</h3>
-                    </div>
-
-                    <h2>Final Swap </h2>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+        </>
+      )}
 
       {/* Add token modal */}
       <Modal active={tokenModal.isActive}>
@@ -408,9 +531,15 @@ export default function DcaCreation({ isExpanded, toggleScreen }) {
             <span></span>
           </div>
           <div className="tokens">
-            {filterBuyAndSellTokens(tokenModal.modalType)?.map((token) => {
+            {tokenModal.tokens?.map((token) => {
               return (
-                <div key={token.id} className="token">
+                <div
+                  onClick={() => {
+                    handleTokenSelection(token);
+                  }}
+                  key={token.id}
+                  className="token"
+                >
                   <div className="token_info">
                     <img className="token_logo" src={token.logo} alt="" />
                     <div className="token_details">

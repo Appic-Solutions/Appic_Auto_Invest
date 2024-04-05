@@ -11,6 +11,7 @@ $light-percentageUP: #00de3b;
 $light-percentageDown: #e63f66;
 $light-border: rgba(0, 0, 0, 0.05);
 $light-placeholder: #707070;
+$light-skeleton: #747474;
 
 // Dark Mode Colors
 $dark-bg: #0c101c;
@@ -23,6 +24,7 @@ $dark-percentageUP: #00de3b;
 $dark-percentageDown: #e63f66;
 $dark-border: rgba(255, 255, 255, 0.05);
 $dark-placeholder: #d9d9d9;
+$dark-skeleton: hsla(0, 0%, 100%, 0.7);
 
 $border-radius: clamp(0px, calc(4px * 9), 44px);
 

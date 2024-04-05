@@ -1185,8 +1185,10 @@
         gap: 3rem;
         .creationContainer {
           width: 40%;
-
           position: relative;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
           .title {
             font-weight: 700;
             color: $light-primary;
@@ -1202,8 +1204,8 @@
           }
           .tokenSelection {
             display: grid;
-            grid-template-columns: 1fr 0.1fr 1fr;
-            gap: 1rem;
+            grid-template-columns: 1fr 0.08fr 1fr;
+            gap: 0.5rem;
             align-items: center;
             .tokenContainer {
               display: flex;
@@ -1211,8 +1213,17 @@
               justify-content: space-between;
               background-color: $light-bg;
               padding: 1rem 0.8rem;
-              border-radius: $border-radius;
+              border-radius: 10px;
               cursor: pointer;
+              .emptyLogo {
+                width: 25px;
+                height: 25px;
+                border-radius: 50%;
+                background-color: #e0e0e0;
+              }
+              .emtpyText {
+                color: $light-placeholder;
+              }
               img {
                 width: 25px;
                 height: 25px;
@@ -1237,7 +1248,6 @@
             }
           }
           .repetitionAndAmountContainer {
-            margin-top: 2rem;
             .inputGroup {
               display: flex;
               justify-content: space-between;
@@ -1262,6 +1272,17 @@
               }
             }
             .repetition {
+              .inputAndPriceContainer {
+                width: 50%;
+                input {
+                  width: 100%;
+                }
+                .price {
+                  margin-top: 0.5rem;
+                  color: $light-secondary;
+                  font-size: 1.2rem;
+                }
+              }
             }
             .amount {
             }
@@ -1269,7 +1290,7 @@
 
           .seprator {
             background-color: $light-tertiary;
-            margin: 1.5rem auto;
+            margin: 1rem auto;
             width: 95%;
             height: 1px;
           }
@@ -1278,7 +1299,7 @@
             font-weight: 700;
             color: $light-primary;
             font-size: 1.5rem;
-            margin: 0.5rem 0 1rem 0;
+            margin: 0rem 0 1rem 0;
           }
 
           .cycle_container {
@@ -1355,6 +1376,7 @@
               border-radius: 10px;
               font-weight: 600;
               font-size: 1.4rem;
+              cursor: pointer;
             }
 
             .weekday.active {
@@ -1371,11 +1393,24 @@
             width: 100%;
             margin-top: 2rem;
 
-            h4 {
+            .localTimeTitle {
               font-weight: 700;
               color: $light-primary;
               font-size: 1.5rem;
               width: 30%;
+              text-decoration: underline dotted 2px $light-secondary;
+              position: relative;
+            }
+            .localTimeTitle:hover::after {
+              right: 0;
+              top: -10px;
+              position: absolute;
+              content: '24 Hour Time Foramt';
+              background-color: $light-bg;
+              font-size: 1.2rem;
+              padding: 0.5rem;
+              font-weight: 500;
+              border-radius: 10px;
             }
 
             .localTimeInputs {
@@ -1404,12 +1439,6 @@
             }
           }
 
-          .smallTimeLine {
-            margin: 2rem 0;
-            font-weight: 500;
-            font-size: 1.3rem;
-          }
-
           .createPosition {
             margin-top: 2rem;
             @include button-responsive(mobile);
@@ -1422,13 +1451,14 @@
             font-weight: 600;
             font-size: 1.5rem;
             width: 100%;
+            align-self: flex-end;
           }
         }
         .reviewDCA {
           width: 55%;
           display: grid;
           gap: 4rem;
-          grid-template-columns: 1fr 1fr;
+          grid-template-columns: 1fr 0.8fr;
 
           .title {
             font-weight: 700;
@@ -1460,16 +1490,21 @@
                 }
                 h1 {
                   font-size: 1.5rem;
+                  span.skeleton {
+                    color: $light-skeleton;
+                  }
                 }
               }
             }
             .explanation {
               width: 100%;
               margin-top: 2rem;
-              font-size: 1.4rem;
+              font-size: 1.35rem;
               span {
                 font-weight: 600;
-
+                span.skeleton {
+                  color: $light-skeleton;
+                }
                 color: $light-secondary;
               }
             }
@@ -1478,7 +1513,7 @@
             .timelineContainer {
               overflow: hidden;
               overflow-y: scroll;
-              max-height: 50vh;
+              max-height: 51vh;
               &::-webkit-scrollbar {
                 width: 10px;
               }
@@ -1490,7 +1525,7 @@
 
               &::-webkit-scrollbar-thumb {
                 background-image: linear-gradient(180deg, #d0368a 0%, #708ad4 99%);
-                box-shadow: inset 2px 2px 5px 0 rgba(#fff, 0.5);
+                // box-shadow: inset 2px 2px 5px 0 rgba(#fff, 0.5);
                 border-radius: 20px;
               }
               .timelineHolder {
@@ -1503,6 +1538,9 @@
                   height: 100%;
                   background-color: $light-secondary;
                   border-radius: 10px;
+                  &.skeleton {
+                    background-color: $light-skeleton;
+                  }
                 }
                 .swapTime {
                   padding: 2rem 0;
@@ -1522,8 +1560,10 @@
                   }
                   h2 {
                     margin-left: 3rem;
+                    font-size: 1.2rem;
                   }
                   &.last {
+                    padding-bottom: 0;
                     position: relative;
 
                     .tailCover {
@@ -1531,7 +1571,7 @@
                       position: absolute;
                       left: 5px;
                       width: 2px;
-                      height: 100%;
+                      height: calc(100% - 2rem);
                       z-index: 9;
                     }
                     .connectedTitle {
@@ -1558,6 +1598,17 @@
                       }
                       h1 {
                       }
+                    }
+                  }
+                  &.skeleton {
+                    .connector {
+                      background-color: $light-skeleton;
+                    }
+                    h3 {
+                      color: $light-skeleton;
+                    }
+                    h2 {
+                      color: $light-skeleton;
                     }
                   }
                 }
