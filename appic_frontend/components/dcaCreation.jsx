@@ -8,7 +8,7 @@ import WalletNotConnected from './walletNotConnectd';
 import Modal from './higerOrderComponents/modal';
 import { applyDecimals, formatDecimalValue } from '@/helper/number_formatter';
 
-export default function DcaCreation({ isExpanded, toggleScreen }) {
+export default function DcaCreation() {
   const dispatch = useDispatch();
   const [selectedDay, setSelectedDay] = useState('Sunday'); // Default selected day is Sunday
   const [tokenModal, setTokenModal] = useState({ isActive: false, modalType: 'sell', tokens: [] }); // modalType: buy, sell
@@ -90,6 +90,12 @@ export default function DcaCreation({ isExpanded, toggleScreen }) {
     }
   };
 
+  // get WeekDay by nuumber
+  const getWeekDayString = (weekNumber) => {
+    var weekdays = ['Sun', 'Mon', 'Tues', 'Wednes', 'Thurs', 'Fri', 'Sat'];
+    return weekdays[weekNumber];
+  };
+
   // Foramt frequency
   const formatFrequency = (frequency) => {
     switch (frequency) {
@@ -102,6 +108,35 @@ export default function DcaCreation({ isExpanded, toggleScreen }) {
       default:
         return 'Months';
     }
+  };
+
+  // Format date for timeline
+  const formatDate = (date) => {
+    // Extract day, month, and year
+    let day = date.getDate();
+    let month = date.getMonth() + 1; // Months are zero-indexed, so we add 1
+    let year = date.getFullYear();
+    let hour = date.getHours();
+    let minute = date.getMinutes();
+    let weekDay = getWeekDayString(date.getDay());
+
+    if (hour < 10) {
+      hour = '0' + String(hour);
+    }
+    if (minute < 10) {
+      minute = '0' + String(minute);
+    }
+    // Convert date to string
+    var dateString = date.toString();
+
+    // Split the string by spaces
+    var parts = dateString.split(' ');
+
+    // Extract the time zone information
+    var timeZone = parts[parts.length - 3] + ' ' + parts[parts.length - 1];
+
+    // Format the date in non-American way (day-month-year)
+    return `${weekDay}, ${day}/${month}/${year}, ${hour}:${minute} ${timeZone}`;
   };
 
   // Event Handler for Token slection
@@ -125,10 +160,195 @@ export default function DcaCreation({ isExpanded, toggleScreen }) {
     let day = indexDate.getDate();
     let month = indexDate.getMonth() + 1; // Months are zero-indexed, so we add 1
     let year = indexDate.getFullYear();
+    let weekDay = getWeekDayString(indexDate.getDay());
 
+    // Convert date to string
+    var dateString = date.toString();
+
+    // Split the string by spaces
+    var parts = dateString.split(' ');
+
+    // Extract the time zone information
+    var timeZone = parts[parts.length - 3] + ' ' + parts[parts.length - 1];
     // Format the date in non-American way (day-month-year)
-    return `${day}/${month}/${year}, 17:00`;
+    return `${weekDay}, ${day}/${month}/${year}, 17:00, ${timeZone}`;
   };
+
+  const getCurrentTime = () => {
+    const date = new Date();
+
+    return {
+      year: date.getFullYear(),
+      month: date.getMonth(),
+      monthDate: date.getDate(),
+      hour: date.getHours(),
+      minutes: date.getMinutes(),
+      weekDay: date.getDay(),
+    };
+  };
+
+  // Generatre First Swap's Time
+  const generateFirstSwapTime = (newDCAData, currentDate) => {
+    let firstSwapTime = '';
+    if (newDCAData.frequency != '' && newDCAData.swapsNo != '') {
+      switch (newDCAData.frequency) {
+        // if frequency is Daily
+        case 'Daily':
+          if (newDCAData.localHour != '' && newDCAData.localMinute != '') {
+            // Check to see if Hour  of Dca is greater than current Hour  plus 2 Hours
+            if (Number(newDCAData.localHour) >= currentDate.hour + 2) {
+              firstSwapTime = new Date(
+                currentDate.year,
+                currentDate.month,
+                currentDate.monthDate,
+                Number(newDCAData.localHour),
+                Number(newDCAData.localMinute)
+              );
+            }
+            // Hour and Minute of Dca is not greater than current Hour and minute set the first swap for the next day
+            else {
+              firstSwapTime = new Date(
+                currentDate.year,
+                currentDate.month,
+                currentDate.monthDate + 1,
+                Number(newDCAData.localHour),
+                Number(newDCAData.localMinute)
+              );
+            }
+          } else {
+            firstSwapTime = '';
+          }
+          break;
+        // if frequency is Weekly
+        case 'Weekly':
+          if (newDCAData.localHour != '' && newDCAData.localMinute != '' && newDCAData.weekday != '') {
+            // Check to see if WeekDay is equal to current WeekDay
+            // And Hour and Minute of Dca is greater than current Hour and minute plus 2 Hours
+            if (Number(newDCAData.weekDay) == currentDate.weekDay && Number(newDCAData.localHour) >= currentDate.hour + 2) {
+              firstSwapTime = new Date(
+                currentDate.year,
+                currentDate.month,
+                currentDate.monthDate,
+                Number(newDCAData.localHour),
+                Number(newDCAData.localMinute)
+              );
+            }
+            // Check to see if WeekDay is not equal to current WeekDay
+            // And Hour and Minute of Dca is not greater than current Hour and minute set the first swap for the next day
+            else {
+              if (Number(newDCAData.weekDay) == currentDate.weekDay) {
+                firstSwapTime = new Date(
+                  currentDate.year,
+                  currentDate.month,
+                  currentDate.monthDate + 7,
+                  Number(newDCAData.localHour),
+                  Number(newDCAData.localMinute)
+                );
+              } else if (Number(newDCAData.weekDay) > currentDate.weekDay) {
+                firstSwapTime = new Date(
+                  currentDate.year,
+                  currentDate.month,
+                  currentDate.monthDate + Number(newDCAData.weekDay) - currentDate.weekDay,
+                  Number(newDCAData.localHour),
+                  Number(newDCAData.localMinute)
+                );
+              } else if (Number(newDCAData.weekDay) < currentDate.weekDay) {
+                firstSwapTime = new Date(
+                  currentDate.year,
+                  currentDate.month,
+                  currentDate.monthDate + 7 - currentDate.weekDay + Number(newDCAData.weekDay),
+                  Number(newDCAData.localHour),
+                  Number(newDCAData.localMinute)
+                );
+              }
+            }
+          } else {
+            firstSwapTime = '';
+          }
+          break;
+
+        // if frequency is Monthly
+        case 'Monthly':
+          if (newDCAData.localHour != '' && newDCAData.localMinute != '' && newDCAData.monthDate != '') {
+            // Check to see if Month Date equal to current Month Date
+            // And If Hour and Minute of Dca is greater than current Hour and minute plus 2 Hours
+            if (Number(newDCAData.monthDate) >= currentDate.monthDate && Number(newDCAData.localHour) >= currentDate.hour + 2) {
+              firstSwapTime = new Date(
+                currentDate.year,
+                currentDate.month,
+                Number(newDCAData.monthDate),
+                Number(newDCAData.localHour),
+                Number(newDCAData.localMinute)
+              );
+            }
+            // Hour and Minute of Dca is not greater than current Hour and minute set the first swap for the next day
+            else {
+              firstSwapTime = new Date(
+                currentDate.year,
+                currentDate.month + 1,
+                Number(newDCAData.monthDate),
+                Number(newDCAData.localHour),
+                Number(newDCAData.localMinute)
+              );
+            }
+          } else {
+            firstSwapTime = '';
+          }
+          break;
+
+        default:
+          break;
+      }
+    }
+    console.log(firstSwapTime);
+    return firstSwapTime;
+  };
+
+  // Generatre timelines and swap times from first swap time
+  const generateSwapTimesFromFirstSwapTime = (firstSwapTime, newDCAData) => {
+    // Extract day, month, and year
+    let firstMonthDay = firstSwapTime.getDate();
+    let firstMonth = firstSwapTime.getMonth(); // Months are zero-indexed, so we add 1
+    let firstYear = firstSwapTime.getFullYear();
+    let firstHour = firstSwapTime.getHours();
+    let firstMinute = firstSwapTime.getMinutes();
+    // Array for saving all swap times
+    const timeLineArray = [firstSwapTime];
+
+    // Creating loops to generate all swaps date
+    switch (newDCAData.frequency) {
+      case 'Daily':
+        for (let i = 1; i < Number(newDCAData.swapsNo); i++) {
+          timeLineArray.push(new Date(firstYear, firstMonth, firstMonthDay + i, firstHour, firstMinute));
+        }
+        break;
+      case 'Weekly':
+        for (let i = 1; i < Number(newDCAData.swapsNo); i++) {
+          timeLineArray.push(new Date(firstYear, firstMonth, firstMonthDay + i * 7, firstHour, firstMinute));
+        }
+        break;
+      case 'Monthly':
+        for (let i = 1; i < Number(newDCAData.swapsNo); i++) {
+          timeLineArray.push(new Date(firstYear, firstMonth + i, firstMonthDay, firstHour, firstMinute));
+        }
+        break;
+    }
+
+    setDCAData({ ...newDCAData, timeLine: timeLineArray });
+  };
+  // Generate Timelines
+  const generateTimelines = (newDCAData) => {
+    // Get current time
+    const currentDate = getCurrentTime();
+    let firstSwapTime = generateFirstSwapTime(newDCAData, currentDate);
+
+    if (firstSwapTime != '') {
+      generateSwapTimesFromFirstSwapTime(firstSwapTime, newDCAData);
+    } else {
+      setDCAData({ ...newDCAData, timeLine: [] });
+    }
+  };
+
   return (
     <div className={darkModeClassnamegenerator('DcaCreation')}>
       {/* <CenteredMainTitle show={creationStatus == "configDca" ? false : true} onClick={handleBackButton}>Create DCA</CenteredMainTitle> */}
@@ -202,9 +422,14 @@ export default function DcaCreation({ isExpanded, toggleScreen }) {
                         onChange={(e) => {
                           if (e.target.value > 10) {
                             setDCAData({ ...DCAData, swapsNo: 10 });
-                          } else if (e.target.value < 1) {
+                            generateTimelines({ ...DCAData, swapsNo: 10 });
+                          } else if (e.target.value < 0) {
                             setDCAData({ ...DCAData, swapsNo: 1 });
-                          } else setDCAData({ ...DCAData, swapsNo: Math.floor(e.target.value) });
+                            generateTimelines({ ...DCAData, swapsNo: 1 });
+                          } else {
+                            setDCAData({ ...DCAData, swapsNo: Math.floor(e.target.value) });
+                            generateTimelines({ ...DCAData, swapsNo: Math.floor(e.target.value) });
+                          }
                         }}
                         placeholder="No of swaps e.g 4"
                       />
@@ -240,6 +465,7 @@ export default function DcaCreation({ isExpanded, toggleScreen }) {
                       <div
                         onClick={() => {
                           setDCAData({ ...DCAData, frequency: 'Daily' });
+                          generateTimelines({ ...DCAData, frequency: 'Daily' });
                         }}
                         className={`cycle ${DCAData.frequency == 'Daily' && 'active'}`}
                       >
@@ -248,6 +474,7 @@ export default function DcaCreation({ isExpanded, toggleScreen }) {
                       <div
                         onClick={() => {
                           setDCAData({ ...DCAData, frequency: 'Weekly' });
+                          generateTimelines({ ...DCAData, frequency: 'Weekly' });
                         }}
                         className={`cycle ${DCAData.frequency == 'Weekly' && 'active'}`}
                       >
@@ -256,6 +483,7 @@ export default function DcaCreation({ isExpanded, toggleScreen }) {
                       <div
                         onClick={() => {
                           setDCAData({ ...DCAData, frequency: 'Monthly' });
+                          generateTimelines({ ...DCAData, frequency: 'Monthly' });
                         }}
                         className={`cycle ${DCAData.frequency == 'Monthly' && 'active'}`}
                       >
@@ -273,13 +501,16 @@ export default function DcaCreation({ isExpanded, toggleScreen }) {
                       <>
                         <p className="smallTitle">Repeats every</p>
                         <div className="weekdays">
-                          {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
+                          {['0', '1', '2', '3', '4', '5', '6'].map((day) => (
                             <div
                               key={day}
                               className={`weekday ${day == DCAData.weekDay ? 'active' : ''}`}
-                              onClick={() => setDCAData({ ...DCAData, weekDay: day })}
+                              onClick={() => {
+                                setDCAData({ ...DCAData, weekDay: day });
+                                generateTimelines({ ...DCAData, weekDay: day });
+                              }}
                             >
-                              {day}
+                              {getWeekDayString(Number(day))}
                             </div>
                           ))}
                         </div>
@@ -293,7 +524,25 @@ export default function DcaCreation({ isExpanded, toggleScreen }) {
                         <div className="monthDate">
                           <h4>Date of the month</h4>
                           <div className="localTimeInputs">
-                            <input type="number" placeholder="1-28" min={1} max={28} />
+                            <input
+                              type="number"
+                              value={DCAData.monthDate}
+                              onChange={(e) => {
+                                if (Number(e.target.value) > 28) {
+                                  setDCAData({ ...DCAData, monthDate: '28' });
+                                  generateTimelines({ ...DCAData, monthDate: '28' });
+                                } else if (Number(e.target.value) < 0) {
+                                  setDCAData({ ...DCAData, monthDate: '0' });
+                                  generateTimelines({ ...DCAData, monthDate: '0' });
+                                } else {
+                                  setDCAData({ ...DCAData, monthDate: String(e.target.value) });
+                                  generateTimelines({ ...DCAData, monthDate: String(e.target.value) });
+                                }
+                              }}
+                              placeholder="1-28"
+                              min={1}
+                              max={28}
+                            />
                           </div>
                         </div>
                       </>
@@ -307,13 +556,15 @@ export default function DcaCreation({ isExpanded, toggleScreen }) {
                           type="Number"
                           value={DCAData.localHour}
                           onChange={(e) => {
-                            console.log(Number(e.target.value));
                             if (Number(e.target.value) > 23) {
-                              setDCAData({ ...DCAData, localHour: 23 });
+                              setDCAData({ ...DCAData, localHour: '23' });
+                              generateTimelines({ ...DCAData, localHour: '23' });
                             } else if (Number(e.target.value) < 0) {
-                              setDCAData({ ...DCAData, localHour: 0 });
+                              setDCAData({ ...DCAData, localHour: '0' });
+                              generateTimelines({ ...DCAData, localHour: '0' });
                             } else {
-                              setDCAData({ ...DCAData, localHour: Number(e.target.value) });
+                              setDCAData({ ...DCAData, localHour: String(e.target.value) });
+                              generateTimelines({ ...DCAData, localHour: String(e.target.value) });
                             }
                           }}
                           placeholder="17"
@@ -328,11 +579,14 @@ export default function DcaCreation({ isExpanded, toggleScreen }) {
                           onChange={(e) => {
                             console.log(Number(e.target.value));
                             if (Number(e.target.value) > 59) {
-                              setDCAData({ ...DCAData, localMinute: 59 });
+                              setDCAData({ ...DCAData, localMinute: '59' });
+                              generateTimelines({ ...DCAData, localMinute: '59' });
                             } else if (Number(e.target.value) < 0) {
-                              setDCAData({ ...DCAData, localMinute: 0 });
+                              setDCAData({ ...DCAData, localMinute: '0' });
+                              generateTimelines({ ...DCAData, localMinute: '0' });
                             } else {
-                              setDCAData({ ...DCAData, localMinute: Number(e.target.value) });
+                              setDCAData({ ...DCAData, localMinute: String(e.target.value) });
+                              generateTimelines({ ...DCAData, localMinute: String(e.target.value) });
                             }
                           }}
                           placeholder="00"
@@ -420,7 +674,6 @@ export default function DcaCreation({ isExpanded, toggleScreen }) {
                       {/* Timeline swaps */}
                       {DCAData.timeLine.length == 0 && (
                         <>
-                          {' '}
                           <div className="swapTime skeleton first">
                             <div className="tailCover"></div>
                             <div className="connectedTitle">
@@ -490,6 +743,23 @@ export default function DcaCreation({ isExpanded, toggleScreen }) {
                           </div>
                         </>
                       )}
+                      {DCAData.timeLine.length != 0 &&
+                        DCAData.timeLine.map((swapTime, index) => {
+                          return (
+                            <>
+                              <div key={index} className={`swapTime ${index == 0 && 'first'} ${index == DCAData.timeLine.length - 1 && 'last'}`}>
+                                {(index == DCAData.timeLine.length - 1 || index == 0) && <div className="tailCover"></div>}
+
+                                <div className="connectedTitle">
+                                  <div className="connector"></div>
+                                  <h3>{formatDate(swapTime)}</h3>
+                                </div>
+
+                                <h2>First Swap </h2>
+                              </div>
+                            </>
+                          );
+                        })}
                     </div>
                   </div>
                 </div>

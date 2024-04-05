@@ -95,7 +95,7 @@ function WalletConnectM() {
           initWallet({
             principalID: response,
             accountID,
-            walletName: selectedWallet.name,
+            walletName: selectedWalletDetails.name,
             isWalletConnected: true,
             assets: [],
             totalBalance: 0,
@@ -105,6 +105,7 @@ function WalletConnectM() {
         setConnectWalletStatus(null);
       }
     } catch (error) {
+      console.log(error);
       setConnectWalletStatus('Failed');
     }
   };
