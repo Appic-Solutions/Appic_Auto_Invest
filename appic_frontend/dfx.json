@@ -1,6 +1,6 @@
 {
   "canisters": {
-    "AVfrontend": {
+    "AppicFrontend": {
       "frontend": {
         "entrypoint": "out/index.html"
       },
@@ -10,3 +10,4 @@
   },
   "output_env_file": ".env"
 }
+

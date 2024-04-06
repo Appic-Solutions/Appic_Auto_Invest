@@ -4,11 +4,7 @@ import canistersIDs from '@/config/canistersIDs';
 import { AppicIdlFactory, dip20IdleFactory, icrcIdlFactory, sonicIdlFactory } from '@/did';
 import { initTokens } from '@/redux/features/supportedTokensSlice';
 import { useDispatch } from 'react-redux';
-import { parseResponseGetAllTokens } from '@/utils/responseParser';
 
-import { Principal } from '@dfinity/principal';
-import { waitWithTimeout } from '@/utils/timeFunctions';
-import BigNumber from 'bignumber.js';
 import { initPairs } from '@/redux/features/supportedPairs';
 
 export const useSupportedPairs = (assets, supportedTokens) => {

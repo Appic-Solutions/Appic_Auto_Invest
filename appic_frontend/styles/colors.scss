@@ -2,8 +2,8 @@
 
 // Light Mode Colors
 $light-bg: #f5f6fa;
-$light-box-bg: color-mix(in srgb, #000 0%, #fff);
-$light-primary: color-mix(in srgb, #000 0%, #141414);
+$light-box-bg: #ffffff;
+$light-primary: #141414;
 $light-secondary: #843ea1;
 $light-tertiary: rgba(0, 0, 0, 0.05);
 $light-buttons: #843ea1;
@@ -16,7 +16,7 @@ $light-skeleton: #747474;
 // Dark Mode Colors
 $dark-bg: #0c101c;
 $dark-box-bg: rgba(255, 255, 255, 0.02);
-$dark-primary: color-mix(in srgb, #fff 0%, #e4e7e7);
+$dark-primary: #e4e7e7;
 $dark-secondary: #843ea1;
 $dark-tertiary: rgba(255, 255, 255, 0.05);
 $dark-buttons: #843ea1;

@@ -6,7 +6,6 @@ import { useState, React } from 'react';
 import { useRouter } from 'next/navigation';
 import WalletNotConnected from './walletNotConnectd';
 import { formatDecimalValue, formatSignificantNumber } from '@/helper/number_formatter';
-import { artemisWalletAdapter } from '@/utils/walletConnector';
 import canistersIDs from '@/config/canistersIDs';
 
 function Portfolio() {

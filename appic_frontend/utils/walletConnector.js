@@ -1,11 +1,12 @@
-import { Artemis } from "artemis-web3-adapter";
-import { BatchTransact } from "artemis-web3-adapter";
-import { SONICSWAP_IDL } from "artemis-web3-adapter/src/did/sonixswap.idl";
-import { ICRC1_IDL } from "artemis-web3-adapter/src/did/icrc1.idl";
-import { Principal } from "@dfinity/principal";
-const connectObj = { whitelist: [""], host: "https://icp0.io/" };
+import { Artemis } from '@/artemis-web3-adapter';
+// import { BatchTransact } from 'artemis-web3-adapter';
+// import { SONICSWAP_IDL } from 'artemis-web3-adapter/src/did/sonixswap.idl';
+// import { ICRC1_IDL } from 'artemis-web3-adapter/src/did/icrc1.idl';
+import { Principal } from '@dfinity/principal';
+const connectObj = { whitelist: [''], host: 'https://icp0.io/' };
 
 export const artemisWalletAdapter = new Artemis(connectObj);
+
 // export const transactions = {
 //   initGetAcc1: {
 //     canisterId: "3xwpq-ziaaa-aaaah-qcn4a-cai",
@@ -42,3 +43,4 @@ export const artemisWalletAdapter = new Artemis(connectObj);
 // export const batchTransactionObject = new BatchTransact(transactions, artemisWalletAdapter);
 
 // const resp = await batchTransactionObject.execute();
+

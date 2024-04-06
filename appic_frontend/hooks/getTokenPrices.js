@@ -4,10 +4,6 @@ import canistersIDs from '@/config/canistersIDs';
 import { dip20IdleFactory, icrcIdlFactory, sonicIdlFactory } from '@/did';
 import { initTokens } from '@/redux/features/supportedTokensSlice';
 import { useDispatch } from 'react-redux';
-import { parseResponseGetAllTokens } from '@/utils/responseParser';
-
-import { Principal } from '@dfinity/principal';
-import { waitWithTimeout } from '@/utils/timeFunctions';
 import BigNumber from 'bignumber.js';
 
 export const usePrices = (allTokens, icpPrice) => {

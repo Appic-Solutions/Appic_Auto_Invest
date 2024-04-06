@@ -16,6 +16,8 @@ import { useBalances } from '@/hooks/getPrincipalBalances';
 import { usePrices } from '@/hooks/getTokenPrices';
 import Modal from './higerOrderComponents/modal';
 import { useSupportedPairs } from '@/hooks/getSupportedPairs';
+import LoadingComponent from './higerOrderComponents/loadingComponent';
+import { useSupportedWallets } from '@/hooks/getSuppoortedWallets';
 
 function WalletConnectM() {
   const dispatch = useDispatch();
@@ -26,6 +28,7 @@ function WalletConnectM() {
   const [connectWalletStatus, setConnectWalletStatus] = useState(null);
   const [selectedWalletDetails, setSelectedWalletDetails] = useState(null);
 
+  // const supportedWallets = useSelector((state) => state.supportedWallets.wallets);
   const isWalletConnected = useSelector((state) => state.wallet.items.isWalletConnected);
   const principalID = useSelector((state) => state.wallet.items.principalID);
   const accoundID = useSelector((state) => state.wallet?.items?.accoundID);
@@ -35,8 +38,16 @@ function WalletConnectM() {
   const icpPrice = useSelector((state) => state.icpPrice.usdPrice);
   const allTokensList = useSelector((state) => state.allTokens.tokens);
   const supportedTokens = useSelector((state) => state.supportedTokens.tokens);
-  // Custom Hooks
+  const [supportedWallets, setSupportedWallets] = useState([]);
+  // Hooks
+  useEffect(() => {
+    setSupportedWallets(artemisWalletAdapter.wallets);
+    return () => {
+      setSupportedWallets([]);
+    };
+  }, []);
 
+  // Custom Hooks
   // TODO: set a timer taht call all these hooks every 15 seconds to fetch new data
   // Fetch Icp price
   const { icpPriceError } = useIcpPrice();
@@ -58,9 +69,12 @@ function WalletConnectM() {
         let response = await artemisWalletAdapter.connect(selectedWallet.id, { whitelist: whiteListCanisters, host: 'https://icp0.io/' });
         return;
       }
+
       setSelectedWalletDetails(selectedWallet);
       setConnectWalletStatus('Loading');
       let response = await artemisWalletAdapter.connect(selectedWallet.id, { whitelist: whiteListCanisters, host: 'https://icp0.io/' });
+
+      console.log(response);
       if (response) {
         let accountID = artemisWalletAdapter.accountId;
         dispatch(
@@ -89,6 +103,7 @@ function WalletConnectM() {
     try {
       setConnectWalletStatus('Loading');
       let response = await artemisWalletAdapter.connect(selectedWalletDetails.id, { whitelist: whiteListCanisters, host: 'https://icp0.io/' });
+      console.log(response);
       if (response) {
         let accountID = artemisWalletAdapter.accountId;
         dispatch(
@@ -157,7 +172,7 @@ function WalletConnectM() {
         <div className="walletsContainer">
           {connectWalletStatus == null && (
             <>
-              {artemisWalletAdapter.wallets.map((wallet) => {
+              {supportedWallets.map((wallet) => {
                 return (
                   <div
                     key={wallet.id}
