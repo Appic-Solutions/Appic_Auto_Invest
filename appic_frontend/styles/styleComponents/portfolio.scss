@@ -31,7 +31,7 @@
       .avatarImage {
         width: 25px;
         height: 25px;
-        background: linear-gradient(45deg, rgba(131, 58, 180, 1) 0%, rgba(253, 29, 29, 1) 50%, rgba(252, 176, 69, 1) 100%);
+        background: $default-gradient45;
         border-radius: 50%;
       }
 
@@ -185,7 +185,7 @@
             .avatarImage {
               width: 36px;
               height: 36px;
-              background: linear-gradient(45deg, rgba(131, 58, 180, 1) 0%, rgba(253, 29, 29, 1) 50%, rgba(252, 176, 69, 1) 100%);
+              background: $default-gradient45;
               border-radius: 50%;
             }
 
@@ -284,7 +284,7 @@
         .avatarImage {
           width: 50px;
           height: 50px;
-          background: linear-gradient(45deg, rgba(131, 58, 180, 1) 0%, rgba(253, 29, 29, 1) 50%, rgba(252, 176, 69, 1) 100%);
+          background: $default-gradient45;
           border-radius: 50%;
         }
 
@@ -570,7 +570,7 @@
           .walletActions {
             .addressActions {
               .avatarImage {
-                background: linear-gradient(45deg, rgba(131, 58, 180, 1) 0%, rgba(253, 29, 29, 1) 50%, rgba(252, 176, 69, 1) 100%);
+                background: $default-gradient45;
                 border-radius: 50%;
               }
 

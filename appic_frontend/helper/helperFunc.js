@@ -38,3 +38,69 @@ export function formatAccountId(accountId) {
   return shortenedAccountId;
 }
 
+// Get the number of poistion for timeline
+export function getPositionNumber(index, isFinal = false) {
+  const positions = {
+    0: 'First',
+    1: 'Second',
+    2: 'Third',
+    3: 'Fourth',
+    4: 'Fifth',
+    5: 'Sixth',
+    6: 'Seventh',
+    7: 'Eighth',
+    8: 'Ninth',
+    9: 'Tenth',
+    10: 'Eleventh',
+    11: 'Twelfth',
+    12: 'Thirteenth',
+    13: 'Fourteenth',
+    14: 'Fifteenth',
+    15: 'Sixteenth',
+    16: 'Seventeenth',
+    17: 'Eighteenth',
+    18: 'Nineteenth',
+    19: 'Twentieth',
+    20: 'Twenty-First',
+    21: 'Twenty-Second',
+    22: 'Twenty-Third',
+    23: 'Twenty-Fourth',
+    24: 'Twenty-Fifth',
+    25: 'Twenty-Sixth',
+    26: 'Twenty-Seventh',
+    27: 'Twenty-Eighth',
+    28: 'Twenty-Ninth',
+    29: 'Thirtieth',
+    30: 'Thirty-First',
+    31: 'Thirty-Second',
+    32: 'Thirty-Third',
+    33: 'Thirty-Fourth',
+    34: 'Thirty-Fifth',
+    35: 'Thirty-Sixth',
+    36: 'Thirty-Seventh',
+    37: 'Thirty-Eighth',
+    38: 'Thirty-Ninth',
+    39: 'Fortieth',
+    40: 'Forty-First',
+    41: 'Forty-Second',
+    42: 'Forty-Third',
+    43: 'Forty-Fourth',
+    44: 'Forty-Fifth',
+    45: 'Forty-Sixth',
+    46: 'Forty-Seventh',
+    47: 'Forty-Eighth',
+    48: 'Forty-Ninth',
+    49: 'Fiftieth',
+  };
+
+  if (index in positions) {
+    let position = positions[index];
+    if (isFinal) {
+      position = 'Final';
+    }
+    return position;
+  } else {
+    return null; // Handle invalid index
+  }
+}
+

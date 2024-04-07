@@ -7,11 +7,13 @@ import BigNumber from 'bignumber.js';
 import WalletNotConnected from './walletNotConnectd';
 import Modal from './higerOrderComponents/modal';
 import { applyDecimals, formatDecimalValue } from '@/helper/number_formatter';
+import { getPositionNumber } from '@/helper/helperFunc';
+import { artemisWalletAdapter } from '@/utils/walletConnector';
 
 export default function DcaCreation() {
   const dispatch = useDispatch();
-  const [selectedDay, setSelectedDay] = useState('Sunday'); // Default selected day is Sunday
   const [tokenModal, setTokenModal] = useState({ isActive: false, modalType: 'sell', tokens: [] }); // modalType: buy, sell
+  const [transactionModal, setTransactionModal] = useState(false);
   const [DCAData, setDCAData] = useState({
     sellToken: null,
     buyToken: null,
@@ -35,8 +37,11 @@ export default function DcaCreation() {
   const loader = useSelector((state) => state.wallet.items.loader);
   const supportedTokens = useSelector((state) => state.supportedTokens.tokens);
   const supportedPairs = useSelector((state) => state.supportedPairs.pairs);
+
+  // Disable create button if form is not completed
   const handleButtonDisablity = () => {
-    if (!DCAData.sellToken.id || !DCAData.buyToken.id || !DCAData) return false;
+    if (DCAData.timeLine.length != 0 && DCAData.buyToken != null && DCAData.sellToken != null && DCAData.amoutPerSwap != '') return false;
+    return true;
   };
 
   // Filter Token for token selection modal based on type
@@ -221,7 +226,7 @@ export default function DcaCreation() {
           break;
         // if frequency is Weekly
         case 'Weekly':
-          if (newDCAData.localHour != '' && newDCAData.localMinute != '' && newDCAData.weekday != '') {
+          if (newDCAData.localHour != '' && newDCAData.localMinute != '' && newDCAData.weekDay != '') {
             // Check to see if WeekDay is equal to current WeekDay
             // And Hour and Minute of Dca is greater than current Hour and minute plus 2 Hours
             if (Number(newDCAData.weekDay) == currentDate.weekDay && Number(newDCAData.localHour) >= currentDate.hour + 2) {
@@ -300,7 +305,6 @@ export default function DcaCreation() {
           break;
       }
     }
-    console.log(firstSwapTime);
     return firstSwapTime;
   };
 
@@ -349,6 +353,10 @@ export default function DcaCreation() {
     }
   };
 
+  const handleCreateDca = () => {
+    setTransactionModal(true);
+  };
+
   return (
     <div className={darkModeClassnamegenerator('DcaCreation')}>
       {/* <CenteredMainTitle show={creationStatus == "configDca" ? false : true} onClick={handleBackButton}>Create DCA</CenteredMainTitle> */}
@@ -356,7 +364,6 @@ export default function DcaCreation() {
       {!isWalletConnected && <WalletNotConnected />}
       {isWalletConnected && (
         <>
-          {' '}
           <div className="dcaBox">
             <div className="flex">
               {/* Creation part */}
@@ -415,14 +422,14 @@ export default function DcaCreation() {
 
                       <input
                         type="number"
-                        max={10}
+                        max={50}
                         min={0}
                         step={1}
                         value={DCAData.swapsNo}
                         onChange={(e) => {
-                          if (e.target.value > 10) {
-                            setDCAData({ ...DCAData, swapsNo: 10 });
-                            generateTimelines({ ...DCAData, swapsNo: 10 });
+                          if (e.target.value > 50) {
+                            setDCAData({ ...DCAData, swapsNo: 50 });
+                            generateTimelines({ ...DCAData, swapsNo: 50 });
                           } else if (e.target.value < 0) {
                             setDCAData({ ...DCAData, swapsNo: 1 });
                             generateTimelines({ ...DCAData, swapsNo: 1 });
@@ -577,7 +584,6 @@ export default function DcaCreation() {
                           type="number"
                           value={DCAData.localMinute}
                           onChange={(e) => {
-                            console.log(Number(e.target.value));
                             if (Number(e.target.value) > 59) {
                               setDCAData({ ...DCAData, localMinute: '59' });
                               generateTimelines({ ...DCAData, localMinute: '59' });
@@ -599,7 +605,9 @@ export default function DcaCreation() {
                   </div>
                 </div>
                 {/* Create position button */}
-                <button className="createPosition">Create Auto-invest position</button>
+                <button onClick={handleCreateDca} disabled={handleButtonDisablity()} className="createPosition">
+                  Create Auto-invest position
+                </button>
               </div>
               {/* Review part */}
               <div className="reviewDCA">
@@ -669,9 +677,10 @@ export default function DcaCreation() {
                   <h3 className="title">Timeline</h3>
                   <div className="timelineContainer">
                     <div className="timelineHolder">
-                      <div className={`timelineShape ${DCAData.timeLine.length == 0 && 'skeleton'}`}></div>
+                      {DCAData.swapsNo > 1 && <div key={'shape'} className={`timelineShape ${DCAData.timeLine.length == 0 && 'skeleton'}`}></div>}
 
                       {/* Timeline swaps */}
+                      {/* Skeleton */}
                       {DCAData.timeLine.length == 0 && (
                         <>
                           <div className="swapTime skeleton first">
@@ -743,21 +752,21 @@ export default function DcaCreation() {
                           </div>
                         </>
                       )}
+
+                      {/* Real data */}
                       {DCAData.timeLine.length != 0 &&
                         DCAData.timeLine.map((swapTime, index) => {
                           return (
-                            <>
-                              <div key={index} className={`swapTime ${index == 0 && 'first'} ${index == DCAData.timeLine.length - 1 && 'last'}`}>
-                                {(index == DCAData.timeLine.length - 1 || index == 0) && <div className="tailCover"></div>}
+                            <div key={index} className={`swapTime ${index == 0 && 'first'} ${index == DCAData.timeLine.length - 1 && 'last'}`}>
+                              {(index == DCAData.timeLine.length - 1 || index == 0) && <div className="tailCover"></div>}
 
-                                <div className="connectedTitle">
-                                  <div className="connector"></div>
-                                  <h3>{formatDate(swapTime)}</h3>
-                                </div>
-
-                                <h2>First Swap </h2>
+                              <div className="connectedTitle">
+                                <div className="connector"></div>
+                                <h3>{formatDate(swapTime)}</h3>
                               </div>
-                            </>
+
+                              <h2>{getPositionNumber(index, DCAData.timeLine.length - 1 == index)} Swap</h2>
+                            </div>
                           );
                         })}
                     </div>
@@ -823,6 +832,61 @@ export default function DcaCreation() {
                 </div>
               );
             })}
+          </div>
+        </div>
+      </Modal>
+
+      {/* Transaction Modal */}
+      <Modal active={transactionModal}>
+        <div className="transactionModal">
+          <div className="topSection">
+            <button className="backBTN"></button>
+            <h3 className="title">Approve transaction</h3>
+            <button
+              onClick={() => {
+                setTransactionModal(false);
+              }}
+              className="closeBTN"
+            >
+              <svg fill="none" viewBox="0 0 16 16">
+                <path
+                  fill="currentColor"
+                  fillRule="evenodd"
+                  d="M2.54 2.54a1 1 0 0 1 1.42 0L8 6.6l4.04-4.05a1 1 0 1 1 1.42 1.42L9.4 8l4.05 4.04a1 1 0 0 1-1.42 1.42L8 9.4l-4.04 4.05a1 1 0 0 1-1.42-1.42L6.6 8 2.54 3.96a1 1 0 0 1 0-1.42Z"
+                  clipRule="evenodd"
+                ></path>
+              </svg>
+            </button>
+          </div>
+          <div className="seprator">
+            <span></span>
+          </div>
+          <div className="stepContainer Approval">
+            <h1>Step 1</h1>
+            <div className="imagesContainer active">
+              <div className="iconLoading">
+                <div className="coverBG"></div>
+                <div className="rotator"></div>
+              </div>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                <path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24V264c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z" />
+              </svg>
+            </div>
+            <p className="transactionDetail">Please approve the transaction </p>
+          </div>
+          <div className="stepContainer dcaCreation">
+            <h1>Step 2</h1>
+            <div className="imagesContainer">
+              <div className="iconLoading">
+                <div className="coverBG"></div>
+
+                <div className="rotator"></div>
+              </div>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                <path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z" />
+              </svg>
+            </div>
+            <p className="transactionDetail">PLease wait until the position is created</p>
           </div>
         </div>
       </Modal>

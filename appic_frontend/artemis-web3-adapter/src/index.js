@@ -148,7 +148,7 @@ export const principalIdFromHex = getAccountIdentifier;
 // export const ArtemisAdapter = new Artemis({ whitelist: [NNS_CANISTER_ID], host: HOSTURL });
 
 // if (window) {
-//     const artemis = new Artemis({ whitelist: [NNS_CANISTER_ID], host: HOSTURL });
-//     window.artemis = artemis;
-//     window.artemis.BatchTransact = BatchTransaction;
+//   const artemis = new Artemis({ whitelist: [NNS_CANISTER_ID], host: HOSTURL });
+//   window.artemis = artemis;
+//   window.artemis.BatchTransact = BatchTransaction;
 // }
