@@ -8,14 +8,14 @@ import Nat "mo:base/Nat";
 import Nat64 "mo:base/Nat64";
 import Principal "mo:base/Principal";
 import Result "mo:base/Result";
+import Text "mo:base/Text";
 import Time "mo:base/Time";
 import { recurringTimer } "mo:base/Timer";
-import Text "mo:base/Text";
 
 import dcaTypes "dcaTypes";
 import icrcTypes "icrcTypes";
-import utils "utils";
 import sonicTypes "sonicTypes";
+import utils "utils";
 
 actor AlphavaultRoot {
   // Auto invest Types
@@ -25,7 +25,7 @@ actor AlphavaultRoot {
   type PositionTokens = dcaTypes.PositionTokens;
   type Transaction = dcaTypes.Transaction;
   type Position = dcaTypes.Position;
-  type CreatePositionsArgs = dcaTypes.CreatePositionsArgs;
+  type CreatePositionArgs = dcaTypes.CreatePositionArgs;
   type Result_1 = dcaTypes.Result_1;
   type Result_2 = dcaTypes.Result_2;
   type PositionCreationError = dcaTypes.PositionCreationError;
@@ -47,9 +47,9 @@ actor AlphavaultRoot {
   type sonicActor = sonicTypes.sonicActor;
   type TxReceipt = sonicTypes.TxReceipt;
 
-  let platformFee : Nat = 2; //2 percent
+  let platformFee : Nat = 1; //2 percent
   let noOfTransferFees = 3; // how many time do we have to pay transfer fee for a single swap
-  let cronInterval = 3600; // 60 min
+  let cronInterval = 300; // 5 min
   let admin : Principal = Principal.fromText("matbl-u2myk-jsllo-b5aw6-bxboq-7oon2-h6wmo-awsxf-pcebc-4wpgx-4qe");
   let sonicCanisterId : Principal = Principal.fromText("3xwpq-ziaaa-aaaah-qcn4a-cai");
 
@@ -58,15 +58,38 @@ actor AlphavaultRoot {
   // Buffer for keeping active positions
   let activePositions = Buffer.Buffer<Position>(0);
 
+  //
+  let platformIncome = HashMap.HashMap<Principal, Nat>(0, Principal.equal, Principal.hash);
+
   // Add Auto invest position
   stable var nextPositionId : PositionId = 0;
 
-  public shared func createPosition(createPositionArgs : CreatePositionsArgs) : async Result_1 {
+  public shared ({ caller }) func createPosition(createPositionArgs : CreatePositionArgs) : async Result_1 {
 
-    // Check if entered unix swap times are not in the past
+    if (createPositionArgs.swapsTime.size() > 50) {
+      return (#err(#GenericError { message = "Max tokens are 50" }));
+    };
+
+    // 1: Check if entered unix swap times are not in the past
+    // 2: Check if the the duration between each trade is at least 1 hour
     for (swapTime in createPositionArgs.swapsTime.vals()) {
+      // 1
       if (swapTime < utils.nanoToSecond(Time.now())) {
         return (#err(#PositionInThePast));
+      };
+
+      // 2
+      for (transactionTime in createPositionArgs.swapsTime.vals()) {
+        if (transactionTime > swapTime) {
+          if (transactionTime - swapTime < 3600) {
+            return (#err(#SwapsTooClose { message = "The difference between swap times should be at least 1 hour " }));
+          };
+        };
+        if (swapTime > transactionTime) {
+          if (swapTime - transactionTime < 3600) {
+            return (#err(#SwapsTooClose { message = "The difference between swap times should be at least 1 hour " }));
+          };
+        };
       };
     };
 
@@ -86,7 +109,7 @@ actor AlphavaultRoot {
     };
 
     // Check to see if allwance is valid
-    switch (await _validateAllowance(createPositionArgs)) {
+    switch (await _validateAllowance(createPositionArgs, caller)) {
 
       case (#err(#WronmgAlloance { expectedAllowance; inputAllowance })) {
         return (#err(#WronmgAlloance { expectedAllowance; inputAllowance }));
@@ -129,7 +152,8 @@ actor AlphavaultRoot {
       destination = createPositionArgs.destination; // Bought tokens final destination
       swaps = transactionsArray; // Array that contains all swaps, each of them with specific time
       positionStatus = #Active;
-      allowance = createPositionArgs.allowance;
+      leftAllowance = createPositionArgs.allowance;
+      initialAllowance = createPositionArgs.allowance;
       managerCanister = Principal.fromActor(AlphavaultRoot);
     };
     // Save created new position arg
@@ -141,10 +165,16 @@ actor AlphavaultRoot {
   };
 
   // Validate allowance
-  // Part 1: Checks if privided allowance covers fees and platform fee
-  // Part 2: Checks if total allowance from token canister covers everything
-  private func _validateAllowance(createPositionArgs : CreatePositionsArgs) : async Result_2 {
+  // Part 1: Check if initialAllowance given by user is enough to cover all the swaps
+  // Part 2: Checks if total allowance from that was given to our canister by user is enough
+  private func _validateAllowance(createPositionArgs : CreatePositionArgs, userPrincipal : Principal) : async Result_2 {
+    // Part 1: Check if initialAllowance given by user is enough to cover all the swaps
+    let minAllowanceForPosition = createPositionArgs.amountPerSwap * createPositionArgs.swapsTime.size();
+    if (createPositionArgs.allowance < minAllowanceForPosition) {
+      return (#err(#AllowanceNotEnough { expectedAllowance = minAllowanceForPosition; receivedAllowance = createPositionArgs.allowance }));
 
+    };
+    // Part 2: Check to see if user has more than one transaction with the same selling token
     // defining tokenCanister
     let tokenCanister : ICRC2TokenActor = icrcTypes._getTokenActor(createPositionArgs.sellToken);
     let allowanceArgs : ICRC2AllowanceArgs = {
@@ -157,27 +187,14 @@ actor AlphavaultRoot {
         subaccount = null;
       };
     };
-    // part 1
-    let calculateMinAllowanceForPosition = await _calculateMinAllowanceForPosition(
-      createPositionArgs.destination,
-      createPositionArgs.sellToken,
-      createPositionArgs.amountPerSwap,
-      createPositionArgs.swapsTime.size(),
-      tokenCanister,
-    );
-    if (createPositionArgs.allowance < calculateMinAllowanceForPosition) {
-      return (#err(#WronmgAlloance { expectedAllowance = calculateMinAllowanceForPosition; inputAllowance = createPositionArgs.allowance }));
-    };
 
-    // part 2
     let userAllowance : ICRC2Allowance = await tokenCanister.icrc2_allowance(allowanceArgs);
 
-    // Check to see if user has more than one transaction with the same selling token
     let userAlreadyExsistingPositions : [Position] = _getPositionsFor(createPositionArgs.destination, ?createPositionArgs.sellToken, null, ?true);
     var userMinExpectedAllowance = 0;
     if (userAlreadyExsistingPositions.size() > 0) {
       for (userPosition in userAlreadyExsistingPositions.vals()) {
-        userMinExpectedAllowance += userPosition.allowance;
+        userMinExpectedAllowance += userPosition.leftAllowance;
       };
       userMinExpectedAllowance += createPositionArgs.allowance;
     } else {
@@ -191,39 +208,17 @@ actor AlphavaultRoot {
     return (#ok);
   };
 
-  // calculate minimum allowance for position to be created plus token fee and platofrm fee
-  private func _calculateMinAllowanceForPosition(
-    userPrincipal : Principal,
-    sellToken : Principal,
-    amountPerSwap : Nat,
-    noOfSwaps : Nat,
-    tokenCanister : ICRC2TokenActor,
-  ) : async Nat {
-    let totalAmountOfSellToken = amountPerSwap * noOfSwaps;
-    let tokenFee = await tokenCanister.icrc1_fee();
-    let totalTokenFee = tokenFee * noOfTransferFees * noOfSwaps;
-    let calculatedPlatformFee = totalAmountOfSellToken * platformFee / 100;
-    return (totalAmountOfSellToken + totalTokenFee + calculatedPlatformFee); // MinAllowanceForPosition
-  };
-
   // Get min allowance for a createPositionArg and approveFunctionAmount
   public shared func getAllowanceForNewTrade(getAllowanceArgs : GetAllowanceArgs) : async AllowanceAmountResult {
+    let minAllowanceForPosition = getAllowanceArgs.amountPerSwap * getAllowanceArgs.noOfSwaps;
     // defining tokenCanister
     let tokenCanister : ICRC2TokenActor = icrcTypes._getTokenActor(getAllowanceArgs.sellToken);
 
-    let minAllowanceForPosition = await _calculateMinAllowanceForPosition(
-      getAllowanceArgs.userPrincipal,
-      getAllowanceArgs.sellToken,
-      getAllowanceArgs.amountPerSwap,
-      getAllowanceArgs.noOfSwaps,
-      tokenCanister,
-    );
-
     let userAlreadyExsistingPositions : [Position] = _getPositionsFor(getAllowanceArgs.userPrincipal, ?getAllowanceArgs.sellToken, null, ?true);
-    var userMinExpectedAllowance = 0;
+    var userMinExpectedAllowance : Nat = 0;
     if (userAlreadyExsistingPositions.size() > 0) {
       for (userPosition in userAlreadyExsistingPositions.vals()) {
-        userMinExpectedAllowance += userPosition.allowance;
+        userMinExpectedAllowance += userPosition.leftAllowance;
       };
       userMinExpectedAllowance += minAllowanceForPosition;
     } else {
@@ -231,22 +226,21 @@ actor AlphavaultRoot {
     };
 
     return {
-      minAllowanceForPositionCreation = minAllowanceForPosition;
-      minAllowanceForApproveFunction = userMinExpectedAllowance;
+      minAllowanceRequired : Nat = userMinExpectedAllowance;
     };
   };
 
   // Calculate fee for showing in the frontend
-  public shared func calculateFee(getAllowanceArgs : GetAllowanceArgs) : async Nat {
-    // defining tokenCanister
-    let tokenCanister : ICRC2TokenActor = icrcTypes._getTokenActor(getAllowanceArgs.sellToken);
-    let totalAmountOfSellToken = getAllowanceArgs.amountPerSwap * getAllowanceArgs.noOfSwaps;
-    let tokenFee = await tokenCanister.icrc1_fee();
-    let totalTokenFee = tokenFee * noOfTransferFees * getAllowanceArgs.noOfSwaps;
-    let calculatedPlatformFee = totalAmountOfSellToken * platformFee / 100;
-    return (totalTokenFee + calculatedPlatformFee);
+  // public shared func calculateFee(getAllowanceArgs : GetAllowanceArgs) : async Nat {
+  //   // defining tokenCanister
+  //   let tokenCanister : ICRC2TokenActor = icrcTypes._getTokenActor(getAllowanceArgs.sellToken);
+  //   let totalAmountOfSellToken = getAllowanceArgs.amountPerSwap * getAllowanceArgs.noOfSwaps;
+  //   let tokenFee = await tokenCanister.icrc1_fee();
+  //   let totalTokenFee = tokenFee * noOfTransferFees * getAllowanceArgs.noOfSwaps;
+  //   let calculatedPlatformFee = totalAmountOfSellToken * platformFee / 100;
+  //   return (totalTokenFee + calculatedPlatformFee);
 
-  };
+  // };
 
   // Get all active positions
   public shared query func getAllPositions() : async [Position] {
@@ -376,14 +370,14 @@ actor AlphavaultRoot {
       step6 = null;
     };
 
-    // Save new user positions with updated transaction
-
+    // Save new user positions
     let newTransactionsArrayForPending = Buffer.fromArray<Transaction>(userPosition.swaps);
     newTransactionsArrayForPending.put(transactionIndex, newTransactionForPending);
 
     // Generate new Position
     let newPositionForPending : Position = {
-      allowance = userPosition.allowance;
+      initialAllowance = userPosition.initialAllowance;
+      leftAllowance = userPosition.leftAllowance - newTransactionForPending.sellingAmount;
       destination = userPosition.destination;
       positionId = userPosition.positionId;
       // TODO : Write the logic for changing the position status to successful or faild
@@ -408,7 +402,7 @@ actor AlphavaultRoot {
 
     var transactionStatus : TransactionStatus = #Pending;
     var sonicBalanceOfBuyTokenBeforeTrade : Nat = await sonicCanister.balanceOf(Principal.toText(userPosition.tokens.buyToken), userPosition.managerCanister);
-    var sonicBalanceOfSellTokenAfterTrade : Nat = 0;
+    var sonicBalanceOfBuyTokenAfterTrade : Nat = 0;
     var amountOfBoughtToken : Nat = 0;
     var step1 : ?Text = null;
     var step2 : ?Text = null;
@@ -419,13 +413,13 @@ actor AlphavaultRoot {
 
     // TODO: Trade logic
     // Step1: Transfer from users wallet to canister
-    let icrc2TransferFromResult : ICRCTokenTxReceipt = await _transferFromUsetToCanister(userPosition, transaction, sellTokenCanister, sellTokenFee);
+    let icrc2TransferFromResult : ICRCTokenTxReceipt = await _transferFromUserToCanister(userPosition, transaction, sellTokenCanister, sellTokenFee);
     switch (icrc2TransferFromResult) {
       case (#Err transferError) {
         transactionStatus := #Failed(transferError);
         step1 := ?(
           "Transaction faild. requested amount to transfer to our AV canister:" #
-          Nat.toText(transaction.sellingAmount + (transaction.sellingAmount * platformFee / 100) + sellTokenFee * 2)
+          Nat.toText(transaction.sellingAmount - sellTokenFee) # "This does not include transfer fee"
         );
       };
       case (#Ok SuccessId) {
@@ -435,39 +429,40 @@ actor AlphavaultRoot {
         );
       };
     };
+    let amountOfSellTokenTransfered : Nat = transaction.sellingAmount - sellTokenFee;
+    // Reducing platform fee
+    let calculatedPlatformFee : Nat = transaction.sellingAmount * platformFee / 100;
+    let amountOfSellTokenAfterStep1 : Nat = amountOfSellTokenTransfered - platformFee;
 
     // Step2: ICRC1 transfer to sonic swap
-
     switch (transactionStatus) {
       case (#Pending) {
         let icrc1TransferToSonicResult : ICRCTokenTxReceipt = await _transferFromCanisterToSonic(
-          userPosition,
-          transaction,
           sonicCanister,
           sellTokenCanister,
-          sellTokenFee : Nat,
+          amountOfSellTokenAfterStep1 - sellTokenFee,
         );
         switch (icrc1TransferToSonicResult) {
           case (#Err transferError) {
             transactionStatus := #Failed(transferError);
             step2 := ?(
               "Transaction faild. requested amount to sonic canister:" #
-              Nat.toText(transaction.sellingAmount)
+              Nat.toText(amountOfSellTokenAfterStep1 - sellTokenFee) # "This does not include transfer fee"
             );
             //sending funds back
-            let refundResult : ICRCTokenTxReceipt = await _transferFundsBack(userPosition, transaction, sellTokenCanister);
+            let refundResult : ICRCTokenTxReceipt = await _transferFundsBack(userPosition, sellTokenCanister, amountOfSellTokenAfterStep1 - sellTokenFee);
             switch (refundResult) {
               case (#Ok successId) {
                 step2 := ?(
                   "Transaction faild. requested amount to sonic canister:" #
-                  Nat.toText(transaction.sellingAmount) #
+                  Nat.toText(amountOfSellTokenAfterStep1 - sellTokenFee) # "This does not include transfer fee" #
                   "Funds were sent back to user wallet addreess"
                 );
               };
               case (#Err transferEr) {
                 step2 := ?(
                   "Transaction faild. requested amount to sonic canister:" #
-                  Nat.toText(transaction.sellingAmount) #
+                  Nat.toText(amountOfSellTokenAfterStep1 - sellTokenFee) #
                   "Failed to send back user assets"
                 );
               };
@@ -483,18 +478,19 @@ actor AlphavaultRoot {
       };
       case _ {};
     };
+    let amountOfSellTokenAfterStep2 : Nat = amountOfSellTokenAfterStep1 - sellTokenFee;
 
     // Step3: Despoit to sonic account
     switch (transactionStatus) {
       case (#Pending) {
-        let depositResult = await _depositFundsToSonic(userPosition, transaction, sonicCanister);
+        let depositResult = await _depositFundsToSonic(userPosition, sonicCanister, amountOfSellTokenAfterStep2 - sellTokenFee);
         switch (depositResult) {
           case (#ok successId) {
-            step3 := ?("Successfully deposited " # Nat.toText(transaction.sellingAmount) # " to sonic canister ");
+            step3 := ?("Successfully deposited " # Nat.toText(amountOfSellTokenAfterStep2 - sellTokenFee) # " to sonic canister ");
           };
           case (#err reason) {
             transactionStatus := #Failed(#CustomError(reason));
-            step3 := ?("Failed to deposit" # Nat.toText(transaction.sellingAmount) # " to sonic canister " # reason);
+            step3 := ?("Failed to deposit " # Nat.toText(amountOfSellTokenAfterStep2 - sellTokenFee) # " to sonic canister, this does not include transfer fee " # reason);
           };
         };
       };
@@ -502,20 +498,21 @@ actor AlphavaultRoot {
 
       };
     };
+    let amountOfSellTokenAfterStep3 : Nat = amountOfSellTokenAfterStep2 - sellTokenFee;
 
     // Step4: Trigger the swap
     switch (transactionStatus) {
       case (#Pending) {
-        let swapResult = await _SwapExactTokensForTokens(userPosition, transaction, sonicCanister);
+        let swapResult = await _SwapExactTokensForTokens(userPosition, sonicCanister, amountOfSellTokenAfterStep3);
         switch (swapResult) {
           case (#ok successId) {
-            sonicBalanceOfSellTokenAfterTrade := await sonicCanister.balanceOf(Principal.toText(userPosition.tokens.buyToken), userPosition.managerCanister);
-            amountOfBoughtToken := sonicBalanceOfSellTokenAfterTrade - sonicBalanceOfBuyTokenBeforeTrade;
-            step4 := ?("Successfully Swapped" # Nat.toText(transaction.sellingAmount) # "For" # Nat.toText(amountOfBoughtToken) # "Of buy token");
+            sonicBalanceOfBuyTokenAfterTrade := await sonicCanister.balanceOf(Principal.toText(userPosition.tokens.buyToken), userPosition.managerCanister);
+            amountOfBoughtToken := sonicBalanceOfBuyTokenAfterTrade - sonicBalanceOfBuyTokenBeforeTrade;
+            step4 := ?("Successfully Swapped " # Nat.toText(amountOfSellTokenAfterStep3) # " For " # Nat.toText(amountOfBoughtToken) # " Of buy token");
           };
           case (#err reason) {
             transactionStatus := #Failed(#CustomError(reason));
-            step4 := ?("Failed to swap" # Nat.toText(transaction.sellingAmount) # "in sonic" # reason);
+            step4 := ?("Failed to swap " # Nat.toText(amountOfSellTokenAfterStep3) # " in sonic" # reason);
 
           };
         };
@@ -526,16 +523,16 @@ actor AlphavaultRoot {
     // Step5: Withdraw traded token from sonic
     switch (transactionStatus) {
       case (#Pending) {
-        let withdrawResult = await _WinthdrawFromSonic(userPosition, transaction, sonicCanister, amountOfBoughtToken);
+        let withdrawResult = await _WithdrawFromSonic(userPosition, transaction, sonicCanister, amountOfBoughtToken);
         switch (withdrawResult) {
           case (#ok successId) {
-            step5 := ?("Successfully Withdrew" # Nat.toText(amountOfBoughtToken - buyTokenFee));
+            step5 := ?("Successfully Withdrew " # Nat.toText(amountOfBoughtToken - buyTokenFee));
             // Deduct withdraw fee
             amountOfBoughtToken -= buyTokenFee;
           };
           case (#err reason) {
             transactionStatus := #Failed(#CustomError(reason));
-            step5 := ?("Failed to withdraw" # Nat.toText(amountOfBoughtToken) # "from sonic for:" # reason);
+            step5 := ?("Failed to withdraw " # Nat.toText(amountOfBoughtToken) # " from sonic for:" # reason);
 
           };
         };
@@ -586,7 +583,8 @@ actor AlphavaultRoot {
 
     // Generate new Position
     let newPosition : Position = {
-      allowance = userPosition.allowance;
+      initialAllowance = userPosition.initialAllowance;
+      leftAllowance = userPosition.leftAllowance;
       destination = userPosition.destination;
       positionId = userPosition.positionId;
       // TODO : Write the logic for changing the position status to successful or faild
@@ -597,18 +595,20 @@ actor AlphavaultRoot {
     };
 
     // Save updated Positions into active position buffer
-    activePositions.put(positionIndex, newPosition)
+    activePositions.put(positionIndex, newPosition);
+
+    // Add to platform income
+    _addToPlatformIncome(userPosition.tokens.sellToken, calculatedPlatformFee);
 
   };
 
   // Transfer from users wallet to canister
-  private func _transferFromUsetToCanister(
+  private func _transferFromUserToCanister(
     userPosition : Position,
     transaction : Transaction,
     sellTokenCanister : ICRC2TokenActor,
     sellTokenFee : Nat,
   ) : async ICRCTokenTxReceipt {
-    let calculatedPlatformFee = transaction.sellingAmount * platformFee / 100;
     let transferFromArgs : ICRC2TransferArg = {
       from : ICRCAccount = {
         owner = userPosition.destination;
@@ -618,37 +618,35 @@ actor AlphavaultRoot {
         owner = userPosition.managerCanister;
         subaccount = null;
       };
-      amount = transaction.sellingAmount + platformFee + (sellTokenFee * 2);
+      amount = transaction.sellingAmount - sellTokenFee;
     };
     let result = await sellTokenCanister.icrc2_transfer_from(transferFromArgs);
   };
 
   // Transfer from our canister to sonic's canister
   private func _transferFromCanisterToSonic(
-    userPosition : Position,
-    transaction : Transaction,
     sonicCanister : sonicActor,
     sellTokenCanister : ICRC2TokenActor,
-    sellTokenFee : Nat,
+    transferAmount : Nat,
   ) : async ICRCTokenTxReceipt {
     let getSubbaccount : Blob = await sonicCanister.initiateICRC1Transfer();
-    let transferFromArgs : ICRCTransferArg = {
+    let transferArgs : ICRCTransferArg = {
       from_subaccount = null;
       to : ICRCAccount = {
         owner = sonicCanisterId;
         subaccount = ?getSubbaccount;
       };
-      amount = transaction.sellingAmount + sellTokenFee;
+      amount = transferAmount;
     };
-    let result = await sellTokenCanister.icrc1_transfer(transferFromArgs);
+    let result = await sellTokenCanister.icrc1_transfer(transferArgs);
     return (result);
   };
 
   // Transfer Funds back becasue of Error during transaction execution
   private func _transferFundsBack(
     userPosition : Position,
-    transaction : Transaction,
     sellTokenCanister : ICRC2TokenActor,
+    refundAmount : Nat,
   ) : async ICRCTokenTxReceipt {
     let transferFromArgs : ICRCTransferArg = {
       from_subaccount = null;
@@ -656,7 +654,7 @@ actor AlphavaultRoot {
         owner = userPosition.destination;
         subaccount = null;
       };
-      amount = transaction.sellingAmount;
+      amount = refundAmount;
     };
     let result = await sellTokenCanister.icrc1_transfer(transferFromArgs);
     return (result);
@@ -665,27 +663,27 @@ actor AlphavaultRoot {
   // Deposit funds to sonic to be able to use swap function
   private func _depositFundsToSonic(
     userPosition : Position,
-    transaction : Transaction,
     sonicCanister : sonicActor,
+    depositAmount : Nat,
   ) : async TxReceipt {
-    let depositResult : TxReceipt = await sonicCanister.deposit(userPosition.tokens.sellToken, transaction.sellingAmount);
+    let depositResult : TxReceipt = await sonicCanister.deposit(userPosition.tokens.sellToken, depositAmount);
     return depositResult;
   };
 
-  // Deposit funds to sonic to be able to use swap function
+  // Swap Deposited funds by using swapExactTokensForTokens func from sonic
   private func _SwapExactTokensForTokens(
     userPosition : Position,
-    transaction : Transaction,
     sonicCanister : sonicActor,
+    swapAmount : Nat,
   ) : async TxReceipt {
     let sellToken = Principal.toText(userPosition.tokens.sellToken);
     let buyToken = Principal.toText(userPosition.tokens.buyToken);
-    let swapResult : TxReceipt = await sonicCanister.swapExactTokensForTokens(transaction.sellingAmount, 0, [sellToken, buyToken], userPosition.managerCanister, Time.now() + 300000000000);
+    let swapResult : TxReceipt = await sonicCanister.swapExactTokensForTokens(swapAmount, 0, [sellToken, buyToken], userPosition.managerCanister, Time.now() + 300000000000);
     return swapResult;
   };
 
   // Withdraw swapped funds from sonic
-  private func _WinthdrawFromSonic(
+  private func _WithdrawFromSonic(
     userPosition : Position,
     transaction : Transaction,
     sonicCanister : sonicActor,
@@ -713,6 +711,15 @@ actor AlphavaultRoot {
     };
     let result = await buyTokenCanister.icrc1_transfer(transferFromArgs);
     return (result);
+  };
+
+  private func _addToPlatformIncome(token : Principal, amount : Nat) {
+    let currentValueOfToken : Nat = switch (platformIncome.get(token)) {
+      case (null) { 0 };
+      case (?value) { value };
+    };
+
+    platformIncome.put(token, amount + currentValueOfToken);
   };
 
   // Cron timer function
@@ -751,7 +758,8 @@ actor AlphavaultRoot {
           switch (markAsInActive) {
             case (true) {
               let newPosition : Position = {
-                allowance = userPosition.allowance;
+                initialAllowance = userPosition.initialAllowance;
+                leftAllowance = userPosition.leftAllowance;
                 destination = userPosition.destination;
                 positionId = userPosition.positionId;
                 // TODO : Write the logic for changing the position status to successful or faild
@@ -833,7 +841,7 @@ actor AlphavaultRoot {
       let sonicCanister : sonicActor = sonicTypes._getSonicActor(sonicCanisterId);
       let reuslt : TxReceipt = await sonicCanister.withdraw(token, amount);
       switch (reuslt) {
-        case (#ok successId) { return "Transfer Failed" };
+        case (#ok successId) { return "Transfer Successful" };
         case _ { return "Transfer Failed" };
       };
     };
@@ -841,10 +849,20 @@ actor AlphavaultRoot {
 
   };
 
+  // Get platform income
+  public shared ({ caller }) func showPlatformIncome() : async Result.Result<[(Principal, Nat)], Text> {
+    if (caller == admin) {
+      return #ok(Iter.toArray(platformIncome.entries()));
+    };
+    return #err("You're not an admin");
+
+  };
+
   // System Functions
   // Pre-upgrade logic
   stable var usersPositionsArray : [Position] = [];
   stable var pairsArray : [Pair] = [];
+  stable var platformIncomeArray : [(Principal, Nat)] = [];
 
   system func preupgrade() {
 
@@ -853,6 +871,9 @@ actor AlphavaultRoot {
 
     //saving pairs in stable array
     pairsArray := Buffer.toArray(supportedPirs);
+
+    //saving platform incom
+    platformIncomeArray := Iter.toArray(platformIncome.entries());
   };
   // Post-upgrade logic
   system func postupgrade() {
@@ -866,5 +887,10 @@ actor AlphavaultRoot {
       supportedPirs.add(pair);
     };
     pairsArray := [];
+
+    for ((token, amount) in platformIncomeArray.vals()) {
+      platformIncome.put(token, amount);
+    };
+    platformIncomeArray := [];
   };
 };

@@ -1,0 +1,101 @@
+(
+    vec {
+        record {
+            destination = principal "matbl-u2myk-jsllo-b5aw6-bxboq-7oon2-h6wmo-awsxf-pcebc-4wpgx-4qe";
+            managerCanister = principal "vd7yn-iqaaa-aaaak-qdbxq-cai";
+            leftAllowance = 1000;
+            positionStatus = variant { InActive };
+            positionId = 0;
+            initialAllowance = 3000;
+            swaps = vec {
+                record {
+                    transactionTime = 1712516820;
+                    step1 = opt "Transaction faild. requested amount to transfer to our AV canister:990This does not include transfer fee";
+                    step2 = null;
+                    step3 = null;
+                    step4 = null;
+                    step5 = null;
+                    step6 = null;
+                    amountBought = opt 0;
+                    sellingAmount = 1000;
+                    transactionStatus = variant {
+                        Failed = variant {
+                            InsufficientAllowance = record { allowance = 0 };
+                        };
+                    };
+                    transactionId = 0;
+                };
+                record {
+                    transactionTime = 1712516940;
+                    step1 = opt "Success code:1351875";
+                    step2 = opt "Success code:1351876";
+                    step3 = opt "Successfully deposited 969 to sonic canister ";
+                    step4 = opt "Successfully Swapped1000For3930119Of buy token";
+                    step5 = opt "Successfully Withdrew3920119";
+                    step6 = opt "Transfer was successful, Amount sent to user's wallet: 3900119";
+                    amountBought = opt 3920119;
+                    sellingAmount = 1000;
+                    transactionStatus = variant { Successful };
+                    transactionId = 1;
+                };
+            };
+            tokens = record {
+                sellToken = principal "mxzaz-hqaaa-aaaar-qaada-cai";
+                buyToken = principal "ryjl3-tyaaa-aaaaa-aaaba-cai";
+            };
+        };
+        record {
+            destination = principal "matbl-u2myk-jsllo-b5aw6-bxboq-7oon2-h6wmo-awsxf-pcebc-4wpgx-4qe";
+            managerCanister = principal "vd7yn-iqaaa-aaaak-qdbxq-cai";
+            leftAllowance = 0;
+            positionStatus = variant { Active };
+            positionId = 0;
+            initialAllowance = 300000;
+            swaps = vec {
+                record {
+                    transactionTime = 1712520708;
+                    step1 = null;
+                    step2 = null;
+                    step3 = null;
+                    step4 = null;
+                    step5 = null;
+                    step6 = null;
+                    amountBought = opt 0;
+                    sellingAmount = 100000;
+                    transactionStatus = variant { Pending };
+                    transactionId = 0;
+                };
+                record {
+                    transactionTime = 1712520768;
+                    step1 = null;
+                    step2 = null;
+                    step3 = null;
+                    step4 = null;
+                    step5 = null;
+                    step6 = null;
+                    amountBought = opt 0;
+                    sellingAmount = 100000;
+                    transactionStatus = variant { Pending };
+                    transactionId = 1;
+                };
+                record {
+                    transactionTime = 1712520828;
+                    step1 = null;
+                    step2 = null;
+                    step3 = null;
+                    step4 = null;
+                    step5 = null;
+                    step6 = null;
+                    amountBought = opt 0;
+                    sellingAmount = 100000;
+                    transactionStatus = variant { Pending };
+                    transactionId = 2;
+                };
+            };
+            tokens = record {
+                sellToken = principal "ryjl3-tyaaa-aaaaa-aaaba-cai";
+                buyToken = principal "mxzaz-hqaaa-aaaar-qaada-cai";
+            };
+        };
+    }
+);

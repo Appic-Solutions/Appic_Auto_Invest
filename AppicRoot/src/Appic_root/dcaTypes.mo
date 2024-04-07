@@ -24,6 +24,7 @@ module {
         #GenericError : { message : Text; error_code : Nat };
         #Expired; //only for approve
         #CustomError : Text; // custom error for sonic logic
+
     };
 
     //Public Type for specifying the status of Auto Invest Position
@@ -61,18 +62,20 @@ module {
         destination : Principal; // Bought tokens final destination
         swaps : [Transaction]; // Array that contains all swaps, each of them with specific time
         positionStatus : PositionStatus;
-        allowance : Nat;
+        leftAllowance : Nat;
+        initialAllowance : Nat;
         managerCanister : Principal; // AlpahvaultRoot canister id
     };
 
     //Create Position Args
-    public type CreatePositionsArgs = {
+    public type CreatePositionArgs = {
         sellToken : Principal;
         buyToken : Principal;
-        destination : Principal; // Bought tokens final destination
         swapsTime : [Nat]; // Array that contains all swaps, each of them with specific time
         allowance : Nat;
         amountPerSwap : Nat;
+        destination : Principal;
+
     };
 
     public type PositionCreationError = {
@@ -85,11 +88,11 @@ module {
         #NotEnoughFee : { expectedFee : Nat; receivedFee : Nat };
         #TokenNotFound;
         #GenericError : { message : Text };
+        #SwapsTooClose : { message : Text };
     };
 
     public type AllowanceAmountResult = {
-        minAllowanceForApproveFunction : Nat;
-        minAllowanceForPositionCreation : Nat;
+        minAllowanceRequired : Nat;
     };
 
     public type GetAllowanceArgs = {
