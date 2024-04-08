@@ -41,6 +41,14 @@ type Result_1 =
    err: PositionCreationError;
    ok: nat;
  };
+type Result = 
+ variant {
+   err: text;
+   ok: vec record {
+             principal;
+             nat;
+           };
+ };
 type PositionTokens = 
  record {
    buyToken: principal;
@@ -52,7 +60,7 @@ type PositionStatus =
    Deleted;
    InActive;
  };
-type PositionId = nat64;
+type PositionId = nat;
 type PositionCreationError = 
  variant {
    AllowanceNotEnough:
@@ -66,6 +74,7 @@ type PositionCreationError =
                    receivedFee: nat;
                  };
    PositionInThePast;
+   SwapsTooClose: record {message: text;};
    TokenNotFound;
    WronmgAlloance: record {
                      expectedAllowance: nat;
@@ -74,8 +83,9 @@ type PositionCreationError =
  };
 type Position = 
  record {
-   allowance: nat;
    destination: principal;
+   initialAllowance: nat;
+   leftAllowance: nat;
    managerCanister: principal;
    positionId: PositionId;
    positionStatus: PositionStatus;
@@ -94,7 +104,7 @@ type GetAllowanceArgs =
    sellToken: principal;
    userPrincipal: principal;
  };
-type CreatePositionsArgs = 
+type CreatePositionArgs = 
  record {
    allowance: nat;
    amountPerSwap: nat;
@@ -103,15 +113,10 @@ type CreatePositionsArgs =
    sellToken: principal;
    swapsTime: vec nat;
  };
-type AllowanceAmountResult = 
- record {
-   minAllowanceForApproveFunction: nat;
-   minAllowanceForPositionCreation: nat;
- };
+type AllowanceAmountResult = record {minAllowanceRequired: nat;};
 service : {
   addPair: (principal, principal) -> (text);
-  calculateFee: (GetAllowanceArgs) -> (nat);
-  createPosition: (CreatePositionsArgs) -> (Result_1);
+  createPosition: (CreatePositionArgs) -> (Result_1);
   getAllPairs: () -> (vec Pair);
   getAllPositions: () -> (vec Position) query;
   getAllowanceForNewTrade: (GetAllowanceArgs) -> (AllowanceAmountResult);
@@ -120,6 +125,7 @@ service : {
   removePair: (principal, principal) -> (text);
   retreiveCaller: () -> (principal);
   retreiveTime: () -> (int);
+  showPlatformIncome: () -> (Result);
   transferTokens: (principal, principal, nat) -> (text);
   withdrawFromSonic: (principal, nat) -> (text);
 }

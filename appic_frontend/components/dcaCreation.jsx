@@ -19,7 +19,7 @@ export default function DcaCreation() {
   const [tokenModal, setTokenModal] = useState({ isActive: false, modalType: 'sell', tokens: [] }); // modalType: buy, sell
   const [transactionModal, setTransactionModal] = useState(false);
   const [transactionStep1, setTransationStep1] = useState('notTriggered'); // inProgress, notTriggered, Rejected, Fialed , Successful
-  const [transactionStep2, setTransationStep2] = useState('notTriggered'); // inProgress, notTriggered, Rejected, Fialed
+  const [transactionStep2, setTransationStep2] = useState('notTriggered'); // inProgress, notTriggered, Rejected, Fialeds
   const [transactionStepFailure, setTransactionStepFailure] = useState(null);
   const [DCAData, setDCAData] = useState({
     sellToken: null,

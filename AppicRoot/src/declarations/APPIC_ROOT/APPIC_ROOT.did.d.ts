@@ -2,11 +2,8 @@ import type { Principal } from '@dfinity/principal';
 import type { ActorMethod } from '@dfinity/agent';
 import type { IDL } from '@dfinity/candid';
 
-export interface AllowanceAmountResult {
-  'minAllowanceForPositionCreation' : bigint,
-  'minAllowanceForApproveFunction' : bigint,
-}
-export interface CreatePositionsArgs {
+export interface AllowanceAmountResult { 'minAllowanceRequired' : bigint }
+export interface CreatePositionArgs {
   'destination' : Principal,
   'swapsTime' : Array<bigint>,
   'sellToken' : Principal,
@@ -24,11 +21,12 @@ export interface Pair { 'sellToken' : Principal, 'buyToken' : Principal }
 export interface Position {
   'destination' : Principal,
   'managerCanister' : Principal,
+  'leftAllowance' : bigint,
   'positionStatus' : PositionStatus,
   'positionId' : PositionId,
+  'initialAllowance' : bigint,
   'swaps' : Array<Transaction>,
   'tokens' : PositionTokens,
-  'allowance' : bigint,
 }
 export type PositionCreationError = {
     'GenericError' : { 'message' : string }
@@ -47,7 +45,8 @@ export type PositionCreationError = {
       'receivedAllowance' : bigint,
     }
   } |
-  { 'NotEnoughFee' : { 'receivedFee' : bigint, 'expectedFee' : bigint } };
+  { 'NotEnoughFee' : { 'receivedFee' : bigint, 'expectedFee' : bigint } } |
+  { 'SwapsTooClose' : { 'message' : string } };
 export type PositionId = bigint;
 export type PositionStatus = { 'Active' : null } |
   { 'InActive' : null } |
@@ -56,6 +55,8 @@ export interface PositionTokens {
   'sellToken' : Principal,
   'buyToken' : Principal,
 }
+export type Result = { 'ok' : Array<[Principal, bigint]> } |
+  { 'err' : string };
 export type Result_1 = { 'ok' : bigint } |
   { 'err' : PositionCreationError };
 export interface Transaction {
@@ -90,8 +91,7 @@ export type TransactionStatus = { 'Failed' : TransactionFailureReason } |
   { 'Pending' : null };
 export interface _SERVICE {
   'addPair' : ActorMethod<[Principal, Principal], string>,
-  'calculateFee' : ActorMethod<[GetAllowanceArgs], bigint>,
-  'createPosition' : ActorMethod<[CreatePositionsArgs], Result_1>,
+  'createPosition' : ActorMethod<[CreatePositionArgs], Result_1>,
   'getAllPairs' : ActorMethod<[], Array<Pair>>,
   'getAllPositions' : ActorMethod<[], Array<Position>>,
   'getAllowanceForNewTrade' : ActorMethod<
@@ -105,6 +105,7 @@ export interface _SERVICE {
   'removePair' : ActorMethod<[Principal, Principal], string>,
   'retreiveCaller' : ActorMethod<[], Principal>,
   'retreiveTime' : ActorMethod<[], bigint>,
+  'showPlatformIncome' : ActorMethod<[], Result>,
   'transferTokens' : ActorMethod<[Principal, Principal, bigint], string>,
   'withdrawFromSonic' : ActorMethod<[Principal, bigint], string>,
 }

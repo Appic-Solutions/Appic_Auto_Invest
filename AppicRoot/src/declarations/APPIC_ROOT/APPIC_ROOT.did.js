@@ -1,11 +1,5 @@
 export const idlFactory = ({ IDL }) => {
-  const GetAllowanceArgs = IDL.Record({
-    'noOfSwaps' : IDL.Nat,
-    'userPrincipal' : IDL.Principal,
-    'sellToken' : IDL.Principal,
-    'amountPerSwap' : IDL.Nat,
-  });
-  const CreatePositionsArgs = IDL.Record({
+  const CreatePositionArgs = IDL.Record({
     'destination' : IDL.Principal,
     'swapsTime' : IDL.Vec(IDL.Nat),
     'sellToken' : IDL.Principal,
@@ -29,6 +23,7 @@ export const idlFactory = ({ IDL }) => {
       'receivedFee' : IDL.Nat,
       'expectedFee' : IDL.Nat,
     }),
+    'SwapsTooClose' : IDL.Record({ 'message' : IDL.Text }),
   });
   const Result_1 = IDL.Variant({
     'ok' : IDL.Nat,
@@ -43,7 +38,7 @@ export const idlFactory = ({ IDL }) => {
     'InActive' : IDL.Null,
     'Deleted' : IDL.Null,
   });
-  const PositionId = IDL.Nat64;
+  const PositionId = IDL.Nat;
   const TransactionFailureReason = IDL.Variant({
     'GenericError' : IDL.Record({
       'message' : IDL.Text,
@@ -86,20 +81,29 @@ export const idlFactory = ({ IDL }) => {
   const Position = IDL.Record({
     'destination' : IDL.Principal,
     'managerCanister' : IDL.Principal,
+    'leftAllowance' : IDL.Nat,
     'positionStatus' : PositionStatus,
     'positionId' : PositionId,
+    'initialAllowance' : IDL.Nat,
     'swaps' : IDL.Vec(Transaction),
     'tokens' : PositionTokens,
-    'allowance' : IDL.Nat,
+  });
+  const GetAllowanceArgs = IDL.Record({
+    'noOfSwaps' : IDL.Nat,
+    'userPrincipal' : IDL.Principal,
+    'sellToken' : IDL.Principal,
+    'amountPerSwap' : IDL.Nat,
   });
   const AllowanceAmountResult = IDL.Record({
-    'minAllowanceForPositionCreation' : IDL.Nat,
-    'minAllowanceForApproveFunction' : IDL.Nat,
+    'minAllowanceRequired' : IDL.Nat,
+  });
+  const Result = IDL.Variant({
+    'ok' : IDL.Vec(IDL.Tuple(IDL.Principal, IDL.Nat)),
+    'err' : IDL.Text,
   });
   return IDL.Service({
     'addPair' : IDL.Func([IDL.Principal, IDL.Principal], [IDL.Text], []),
-    'calculateFee' : IDL.Func([GetAllowanceArgs], [IDL.Nat], []),
-    'createPosition' : IDL.Func([CreatePositionsArgs], [Result_1], []),
+    'createPosition' : IDL.Func([CreatePositionArgs], [Result_1], []),
     'getAllPairs' : IDL.Func([], [IDL.Vec(Pair)], []),
     'getAllPositions' : IDL.Func([], [IDL.Vec(Position)], ['query']),
     'getAllowanceForNewTrade' : IDL.Func(
@@ -120,6 +124,7 @@ export const idlFactory = ({ IDL }) => {
     'removePair' : IDL.Func([IDL.Principal, IDL.Principal], [IDL.Text], []),
     'retreiveCaller' : IDL.Func([], [IDL.Principal], []),
     'retreiveTime' : IDL.Func([], [IDL.Int], []),
+    'showPlatformIncome' : IDL.Func([], [Result], []),
     'transferTokens' : IDL.Func(
         [IDL.Principal, IDL.Principal, IDL.Nat],
         [IDL.Text],

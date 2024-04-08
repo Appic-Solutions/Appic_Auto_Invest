@@ -1,15 +1,10 @@
 'use client';
 import darkModeClassnamegenerator from '@/utils/darkClassGenerator';
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import CenteredMainTitle from './higerOrderComponents/centeredMainTitle';
 import BigNumber from 'bignumber.js';
-import WalletNotConnected from './walletNotConnectd';
 import { formatDecimalValue } from '@/helper/number_formatter';
-import { changePageTitle } from '@/redux/features/pageData';
 import Link from 'next/link';
-import DcaCreation from './dcaCreation';
-export default function DcaPositions({ positionStatus, children }) {
+export default function DcaPositions({ positionStatus }) {
   const activeDcaPositions = [];
   const completedDcaPositions = [];
   return (

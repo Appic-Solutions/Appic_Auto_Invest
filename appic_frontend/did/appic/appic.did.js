@@ -38,7 +38,7 @@ export const AppicIdlFactory = ({ IDL }) => {
     InActive: IDL.Null,
     Deleted: IDL.Null,
   });
-  const PositionId = IDL.Nat64;
+  const PositionId = IDL.Nat;
   const TransactionFailureReason = IDL.Variant({
     GenericError: IDL.Record({
       message: IDL.Text,
@@ -116,6 +116,4 @@ export const AppicIdlFactory = ({ IDL }) => {
     withdrawFromSonic: IDL.Func([IDL.Principal, IDL.Nat], [IDL.Text], []),
   });
 };
-export const init = ({ IDL }) => {
-  return [];
-};
+

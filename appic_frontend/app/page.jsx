@@ -5,7 +5,6 @@ import WalletTokens from '@/components/walletTokens';
 
 import { useDispatch, useSelector } from 'react-redux';
 import LoadingComponent from '@/components/higerOrderComponents/loadingComponent';
-import { changePageTitle } from '@/redux/features/pageData';
 import Sidebar from '@/components/sidebar';
 import DCA from '@/components/dcaRoot';
 export default function Home() {

@@ -18,6 +18,7 @@ import Modal from './higerOrderComponents/modal';
 import { useSupportedPairs } from '@/hooks/getSupportedPairs';
 import LoadingComponent from './higerOrderComponents/loadingComponent';
 import { useSupportedWallets } from '@/hooks/getSuppoortedWallets';
+import { useUserDcaPositions } from '@/hooks/getUserDCAPositions';
 
 function WalletConnectM() {
   const dispatch = useDispatch();
@@ -59,6 +60,8 @@ function WalletConnectM() {
   const { principalAssetsError } = useBalances(isWalletConnected, principalID, accoundID, supportedTokens);
   //  Fetch Supported pairs from Appic canister
   const { getSupportedPairsError } = useSupportedPairs(assets, supportedTokens);
+  //  Get All user DCA positions
+  const {} = useUserDcaPositions(principalID, supportedTokens);
   // TODO: Handle errors via a notification bar
   // Events
 
