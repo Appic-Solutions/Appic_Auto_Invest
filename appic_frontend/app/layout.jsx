@@ -15,7 +15,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
         <ReduxProvider>
-          <Sidebar />
+          {/* <Sidebar /> */}
           <Background>
             <WalletConnectM />
             <Portfolio />

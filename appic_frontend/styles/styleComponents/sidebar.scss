@@ -166,141 +166,16 @@
         color: $light-secondary;
       }
     }
-
-    .switcherContainer {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      margin: 1rem;
-      justify-content: space-between;
-      p {
-        @include text(laptop);
-        //    display: none;
-        font-size: 1rem;
-        width: auto;
-        // overflow: hidden;
-        transition: all ease 0.5s;
-        color: #9b9b9b;
+    .sidebar__options.Locked {
+      cursor: not-allowed;
+      svg {
+        fill: rgba(0, 0, 0, 0.15);
       }
-      .navbar__themeSwitcher {
-        .checkbox {
-          opacity: 0;
-          position: absolute;
-        }
-
-        .checkbox-label {
-          background-color: $light-bg;
-          width: 50px;
-          height: 26px;
-          border-radius: 50px;
-          position: relative;
-          padding: 1rem;
-          cursor: pointer;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-        }
-
-        .fa-moon {
-          fill: $light-secondary;
-          height: 1.25em;
-          width: 40%;
-        }
-
-        .fa-sun {
-          fill: $light-secondary;
-          height: 1.25em;
-          width: 40%;
-        }
-
-        .checkbox-label .ball {
-          background-color: $light-primary;
-          width: 17px;
-          height: 17px;
-          position: absolute;
-          left: 6px;
-          top: 4px;
-          border-radius: 50%;
-          transition: transform 0.2s linear;
-        }
-
-        .checkbox:checked + .checkbox-label .ball {
-          transform: translateX(21px);
-        }
-        &.dark {
-          border-top: none;
-          border-right: 1px solid $dark-tertiary;
-          .checkbox {
-          }
-
-          .checkbox-label {
-            background-color: $dark-bg;
-          }
-
-          .fa-moon {
-            fill: $dark-secondary;
-          }
-
-          .fa-sun {
-            fill: $dark-secondary;
-          }
-
-          .checkbox-label .ball {
-            background-color: $dark-primary;
-          }
-
-          .checkbox:checked + .checkbox-label .ball {
-          }
-        }
+      p {
+        color: rgba(0, 0, 0, 0.15);
       }
     }
 
-    // &:hover {
-    //     padding: 0rem 3rem 0 1.5rem;
-
-    //     min-width: 10vw;
-    //     transition: all ease 0.5s;
-    //     .sidebar__options {
-    //         transition: all ease 0.5s;
-
-    //         svg {
-    //             margin-right: 2rem;
-    //             transition: all ease 0.5s;
-    //         }
-    //         p {
-    //             width: auto;
-    //             overflow: hidden;
-    //             transition: all ease 0.5s;
-    //         }
-    //     }
-    // }
-
-    // &.active {
-    //     padding: 0rem 3rem 0 1.5rem;
-
-    //     min-width: 12vw;
-    //     tran sition: all ease 0.5s;
-    //     .sidebar__options {
-    //         transition: all ease 0.5s;
-
-    //         svg {
-    //             margin-right: 2rem;
-    //             transition: all ease 0.5s;
-    //         }
-    //         p {
-    //             width: auto;
-    //             transition: all ease 0.5s;
-    //         }
-    //     }
-    //     .sidebar__options:hover {
-    //         svg {
-    //             fill: $light-secondary;
-    //         }
-    //         p {
-    //             color: $light-secondary;
-    //         }
-    //     }
-    // }
     &.dark {
       background-color: $dark-box-bg;
       border-top: none;
@@ -413,6 +288,15 @@
         color: $light-secondary;
       }
     }
+    .sidebar__options.Locked {
+      cursor: not-allowed;
+      svg {
+        fill: rgba(0, 0, 0, 0.15);
+      }
+      p {
+        color: rgba(0, 0, 0, 0.15);
+      }
+    }
 
     .switcherContainer {
       display: flex;
@@ -503,52 +387,6 @@
       }
     }
 
-    // &:hover {
-    //     padding: 0rem 3rem 0 1.5rem;
-
-    //     min-width: 10vw;
-    //     transition: all ease 0.5s;
-    //     .sidebar__options {
-    //         transition: all ease 0.5s;
-
-    //         svg {
-    //             margin-right: 2rem;
-    //             transition: all ease 0.5s;
-    //         }
-    //         p {
-    //             width: auto;
-    //             overflow: hidden;
-    //             transition: all ease 0.5s;
-    //         }
-    //     }
-    // }
-
-    // &.active {
-    //     padding: 0rem 3rem 0 1.5rem;
-
-    //     min-width: 12vw;
-    //     tran sition: all ease 0.5s;
-    //     .sidebar__options {
-    //         transition: all ease 0.5s;
-
-    //         svg {
-    //             margin-right: 2rem;
-    //             transition: all ease 0.5s;
-    //         }
-    //         p {
-    //             width: auto;
-    //             transition: all ease 0.5s;
-    //         }
-    //     }
-    //     .sidebar__options:hover {
-    //         svg {
-    //             fill: $light-secondary;
-    //         }
-    //         p {
-    //             color: $light-secondary;
-    //         }
-    //     }
-    // }
     &.dark {
       border-top: none;
       border-right: 1px solid $dark-border;

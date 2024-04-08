@@ -9,11 +9,18 @@ import Modal from './higerOrderComponents/modal';
 import { applyDecimals, formatDecimalValue } from '@/helper/number_formatter';
 import { getPositionNumber } from '@/helper/helperFunc';
 import { artemisWalletAdapter } from '@/utils/walletConnector';
+import { AppicIdlFactory, icrcIdlFactory } from '@/did';
+import { Principal } from '@dfinity/principal';
+import canistersIDs from '@/config/canistersIDs';
+import { BatchTransact } from '@/artemis-web3-adapter';
 
 export default function DcaCreation() {
   const dispatch = useDispatch();
   const [tokenModal, setTokenModal] = useState({ isActive: false, modalType: 'sell', tokens: [] }); // modalType: buy, sell
   const [transactionModal, setTransactionModal] = useState(false);
+  const [transactionStep1, setTransationStep1] = useState('notTriggered'); // inProgress, notTriggered, Rejected, Fialed , Successful
+  const [transactionStep2, setTransationStep2] = useState('notTriggered'); // inProgress, notTriggered, Rejected, Fialed
+  const [transactionStepFailure, setTransactionStepFailure] = useState(null);
   const [DCAData, setDCAData] = useState({
     sellToken: null,
     buyToken: null,
@@ -353,8 +360,79 @@ export default function DcaCreation() {
     }
   };
 
-  const handleCreateDca = () => {
+  const handleCreateDca = async () => {
     setTransactionModal(true);
+    setTransationStep1('inProgress');
+    // Get swap times in unix standard time
+
+    try {
+      // Define Appic Actor
+      let AppicActor = await artemisWalletAdapter.getCanisterActor(canistersIDs.APPIC_ROOT, AppicIdlFactory, false);
+      // Call getAllowanceForNewTrade to get required allowance for approve function
+      const allowanceForNewTrade = await AppicActor.getAllowanceForNewTrade({
+        noOfSwaps: DCAData.swapsNo,
+        userPrincipal: Principal.fromText(principalID),
+        sellToken: Principal.fromText(DCAData.sellToken.id),
+        amountPerSwap: BigNumber(DCAData.amoutPerSwap)
+          .multipliedBy(10 ** DCAData.sellToken.decimals)
+          .toNumber(),
+      });
+      const transactions = {
+        approval: {
+          canisterId: DCAData.sellToken.id,
+          idl: icrcIdlFactory,
+          methodName: 'icrc2_approve',
+          args: [
+            {
+              fee: [],
+              memo: [],
+              from_subaccount: [],
+              created_at_time: [],
+              expected_allowance: [],
+              expires_at: [],
+              amount: allowanceForNewTrade.minAllowanceRequired,
+              spender: { owner: Principal.fromText(canistersIDs.APPIC_ROOT), subaccount: [] },
+            },
+          ],
+        },
+      };
+
+      // Execute transaction for calling approve function
+      let transactionsList = new BatchTransact(transactions, artemisWalletAdapter);
+      await transactionsList.execute();
+      if (transactionsList.completed.length == 1) {
+        setTransationStep1('Successful');
+        setTransationStep2('inProgress');
+      } else {
+        setTransationStep1('Failed');
+        return;
+      }
+      // Generate swapsTimes from timeline for creating position
+      const swapsTime = DCAData.timeLine.map((swapTime) => swapTime.getTime() / 1000);
+
+      // Call createPosition to create the position
+      let positionResult = await AppicActor.createPosition({
+        destination: Principal.fromText(principalID),
+        swapsTime: swapsTime,
+        sellToken: Principal.fromText(DCAData.sellToken.id),
+        allowance: BigNumber(DCAData.amoutPerSwap)
+          .multipliedBy(DCAData.swapsNo)
+          .multipliedBy(10 ** DCAData.sellToken.decimals)
+          .toNumber(),
+        buyToken: Principal.fromText(DCAData.buyToken.id),
+        amountPerSwap: BigNumber(DCAData.amoutPerSwap)
+          .multipliedBy(10 ** DCAData.sellToken.decimals)
+          .toNumber(),
+      });
+      setTransationStep2('Successful');
+    } catch (error) {
+      if (error.message == 'The transaction was rejected.') {
+        setTransationStep1('Failed');
+        setTransactionStepFailure('The transaction was rejected');
+      }
+      console.log(error.message);
+      setTransactionStepFailure(error.message);
+    }
   };
 
   return (
@@ -677,7 +755,9 @@ export default function DcaCreation() {
                   <h3 className="title">Timeline</h3>
                   <div className="timelineContainer">
                     <div className="timelineHolder">
-                      {DCAData.swapsNo > 1 && <div key={'shape'} className={`timelineShape ${DCAData.timeLine.length == 0 && 'skeleton'}`}></div>}
+                      {(DCAData.swapsNo == '' || DCAData.swapsNo > 1) && (
+                        <div key={'shape'} className={`timelineShape ${DCAData.timeLine.length == 0 && 'skeleton'}`}></div>
+                      )}
 
                       {/* Timeline swaps */}
                       {/* Skeleton */}
@@ -863,30 +943,69 @@ export default function DcaCreation() {
           </div>
           <div className="stepContainer Approval">
             <h1>Step 1</h1>
-            <div className="imagesContainer active">
+            <div
+              className={`imagesContainer ${transactionStep1 == 'inProgress' ? 'active' : ''} ${transactionStep1 == 'Failed' ? 'Failed' : ''} ${
+                transactionStep1 == 'Successful' ? 'Successful' : ''
+              }`}
+            >
               <div className="iconLoading">
                 <div className="coverBG"></div>
                 <div className="rotator"></div>
               </div>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                <path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24V264c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z" />
-              </svg>
+              {transactionStep1 == 'inProgress' && (
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                  <path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24V264c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z" />
+                </svg>
+              )}
+              {transactionStep1 == 'Successful' && (
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                  <path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z" />
+                </svg>
+              )}
+              {transactionStep1 == 'Failed' && (
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                  <path d="M367.2 412.5L99.5 144.8C77.1 176.1 64 214.5 64 256c0 106 86 192 192 192c41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3C434.9 335.9 448 297.5 448 256c0-106-86-192-192-192c-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z" />
+                </svg>
+              )}
             </div>
-            <p className="transactionDetail">Please approve the transaction </p>
+            <p className="transactionDetail">{transactionStep1 == 'Failed' ? transactionStepFailure : 'Please approve the transaction.'}</p>
           </div>
           <div className="stepContainer dcaCreation">
             <h1>Step 2</h1>
-            <div className="imagesContainer">
+            <div
+              className={`imagesContainer ${transactionStep2 == 'inProgress' ? 'active' : ''} ${transactionStep2 == 'Failed' ? 'Failed' : ''} ${
+                transactionStep2 == 'Successful' ? 'Successful' : ''
+              }`}
+            >
               <div className="iconLoading">
                 <div className="coverBG"></div>
 
                 <div className="rotator"></div>
               </div>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                <path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z" />
-              </svg>
+              {transactionStep2 == 'notTriggered' && (
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                  <path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24V264c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z" />
+                </svg>
+              )}
+              {transactionStep2 == 'inProgress' && (
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                  <path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24V264c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z" />
+                </svg>
+              )}
+              {transactionStep2 == 'Successful' && (
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                  <path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z" />
+                </svg>
+              )}
+              {transactionStep2 == 'Failed' && (
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                  <path d="M367.2 412.5L99.5 144.8C77.1 176.1 64 214.5 64 256c0 106 86 192 192 192c41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3C434.9 335.9 448 297.5 448 256c0-106-86-192-192-192c-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z" />
+                </svg>
+              )}
             </div>
-            <p className="transactionDetail">PLease wait until the position is created</p>
+            <p className="transactionDetail">
+              {transactionStep2 == 'Failed' ? transactionStepFailure : 'Please Wait until the position is created.'}
+            </p>
           </div>
         </div>
       </Modal>

@@ -56,6 +56,7 @@
       align-items: center;
       justify-content: center;
       .iconLoading {
+        display: none;
         position: absolute;
         width: 73px;
         height: 73px;
@@ -97,10 +98,29 @@
       }
 
       svg {
-        fill: $light-secondary;
+        fill: $light-skeleton;
         width: 65px;
         height: 65px;
         z-index: 3;
+      }
+
+      &.active {
+        .iconLoading {
+          display: block;
+        }
+        svg {
+          fill: $light-secondary;
+        }
+      }
+      &.Failed {
+        svg {
+          fill: $light-percentageDown;
+        }
+      }
+      &.Successful {
+        svg {
+          fill: $light-percentageUP !important;
+        }
       }
     }
     .transactionDetail {
@@ -191,6 +211,7 @@
         align-items: center;
         justify-content: center;
         .iconLoading {
+          display: none;
           position: absolute;
           width: 65px;
           height: 65px;
@@ -232,10 +253,28 @@
         }
 
         svg {
-          fill: $light-secondary;
+          fill: $light-skeleton;
           width: 56px;
           height: 56px;
           z-index: 3;
+        }
+        &.active {
+          .iconLoading {
+            display: block;
+          }
+          svg {
+            fill: $light-secondary;
+          }
+        }
+        &.Failed {
+          svg {
+            fill: $light-percentageDown;
+          }
+        }
+        &.Successful {
+          svg {
+            fill: $light-percentageUP !important;
+          }
         }
       }
       .transactionDetail {

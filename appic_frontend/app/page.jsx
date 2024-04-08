@@ -6,10 +6,26 @@ import WalletTokens from '@/components/walletTokens';
 import { useDispatch, useSelector } from 'react-redux';
 import LoadingComponent from '@/components/higerOrderComponents/loadingComponent';
 import { changePageTitle } from '@/redux/features/pageData';
+import Sidebar from '@/components/sidebar';
+import DCA from '@/components/dcaRoot';
 export default function Home() {
   const dispatch = useDispatch();
-  const isWalletConnected = useSelector((state) => state.wallet.items.isWalletConnected);
+  const [activeComponent, setActiveComponent] = useState('');
 
-  return <main className={darkModeClassnamegenerator('mainPage')}>{isWalletConnected && <WalletTokens />}</main>;
+  const isWalletConnected = useSelector((state) => state.wallet.items.isWalletConnected);
+  return (
+    <>
+      <Sidebar setActiveComponent={setActiveComponent} activeComponent={activeComponent} />
+      <main className={darkModeClassnamegenerator('mainPage')}>
+        {isWalletConnected && (
+          <>
+            {activeComponent == '' && <WalletTokens />}
+            {activeComponent == 'DCA' && <DCA></DCA>}
+          </>
+        )}
+      </main>
+      ;
+    </>
+  );
 }
 
