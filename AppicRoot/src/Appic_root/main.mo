@@ -6,11 +6,14 @@ import Int "mo:base/Int";
 import Iter "mo:base/Iter";
 import Nat "mo:base/Nat";
 import Nat64 "mo:base/Nat64";
+import Nat32 "mo:base/Nat32";
 import Principal "mo:base/Principal";
 import Result "mo:base/Result";
 import Text "mo:base/Text";
 import Time "mo:base/Time";
 import { recurringTimer } "mo:base/Timer";
+import TrieMap "mo:base/TrieMap";
+import Hash "mo:base/Hash";
 
 import dcaTypes "dcaTypes";
 import icrcTypes "icrcTypes";
@@ -55,8 +58,9 @@ actor AlphavaultRoot {
 
   // Buffer for supported pairs
   let supportedPirs = Buffer.Buffer<Pair>(0);
+
   // Buffer for keeping active positions
-  let activePositions = Buffer.Buffer<Position>(0);
+  let activePositions = TrieMap.TrieMap<PositionId, Position>(Nat.equal, Hash.hash);
 
   //
   let platformIncome = HashMap.HashMap<Principal, Nat>(0, Principal.equal, Principal.hash);
@@ -71,23 +75,23 @@ actor AlphavaultRoot {
     };
 
     // 1: Check if entered unix swap times are not in the past
-    // 2: Check if the the duration between each trade is at least 1 hour
-    for (swapTime in createPositionArgs.swapsTime.vals()) {
+    // 2: Check if the the duration between each trade is at least 23 hours
+    for (swapTime : Nat in createPositionArgs.swapsTime.vals()) {
       // 1
       if (swapTime < utils.nanoToSecond(Time.now())) {
         return (#err(#PositionInThePast));
       };
 
       // 2
-      for (transactionTime in createPositionArgs.swapsTime.vals()) {
+      for (transactionTime : Nat in createPositionArgs.swapsTime.vals()) {
         if (transactionTime > swapTime) {
-          if (transactionTime - swapTime < 3600) {
-            return (#err(#SwapsTooClose { message = "The difference between swap times should be at least 1 hour " }));
+          if (transactionTime - swapTime < 82800) {
+            return (#err(#SwapsTooClose { message = "The difference between swap times should be at least 23 hours " }));
           };
         };
         if (swapTime > transactionTime) {
-          if (swapTime - transactionTime < 3600) {
-            return (#err(#SwapsTooClose { message = "The difference between swap times should be at least 1 hour " }));
+          if (swapTime - transactionTime < 82800) {
+            return (#err(#SwapsTooClose { message = "The difference between swap times should be at least 23 hours " }));
           };
         };
       };
@@ -159,7 +163,9 @@ actor AlphavaultRoot {
     // Save created new position arg
     // Check if user principal already existes in hashmap
 
-    activePositions.add(newPosition);
+    activePositions.put(nextPositionId, newPosition);
+
+    nextPositionId += 1;
 
     return #ok(1);
   };
@@ -244,13 +250,17 @@ actor AlphavaultRoot {
 
   // Get all active positions
   public shared query func getAllPositions() : async [Position] {
-    return Buffer.toArray(activePositions);
+    return Iter.toArray(activePositions.vals());
   };
 
   // Get active positions by principal id of a specific user public
   public shared query func getPositionsFor(userPrincipal : Principal, sellToken : ?Principal, buyToken : ?Principal, active : ?Bool) : async [Position] {
+    // convert activePositions hashmap to a buffer of only values
+    let positionsBuffer = Buffer.fromIter<Position>(activePositions.vals());
+
+    // Filter positions buffer based on the arguments provided
     let filteredByPrincipal = Buffer.mapFilter<Position, Position>(
-      activePositions,
+      positionsBuffer,
       func(position : Position) {
         if (position.destination == userPrincipal) {
           return ?position;
@@ -292,8 +302,12 @@ actor AlphavaultRoot {
 
   // Get active positions by principal id of a specific user and if token id is provided result should be filtered by token id
   private func _getPositionsFor(userPrincipal : Principal, sellToken : ?Principal, buyToken : ?Principal, active : ?Bool) : [Position] {
+    // convert activePositions hashmap to a buffer of only values
+    let positionsBuffer = Buffer.fromIter<Position>(activePositions.vals());
+
+    // Filter positions buffer based on the arguments provided
     let filteredByPrincipal = Buffer.mapFilter<Position, Position>(
-      activePositions,
+      positionsBuffer,
       func(position : Position) {
         if (position.destination == userPrincipal) {
           return ?position;
@@ -350,10 +364,20 @@ actor AlphavaultRoot {
   private func _proccedTransaction(
     userPosition : Position,
     transaction : Transaction,
-    positionIndex : Nat,
-    transactionIndex : Nat,
-
   ) : async () {
+    var positionId = userPosition.positionId;
+    var transactionId = transaction.transactionId;
+    // Check if the transaction has already started by previous cron
+    let positionsLiveData = activePositions.get(positionId);
+    switch (positionsLiveData) {
+      case (?value) {
+        if (value.swaps[transactionId].transactionStatus != #NotTriggered) {
+          return;
+        };
+      };
+      case (null) {};
+    };
+
     // Set the status to pending
     // Generate the new transaction object
     var newTransactionForPending : Transaction = {
@@ -372,7 +396,7 @@ actor AlphavaultRoot {
 
     // Save new user positions
     let newTransactionsArrayForPending = Buffer.fromArray<Transaction>(userPosition.swaps);
-    newTransactionsArrayForPending.put(transactionIndex, newTransactionForPending);
+    newTransactionsArrayForPending.put(transactionId, newTransactionForPending);
 
     // Generate new Position
     let newPositionForPending : Position = {
@@ -388,7 +412,7 @@ actor AlphavaultRoot {
     };
 
     // Save updated Positions into active position buffer
-    activePositions.put(positionIndex, newPositionForPending);
+    activePositions.put(positionId, newPositionForPending);
 
     // Starting the swap process
 
@@ -577,9 +601,9 @@ actor AlphavaultRoot {
     };
 
     // Save new user positions with updated transaction
-
+    // Since the time difference between each swap of a transaction is at least one hour the wont be any conflict on saving data here
     let newTransactionsArray = Buffer.fromArray<Transaction>(userPosition.swaps);
-    newTransactionsArray.put(transactionIndex, newTransaction);
+    newTransactionsArray.put(transactionId, newTransaction);
 
     // Generate new Position
     let newPosition : Position = {
@@ -595,7 +619,7 @@ actor AlphavaultRoot {
     };
 
     // Save updated Positions into active position buffer
-    activePositions.put(positionIndex, newPosition);
+    activePositions.put(positionId, newPosition);
 
     // Add to platform income
     _addToPlatformIncome(userPosition.tokens.sellToken, calculatedPlatformFee);
@@ -724,9 +748,8 @@ actor AlphavaultRoot {
 
   // Cron timer function
   private func cronTimer() : async () {
-    // Create a clone of buffer to iterate over to prevent errors while updating the main buffer
-    let positionsToIteratreOver = Buffer.clone(activePositions);
-    var positionIndex = 0;
+    // Create a buffer of activePosition hashmap to Iterate over
+    let positionsToIteratreOver = Buffer.fromIter<Position>(activePositions.vals());
 
     // Iterating over all active posittions
     for (userPosition in positionsToIteratreOver.vals()) {
@@ -734,7 +757,6 @@ actor AlphavaultRoot {
       switch (userPosition.positionStatus) {
         case (#Active) {
           var markAsInActive = true;
-          var transactionIndex = 0;
           // Iterating over transactions of a poisition
           for (transaction in userPosition.swaps.vals()) {
             // Checking the transaction status
@@ -746,12 +768,11 @@ actor AlphavaultRoot {
               case (#NotTriggered) {
                 markAsInActive := false;
                 if (transaction.transactionTime <= utils.nanoToSecond(Time.now())) {
-                  await _proccedTransaction(userPosition, transaction, positionIndex, transactionIndex);
+                  await _proccedTransaction(userPosition, transaction);
                 };
               };
               case _ {};
             };
-            transactionIndex += 1;
           };
 
           //If all the transactions are triggered put the position status as #InActive
@@ -768,7 +789,7 @@ actor AlphavaultRoot {
                 swaps = userPosition.swaps;
                 managerCanister = userPosition.managerCanister;
               };
-              activePositions.put(positionIndex, newPosition);
+              activePositions.put(userPosition.positionId, newPosition);
             };
             case (false) {};
           };
@@ -777,8 +798,6 @@ actor AlphavaultRoot {
 
         };
       };
-
-      positionIndex += 1;
     };
     return ();
   };
@@ -860,14 +879,14 @@ actor AlphavaultRoot {
 
   // System Functions
   // Pre-upgrade logic
-  stable var usersPositionsArray : [Position] = [];
+  stable var usersPositionsArray : [(PositionId, Position)] = [];
   stable var pairsArray : [Pair] = [];
   stable var platformIncomeArray : [(Principal, Nat)] = [];
 
   system func preupgrade() {
 
     //saving active positions in a stable array
-    usersPositionsArray := Buffer.toArray(activePositions);
+    usersPositionsArray := Iter.toArray(activePositions.entries());
 
     //saving pairs in stable array
     pairsArray := Buffer.toArray(supportedPirs);
@@ -877,9 +896,9 @@ actor AlphavaultRoot {
   };
   // Post-upgrade logic
   system func postupgrade() {
-    for (userPosition in usersPositionsArray.vals()) {
+    for ((positionId, userPosition) in usersPositionsArray.vals()) {
       //putting active positions from a stable array
-      activePositions.add(userPosition);
+      activePositions.put(positionId, userPosition);
     };
     usersPositionsArray := [];
 

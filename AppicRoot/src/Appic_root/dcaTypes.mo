@@ -2,7 +2,7 @@ import Text "mo:base/Text";
 import Principal "mo:base/Principal";
 import Result "mo:base/Result";
 module {
-    public type PositionId = Nat64;
+    public type PositionId = Nat;
 
     //Public Type for specifying the status of each transaction after a swap has been completed at regular intervals
     public type TransactionStatus = {
