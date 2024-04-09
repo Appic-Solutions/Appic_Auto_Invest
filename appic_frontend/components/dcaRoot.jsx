@@ -53,7 +53,9 @@ export default function DCA() {
 
       {(positionStatus == 'active' || positionStatus == 'inactive') && <DcaPositions positionStatus={positionStatus}></DcaPositions>}
 
-      {(positionStatus == 'dca' || positionStatus == 'takeProfit' || positionStatus == 'stopLoss') && <DcaCreation />}
+      {(positionStatus == 'dca' || positionStatus == 'takeProfit' || positionStatus == 'stopLoss') && (
+        <DcaCreation setPositionStatus={setPositionStatus} />
+      )}
     </div>
   );
 }

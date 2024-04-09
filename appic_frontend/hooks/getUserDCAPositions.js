@@ -42,7 +42,9 @@ export const useUserDcaPositions = (userPrinciplaId, supportedTokens) => {
 function _formatPositions(positions, supportedTokens) {
   return positions.map((position) => {
     // Parse swaps object
+    let executed = 0;
     const swaps = position.swaps.map((swap) => {
+      if (Object.keys(swap.transactionStatus)[0] != 'NotTriggered' && Object.keys(swap.transactionStatus)[0] != 'Pending') executed += 1;
       return {
         amountBought: swap.amountBought.length == 0 ? null : BigNumber(swap.amountBought).toString(),
         sellingAmount: BigNumber(swap.sellingAmount).toString(),
@@ -54,13 +56,16 @@ function _formatPositions(positions, supportedTokens) {
         step6: swap.step1.length == 1 ? null : swap.step6,
         transactionId: BigNumber(swap.transactionId).toString(),
         transactionStatus: Object.keys(swap.transactionStatus)[0],
-        transactionTime: BigNumber(swap.transactionTime).toString(),
+        transactionTime: BigNumber(swap.transactionTime).toNumber(),
       };
     });
 
     // Find Buy token and sell token
     const sellToken = supportedTokens.find((token) => token.id == position.tokens.sellToken.toString());
     const buyToken = supportedTokens.find((token) => token.id == position.tokens.buyToken.toString());
+
+    // Get Position Interval
+    const interval = getIntervalType(new Date(swaps[0].transactionTime), new Date(swaps[1].transactionTime), new Date(swaps[2].transactionTime));
 
     // Parse Position object
     return {
@@ -73,7 +78,23 @@ function _formatPositions(positions, supportedTokens) {
       swaps: swaps,
       sellToken,
       buyToken,
+      interval,
+      executed,
     };
   });
+}
+
+function getIntervalType(date1, date2, date3) {
+  const diffInDays1 = Math.abs((date1 - date2) / (60 * 60 * 24));
+  const diffInDays2 = Math.abs((date2 - date3) / (60 * 60 * 24));
+  if (diffInDays1 === 1 && diffInDays2 === 1) {
+    return 'Daily';
+  } else if (diffInDays1 === 7 && diffInDays2 === 7) {
+    return 'Weekly';
+  } else if (date2.getMonth() === date1.getMonth() + 1 && date3.getMonth() === date2.getMonth() + 1) {
+    return 'Monthly';
+  } else {
+    return 'Custom';
+  }
 }
 

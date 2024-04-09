@@ -104,3 +104,39 @@ export function getPositionNumber(index, isFinal = false) {
   }
 }
 
+// get WeekDay by nuumber
+const getWeekDayString = (weekNumber) => {
+  var weekdays = ['Sun', 'Mon', 'Tues', 'Wednes', 'Thurs', 'Fri', 'Sat'];
+  return weekdays[weekNumber];
+};
+
+// Format date for timeline
+export const formatDate = (date) => {
+  console.log(date);
+  // Extract day, month, and year
+  let day = date.getDate();
+  let month = date.getMonth() + 1; // Months are zero-indexed, so we add 1
+  let year = date.getFullYear();
+  let hour = date.getHours();
+  let minute = date.getMinutes();
+  let weekDay = getWeekDayString(date.getDay());
+
+  if (hour < 10) {
+    hour = '0' + String(hour);
+  }
+  if (minute < 10) {
+    minute = '0' + String(minute);
+  }
+  // Convert date to string
+  var dateString = date.toString();
+
+  // Split the string by spaces
+  var parts = dateString.split(' ');
+
+  // Extract the time zone information
+  var timeZone = parts[parts.length - 3] + ' ' + parts[parts.length - 1];
+
+  // Format the date in non-American way (day-month-year)
+  return `${weekDay}, ${day}/${month}/${year}, ${hour}:${minute} ${timeZone}`;
+};
+

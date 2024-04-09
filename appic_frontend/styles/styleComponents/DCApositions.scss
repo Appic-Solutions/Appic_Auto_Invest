@@ -1,0 +1,530 @@
+// new dca
+.dca__list {
+  width: 100%;
+  background-color: $light-box-bg;
+  border-radius: 15px;
+
+  margin-top: 2rem;
+  padding: 1.5rem 1rem;
+  width: 100%;
+  .empty_history {
+    text-align: center;
+    img {
+      width: 12rem;
+      height: 12rem;
+    }
+    p {
+      font-weight: 500;
+      font-size: 12px;
+      color: $light-primary;
+    }
+  }
+  .header {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 20% 20% 20% 20% 20% 20%;
+    margin: 0;
+    font-weight: 600;
+    color: $light-secondary;
+    font-size: 1.3rem;
+    justify-items: center;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #d9d9d9;
+
+    .buyingDesktop {
+      display: none;
+    }
+  }
+
+  .position {
+    background: none;
+    border-bottom: 1px solid #d9d9d9;
+    border-radius: 0;
+    box-shadow: none;
+    display: grid;
+    grid-template-columns: 20% 20% 20% 20% 20% 20%;
+    justify-items: center;
+    align-items: center;
+    padding: 0;
+    color: $light-primary;
+    padding: 1rem 0;
+    font-weight: 500;
+    font-size: 1.2rem;
+    margin: 0;
+
+    .sellingToken {
+      // display: flex;
+      // gap: 1rem;
+      // align-items: center;
+      img {
+        width: 26px;
+        height: 26px;
+      }
+
+      h3 {
+        font-weight: 500;
+        font-size: 1.2rem;
+      }
+    }
+
+    .position__delete {
+      button {
+        background: none;
+        border: none;
+        padding: 4px 8px;
+        background-color: #c5163f;
+        border-radius: 5px;
+        color: $light-box-bg;
+        cursor: pointer;
+      }
+    }
+  }
+
+  .position:hover {
+    background-color: rgba(12, 16, 28, 0.06);
+  }
+  &.dark {
+    background-color: $dark-box-bg;
+    p {
+      color: $dark-primary;
+    }
+    .header {
+      color: $dark-secondary;
+    }
+    .position {
+      color: $dark-primary;
+    }
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .dca__list {
+    width: 100%;
+    background-color: $light-box-bg;
+    border-radius: 15px;
+
+    margin-top: 2rem;
+    padding: 3rem 5rem;
+    width: 100%;
+    .empty_history {
+      text-align: center;
+      img {
+        width: 12rem;
+        height: 12rem;
+      }
+      p {
+        font-weight: 500;
+        font-size: 15px;
+        color: $light-primary;
+      }
+    }
+    .header {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 15% 21% 21% 21% 5% 15%;
+      margin: 0;
+      font-weight: 600;
+      color: $light-secondary;
+      font-size: 1.6rem;
+      justify-content: space-between;
+      justify-items: center;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #d9d9d9;
+      .tokens {
+        justify-self: flex-start;
+      }
+    }
+
+    .position {
+      background: none;
+      border-bottom: 1px solid #d9d9d9;
+      border-radius: 0;
+      box-shadow: none;
+      display: grid;
+      grid-template-columns: 15% 21% 21% 21% 5% 15%;
+      justify-items: center;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 500;
+      font-size: 1.5rem;
+      color: $light-primary;
+    }
+
+    .tokens {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      justify-self: flex-start;
+      .token {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        .tokenLogo {
+          width: 30px;
+          height: 30px;
+        }
+        .tokenSymbol {
+          font-size: 1.5rem;
+          font-weight: 600;
+        }
+      }
+      svg {
+        width: 15px;
+        height: 15px;
+        fill: $light-secondary;
+      }
+    }
+    .DeleteBTN {
+      button {
+        cursor: pointer;
+        background-color: $light-percentageDown;
+        padding: 1rem;
+        color: $light-box-bg;
+        border-radius: 10px;
+      }
+    }
+
+    .timeLine {
+      cursor: pointer;
+      svg {
+        fill: $light-skeleton;
+        width: 20px;
+        height: 20px;
+      }
+    }
+
+    &.dark {
+      background-color: $dark-box-bg;
+
+      p {
+        color: $dark-primary;
+      }
+      .header {
+        color: $dark-secondary;
+
+        border-bottom: 1px solid #d9d9d9;
+      }
+
+      .position {
+        box-shadow: none;
+        border-bottom: 1px solid #d9d9d9;
+
+        color: $dark-primary;
+
+        .sellingToken {
+          img {
+            width: 26px;
+            height: 26px;
+          }
+
+          h3 {
+          }
+        }
+      }
+    }
+  }
+}
+
+.timelineModal {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  .topSection {
+    display: grid;
+    grid-template-columns: 0.5fr 1fr 0.5fr;
+    width: 100%;
+    .backBTN {
+      background: none;
+      color: $light-primary;
+      cursor: pointer;
+
+      svg {
+        fill: none;
+        width: 16px;
+        height: 16px;
+      }
+    }
+    .closeBTN {
+      background: none;
+      color: $light-primary;
+      cursor: pointer;
+      svg {
+        fill: none;
+        width: 16px;
+        height: 16px;
+      }
+    }
+    .title {
+      text-align: center;
+      font-weight: 700;
+      color: $light-primary;
+      font-size: 1.5rem;
+    }
+  }
+
+  .seprator {
+    width: 100%;
+    height: 2px;
+    background-color: $light-border;
+    margin: 2rem;
+  }
+  .timelineContainer {
+    overflow: hidden;
+    overflow-y: scroll;
+    max-height: 51vh;
+    &::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background-color: #e4e4e4;
+      border-radius: 20px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-image: $default-gradientToBottom;
+      // box-shadow: inset 2px 2px 5px 0 rgba(#fff, 0.5);
+      border-radius: 20px;
+    }
+    .timelineHolder {
+      position: relative;
+
+      .timelineShape {
+        position: absolute;
+        left: 5px;
+        width: 2px;
+        height: 100%;
+        background-color: $light-secondary;
+        border-radius: 10px;
+        &.skeleton {
+          background-color: $light-skeleton;
+        }
+      }
+      .swapTime {
+        padding: 2rem 0;
+        .connectedTitle {
+          display: flex;
+          align-items: center;
+          .connector {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: $light-secondary;
+            z-index: 10;
+          }
+          h3 {
+            margin-left: 2rem;
+          }
+        }
+        h2 {
+          margin-left: 3rem;
+          font-size: 1.2rem;
+        }
+        &.last {
+          padding-bottom: 0;
+          position: relative;
+
+          .tailCover {
+            background-color: $light-box-bg;
+            position: absolute;
+            left: 5px;
+            width: 2px;
+            height: calc(100% - 2rem);
+            z-index: 9;
+          }
+          .connectedTitle {
+            .connector {
+            }
+            h1 {
+            }
+          }
+        }
+        &.first {
+          position: relative;
+
+          .tailCover {
+            background-color: $light-box-bg;
+            position: absolute;
+            left: 5px;
+            top: 0;
+            width: 2px;
+            height: 2.1rem;
+            z-index: 9;
+          }
+          .connectedTitle {
+            .connector {
+            }
+            h1 {
+            }
+          }
+        }
+        &.skeleton {
+          .connector {
+            background-color: $light-skeleton;
+          }
+          h3 {
+            color: $light-skeleton;
+          }
+          h2 {
+            color: $light-skeleton;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .timelineModal {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    overflow-y: hidden;
+    .topSection {
+      display: grid;
+      grid-template-columns: 0.5fr 1fr 0.5fr;
+      width: 100%;
+      .backBTN {
+        background: none;
+        color: $light-primary;
+        cursor: pointer;
+
+        svg {
+          fill: none;
+          width: 20px;
+          height: 20px;
+        }
+      }
+      .closeBTN {
+        background: none;
+        cursor: pointer;
+        color: $light-primary;
+        svg {
+          fill: none;
+          width: 20px;
+          height: 20px;
+        }
+      }
+      .title {
+        text-align: center;
+        font-weight: 700;
+        color: $light-primary;
+        font-size: 1.7rem;
+      }
+    }
+
+    .seprator {
+      width: 100%;
+      height: 2px;
+      background-color: $light-tertiary;
+      margin: 2rem 0;
+    }
+    .timelineContainer {
+      overflow: hidden;
+      width: 90%;
+
+      overflow-y: scroll;
+      &::-webkit-scrollbar {
+        width: 10px;
+      }
+
+      &::-webkit-scrollbar-track {
+        background-color: #e4e4e4;
+        border-radius: 20px;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background-image: $default-gradientToBottom;
+        // box-shadow: inset 2px 2px 5px 0 rgba(#fff, 0.5);
+        border-radius: 20px;
+      }
+      .timelineHolder {
+        position: relative;
+
+        .timelineShape {
+          position: absolute;
+          left: 5px;
+          width: 2px;
+          height: 100%;
+          background-color: $light-secondary;
+          border-radius: 10px;
+          &.skeleton {
+            background-color: $light-skeleton;
+          }
+        }
+        .swapTime {
+          padding: 2rem 0;
+          .connectedTitle {
+            display: flex;
+            align-items: center;
+            .connector {
+              width: 12px;
+              height: 12px;
+              border-radius: 50%;
+              background-color: $light-secondary;
+              z-index: 10;
+            }
+            .transactionIndex {
+              margin-left: 2rem;
+              font-size: 1.3rem;
+              color: $light-secondary;
+            }
+          }
+
+          .transactionDetail {
+            margin-left: 3rem;
+            font-size: 1.2rem;
+            margin-top: 0.5rem;
+            color: $light-primary;
+            span {
+              color: $light-secondary;
+            }
+          }
+          &.last {
+            padding-bottom: 0;
+            position: relative;
+
+            .tailCover {
+              background-color: $light-bg;
+              position: absolute;
+              left: 5px;
+              width: 2px;
+              height: calc(100% - 2rem);
+              z-index: 9;
+            }
+            .connectedTitle {
+              .connector {
+              }
+              h1 {
+              }
+            }
+          }
+          &.first {
+            position: relative;
+
+            .tailCover {
+              background-color: $light-bg;
+              position: absolute;
+              left: 5px;
+              top: 0;
+              width: 2px;
+              height: 2.1rem;
+              z-index: 9;
+            }
+            .connectedTitle {
+              .connector {
+              }
+              h1 {
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+

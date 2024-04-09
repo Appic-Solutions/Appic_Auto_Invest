@@ -14,7 +14,7 @@ import { Principal } from '@dfinity/principal';
 import canistersIDs from '@/config/canistersIDs';
 import { BatchTransact } from '@/artemis-web3-adapter';
 
-export default function DcaCreation() {
+export default function DcaCreation({ setPositionStatus }) {
   const dispatch = useDispatch();
   const [tokenModal, setTokenModal] = useState({ isActive: false, modalType: 'sell', tokens: [] }); // modalType: buy, sell
   const [transactionModal, setTransactionModal] = useState(false);
@@ -1007,6 +1007,15 @@ export default function DcaCreation() {
               {transactionStep2 == 'Failed' ? transactionStepFailure : 'Please Wait until the position is created.'}
             </p>
           </div>
+
+          <button
+            onClick={() => {
+              setPositionStatus('active');
+            }}
+            className="viewPosition"
+          >
+            View your Position
+          </button>
         </div>
       </Modal>
     </div>
