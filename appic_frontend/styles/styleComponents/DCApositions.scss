@@ -1,10 +1,8 @@
-// new dca
 .dca__list {
-  width: 100%;
   background-color: $light-box-bg;
-  border-radius: 15px;
-
-  margin-top: 2rem;
+  margin-top: 1rem;
+  border: 1px solid $light-border;
+  border-radius: $border-radius;
   padding: 1.5rem 1rem;
   width: 100%;
   .empty_history {
@@ -15,24 +13,24 @@
     }
     p {
       font-weight: 500;
-      font-size: 12px;
+      font-size: 1.5rem;
       color: $light-primary;
     }
   }
   .header {
     width: 100%;
     display: grid;
-    grid-template-columns: 20% 20% 20% 20% 20% 20%;
+    grid-template-columns: 15% 21% 21% 21% 5% 15%;
     margin: 0;
     font-weight: 600;
     color: $light-secondary;
-    font-size: 1.3rem;
+    font-size: 1.2rem;
+    justify-content: space-between;
     justify-items: center;
     padding-bottom: 1rem;
     border-bottom: 1px solid #d9d9d9;
-
-    .buyingDesktop {
-      display: none;
+    .tokens {
+      justify-self: flex-start;
     }
   }
 
@@ -42,57 +40,86 @@
     border-radius: 0;
     box-shadow: none;
     display: grid;
-    grid-template-columns: 20% 20% 20% 20% 20% 20%;
+    grid-template-columns: 15% 21% 21% 21% 5% 15%;
     justify-items: center;
+    justify-content: space-between;
     align-items: center;
-    padding: 0;
-    color: $light-primary;
-    padding: 1rem 0;
     font-weight: 500;
     font-size: 1.2rem;
-    margin: 0;
+    padding: 1rem;
+    color: $light-primary;
+  }
 
-    .sellingToken {
-      // display: flex;
-      // gap: 1rem;
-      // align-items: center;
-      img {
-        width: 26px;
-        height: 26px;
+  .tokens {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    justify-self: flex-start;
+    .token {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      .tokenLogo {
+        width: 15px;
+        height: 15px;
       }
-
-      h3 {
-        font-weight: 500;
+      .tokenSymbol {
         font-size: 1.2rem;
+        font-weight: 600;
       }
     }
-
-    .position__delete {
-      button {
-        background: none;
-        border: none;
-        padding: 4px 8px;
-        background-color: #c5163f;
-        border-radius: 5px;
-        color: $light-box-bg;
-        cursor: pointer;
-      }
+    svg {
+      width: 15px;
+      height: 15px;
+      fill: $light-secondary;
+    }
+  }
+  .DeleteBTN {
+    button {
+      cursor: pointer;
+      background-color: $light-percentageDown;
+      padding: 1rem;
+      color: $light-box-bg;
+      border-radius: 10px;
     }
   }
 
-  .position:hover {
-    background-color: rgba(12, 16, 28, 0.06);
+  .timeLine {
+    cursor: pointer;
+    svg {
+      fill: $light-skeleton;
+      width: 20px;
+      height: 20px;
+    }
   }
+
   &.dark {
     background-color: $dark-box-bg;
+
     p {
       color: $dark-primary;
     }
     .header {
       color: $dark-secondary;
+
+      border-bottom: 1px solid #d9d9d9;
     }
+
     .position {
+      box-shadow: none;
+      border-bottom: 1px solid #d9d9d9;
+
       color: $dark-primary;
+
+      .sellingToken {
+        img {
+          width: 26px;
+          height: 26px;
+        }
+
+        h3 {
+        }
+      }
     }
   }
 }
@@ -148,6 +175,7 @@
       font-weight: 500;
       font-size: 1.5rem;
       color: $light-primary;
+      padding: 1rem;
     }
 
     .tokens {

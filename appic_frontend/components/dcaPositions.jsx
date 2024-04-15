@@ -7,13 +7,17 @@ import Link from 'next/link';
 import { useSelector } from 'react-redux';
 import Modal from './higerOrderComponents/modal';
 import { formatDate, getPositionNumber } from '@/helper/helperFunc';
+import { useUserDcaPositions } from '@/hooks/getUserDCAPositions';
 export default function DcaPositions({ positionStatus }) {
   const [timeLineModal, setTimelineModal] = useState({ isActive: false, timline: [], sellToken: null, buyToken: null });
   const activePositions = useSelector((state) => state.userPositionsReducer.active);
   const completedPositions = useSelector((state) => state.userPositionsReducer.completed);
+  const principalID = useSelector((state) => state.wallet.items.principalID);
+  const supportedTokens = useSelector((state) => state.supportedTokens.tokens);
 
+  // Custom hooks
+  const {} = useUserDcaPositions(principalID, supportedTokens);
   const formatTransactionStatus = (status) => {
-    console.log(status);
     switch (status) {
       case 'Pending':
         return 'Executing';

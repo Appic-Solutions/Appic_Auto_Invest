@@ -112,7 +112,6 @@ const getWeekDayString = (weekNumber) => {
 
 // Format date for timeline
 export const formatDate = (date) => {
-  console.log(date);
   // Extract day, month, and year
   let day = date.getDate();
   let month = date.getMonth() + 1; // Months are zero-indexed, so we add 1

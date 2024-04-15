@@ -18,6 +18,7 @@ export default function DcaCreation({ setPositionStatus }) {
   const dispatch = useDispatch();
   const [tokenModal, setTokenModal] = useState({ isActive: false, modalType: 'sell', tokens: [] }); // modalType: buy, sell
   const [transactionModal, setTransactionModal] = useState(false);
+  const [mobileReviewPosition, setMobileReviewPosition] = useState(false);
   const [transactionStep1, setTransationStep1] = useState('notTriggered'); // inProgress, notTriggered, Rejected, Fialed , Successful
   const [transactionStep2, setTransationStep2] = useState('notTriggered'); // inProgress, notTriggered, Rejected, Fialeds
   const [transactionStepFailure, setTransactionStepFailure] = useState(null);
@@ -104,7 +105,7 @@ export default function DcaCreation({ setPositionStatus }) {
 
   // get WeekDay by nuumber
   const getWeekDayString = (weekNumber) => {
-    var weekdays = ['Sun', 'Mon', 'Tues', 'Wednes', 'Thurs', 'Fri', 'Sat'];
+    var weekdays = ['Sun', 'Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat'];
     return weekdays[weekNumber];
   };
 
@@ -405,6 +406,7 @@ export default function DcaCreation({ setPositionStatus }) {
         setTransationStep2('inProgress');
       } else {
         setTransationStep1('Failed');
+        console.log(transactionsList);
         return;
       }
       // Generate swapsTimes from timeline for creating position
@@ -683,12 +685,21 @@ export default function DcaCreation({ setPositionStatus }) {
                   </div>
                 </div>
                 {/* Create position button */}
-                <button onClick={handleCreateDca} disabled={handleButtonDisablity()} className="createPosition">
+                <button onClick={handleCreateDca} disabled={handleButtonDisablity()} className="createPosition desktop">
                   Create Auto-invest position
+                </button>
+                <button
+                  onClick={() => {
+                    setMobileReviewPosition(true);
+                  }}
+                  disabled={handleButtonDisablity()}
+                  className="createPosition mobile"
+                >
+                  Review Auto-invest position
                 </button>
               </div>
               {/* Review part */}
-              <div className="reviewDCA">
+              <div className="reviewDCA desktop">
                 {/* Details */}
                 <div className="details">
                   <h3 className="title">Details</h3>
@@ -1015,6 +1026,178 @@ export default function DcaCreation({ setPositionStatus }) {
             className="viewPosition"
           >
             View your Position
+          </button>
+        </div>
+      </Modal>
+
+      {/* Review position Modal */}
+      <Modal active={mobileReviewPosition}>
+        <div className="reviewDCA mobile">
+          {/* Details */}
+          <div className="details">
+            <h3 className="title">Details</h3>
+            {/* Details Box  */}
+            <div className="detailsContainer">
+              <div className="detail">
+                <div className="titleContainer">
+                  <div className="dot"></div>
+
+                  <h1>Amount Per Swap</h1>
+                </div>
+
+                <h1>
+                  {DCAData.amoutPerSwap != '' ? <span>{DCAData.amoutPerSwap}</span> : <span className="skeleton">4</span>}{' '}
+                  {DCAData.sellToken != null ? <span>{DCAData.sellToken.symbol}</span> : <span className="skeleton">ICP</span>}
+                </h1>
+              </div>
+
+              <div className="detail">
+                <div className="titleContainer">
+                  <div className="dot"></div>
+                  <h1>Buy cycle</h1>
+                </div>
+                <h1> {DCAData.frequency != '' ? <span>{DCAData.frequency}</span> : <span className="skeleton">Weekly</span>}</h1>
+              </div>
+
+              <div className="detail">
+                <div className="titleContainer">
+                  <div className="dot"></div>
+                  <h1>Investment Period</h1>
+                </div>
+                <h1>
+                  {DCAData.swapsNo != '' ? <span>{DCAData.swapsNo}</span> : <span className="skeleton">9</span>}{' '}
+                  {DCAData.frequency != '' ? <span>{formatFrequency(DCAData.frequency)}</span> : <span className="skeleton">Weeks</span>}
+                </h1>
+              </div>
+              <div className="detail">
+                <div className="titleContainer">
+                  <div className="dot"></div>
+                  <h1>Total Investment Amount</h1>
+                </div>
+                <h1>
+                  {DCAData.swapsNo != '' && DCAData.amoutPerSwap != '' ? (
+                    <span>{BigNumber(DCAData.swapsNo).multipliedBy(DCAData.amoutPerSwap).toString()}</span>
+                  ) : (
+                    <span className="skeleton">9</span>
+                  )}{' '}
+                  {DCAData.sellToken != null ? <span>{DCAData.sellToken.symbol}</span> : <span className="skeleton">ICP</span>}
+                </h1>
+              </div>
+            </div>
+          </div>
+
+          {/* Time line */}
+          <div className="timeline">
+            <h3 className="title">Timeline</h3>
+            <div className="timelineContainer">
+              <div className="timelineHolder">
+                {(DCAData.swapsNo == '' || DCAData.swapsNo > 1) && (
+                  <div key={'shape'} className={`timelineShape ${DCAData.timeLine.length == 0 && 'skeleton'}`}></div>
+                )}
+
+                {/* Timeline swaps */}
+                {/* Skeleton */}
+                {DCAData.timeLine.length == 0 && (
+                  <>
+                    <div className="swapTime skeleton first">
+                      <div className="tailCover"></div>
+                      <div className="connectedTitle">
+                        <div className="connector"></div>
+                        <h3>{generateDataForTimelineSkeleton(0)}</h3>
+                      </div>
+
+                      <h2>First Swap </h2>
+                    </div>
+                    <div className="swapTime skeleton ">
+                      <div className="connectedTitle">
+                        <div className="connector"></div>
+                        <h3>{generateDataForTimelineSkeleton(1)}</h3>
+                      </div>
+
+                      <h2>Second Swap </h2>
+                    </div>
+                    <div className="swapTime skeleton">
+                      <div className="connectedTitle">
+                        <div className="connector"></div>
+                        <h3>{generateDataForTimelineSkeleton(2)}</h3>
+                      </div>
+
+                      <h2>Third Swap </h2>
+                    </div>
+                    <div className="swapTime skeleton">
+                      <div className="connectedTitle">
+                        <div className="connector"></div>
+                        <h3>{generateDataForTimelineSkeleton(3)}</h3>
+                      </div>
+
+                      <h2>Fourth Swap </h2>
+                    </div>
+                    <div className="swapTime skeleton">
+                      <div className="connectedTitle">
+                        <div className="connector"></div>
+                        <h3>{generateDataForTimelineSkeleton(4)}</h3>
+                      </div>
+
+                      <h2>Fifth Swap </h2>
+                    </div>
+                    <div className="swapTime skeleton">
+                      <div className="connectedTitle">
+                        <div className="connector"></div>
+                        <h3>{generateDataForTimelineSkeleton(5)}</h3>
+                      </div>
+
+                      <h2>Sixth Swap </h2>
+                    </div>
+                    <div className="swapTime skeleton">
+                      <div className="connectedTitle">
+                        <div className="connector"></div>
+                        <h3>{generateDataForTimelineSkeleton(6)}</h3>
+                      </div>
+
+                      <h2>Seventh Swap </h2>
+                    </div>
+                    <div className="swapTime skeleton last">
+                      <div className="tailCover"></div>
+
+                      <div className="connectedTitle">
+                        <div className="connector"></div>
+                        <h3>{generateDataForTimelineSkeleton(8)}</h3>
+                      </div>
+
+                      <h2>Final Swap </h2>
+                    </div>
+                  </>
+                )}
+
+                {/* Real data */}
+                {DCAData.timeLine.length != 0 &&
+                  DCAData.timeLine.map((swapTime, index) => {
+                    return (
+                      <div key={index} className={`swapTime ${index == 0 && 'first'} ${index == DCAData.timeLine.length - 1 && 'last'}`}>
+                        {(index == DCAData.timeLine.length - 1 || index == 0) && <div className="tailCover"></div>}
+
+                        <div className="connectedTitle">
+                          <div className="connector"></div>
+                          <h3>{formatDate(swapTime)}</h3>
+                        </div>
+
+                        <h2>{getPositionNumber(index, DCAData.timeLine.length - 1 == index)} Swap</h2>
+                      </div>
+                    );
+                  })}
+              </div>
+            </div>
+          </div>
+          <p className="explanation">
+            Please make sure before each swap yopu will have at least{' '}
+            <span>
+              {DCAData.amoutPerSwap != '' ? <span>{DCAData.amoutPerSwap}</span> : <span className="skeleton">4</span>}{' '}
+              {DCAData.sellToken != null ? <span>{DCAData.sellToken.symbol}</span> : <span className="skeleton">ICP</span>}
+            </span>{' '}
+            in your wallet. After swap is completed, fuds will be transfered to your wallet imidietly.
+          </p>
+          <button onClick={handleCreateDca} disabled={handleButtonDisablity()} className="createPosition desktop">
+            Create Auto-invest position
           </button>
         </div>
       </Modal>
