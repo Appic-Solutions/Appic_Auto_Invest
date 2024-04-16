@@ -1,3 +1,4 @@
+
 # Appic auto investment for IC
 
 <img src="https://github.com/AlphaVault-Org/Alphavault_Icp/blob/main/images/screenshot1.png?raw=true"/>
