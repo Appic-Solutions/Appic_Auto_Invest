@@ -1,0 +1,15 @@
+{
+  "canisters": {
+    "APPIC_ROOT": {
+      "main": "src/Appic_root/main.mo",
+      "type": "motoko"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "version": 1
+}

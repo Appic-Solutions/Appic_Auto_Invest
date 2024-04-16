@@ -1,0 +1,903 @@
+.DcaPositions {
+  .position {
+    width: 100%;
+    background-color: $light-box-bg;
+    border-radius: 15px;
+    margin-top: 1rem;
+    padding: 1.5rem 1rem;
+
+    .tokens {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+
+      .token {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+
+        img {
+          width: 30px;
+          height: 30px;
+        }
+
+        p {
+          color: $light-primary;
+          font-family: Poppins;
+          font-size: 16px;
+          font-style: normal;
+          font-weight: 500;
+          line-height: normal;
+        }
+      }
+
+      svg {
+        fill: $light-primary;
+      }
+    }
+
+    .detailsBox {
+      margin: 2rem 0;
+      background-color: #fafafa;
+      border-radius: 15px;
+      border: 1px solid #edeef2;
+      padding: 0.7rem 1.2rem;
+      display: flex;
+      justify-content: space-between;
+
+      .flex {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+
+        .figures {
+          color: $light-tertiary;
+          font-family: Poppins;
+          font-size: 14px;
+          font-style: normal;
+          font-weight: 500;
+          line-height: normal;
+        }
+
+        .figures.Up {
+          color: $light-percentageUP;
+        }
+
+        .figures.Down {
+          color: $light-percentageDown;
+        }
+
+        .percentage {
+          background-color: $light-tertiary;
+          color: $light-box-bg;
+          font-family: Poppins;
+          font-size: 12px;
+          font-style: normal;
+          font-weight: 500;
+          line-height: normal;
+          padding: 0.4rem;
+          border-radius: 15px;
+        }
+
+        .percentage.Up {
+          background-color: $light-percentageUP;
+        }
+
+        .percentage.Down {
+          background-color: $light-percentageDown;
+        }
+      }
+    }
+
+    .seprator {
+      width: 100%;
+    }
+
+    .dataRow {
+      margin: 1rem 0;
+      padding: 0.7rem 1.2rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      row-gap: 2rem;
+      align-items: center;
+    }
+
+    .dataPart {
+      h3 {
+        color: $light-primary;
+        font-family: Poppins;
+        font-size: 15px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+
+        &.delete_Btn {
+          color: #e63f66;
+          cursor: pointer;
+        }
+      }
+
+      h4 {
+        color: $light-tertiary;
+        font-family: Poppins;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+      }
+    }
+
+    .dataPart:nth-child(even) {
+      justify-self: end;
+    }
+  }
+
+  &.dark {
+    .header {
+      .statusChanger {
+        button {
+          color: $dark-primary;
+        }
+
+        button.active {
+          background-color: $light-secondary;
+          color: $dark-primary;
+        }
+      }
+    }
+
+    .position {
+      background-color: $dark-box-bg;
+
+      .tokens {
+        .token {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+
+          img {
+          }
+
+          p {
+            color: $dark-primary;
+          }
+        }
+
+        svg {
+          fill: $dark-primary;
+        }
+      }
+
+      .detailsBox {
+        border: 1px solid #3a4151;
+        background: #0c101c;
+
+        .flex {
+          .figures {
+            color: $dark-tertiary;
+          }
+
+          .figures.Up {
+            color: $dark-percentageUP;
+          }
+
+          .figures.Down {
+            color: $dark-percentageDown;
+          }
+
+          .percentage {
+            background-color: $dark-tertiary;
+            color: $dark-box-bg;
+          }
+
+          .percentage.Up {
+            background-color: $dark-percentageUP;
+          }
+
+          .percentage.Down {
+            background-color: $dark-percentageDown;
+          }
+        }
+      }
+
+      .seprator {
+        width: 100%;
+        fill: #1a222f;
+      }
+
+      .dataRow {
+      }
+
+      .dataPart {
+        h3 {
+          color: $dark-primary;
+
+          &.delete_Btn {
+            color: #e63f66;
+          }
+        }
+
+        h4 {
+          color: $dark-tertiary;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .DcaPositions {
+    .position {
+      width: 100%;
+      background-color: $light-box-bg;
+      border-radius: 15px;
+      margin-top: 1rem;
+      padding: 3rem 5rem;
+
+      .tokens {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 2rem;
+
+        .token {
+          display: flex;
+          align-items: center;
+          gap: 1.5rem;
+
+          img {
+            width: 35px;
+            height: 35px;
+          }
+
+          p {
+            color: $light-primary;
+            font-family: Poppins;
+            font-size: 20px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: normal;
+          }
+        }
+
+        svg {
+          fill: $light-primary;
+        }
+      }
+
+      .detailsBox {
+        margin: 2rem 0;
+        background-color: #fafafa;
+        border-radius: 15px;
+        border: 1px solid #edeef2;
+        padding: 1rem 2rem;
+        display: flex;
+        justify-content: space-between;
+
+        .dataPart {
+          h3 {
+            color: $light-primary;
+            font-family: Poppins;
+            font-size: 19px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: normal;
+
+            &.delete_Btn {
+              color: #e63f66;
+              cursor: pointer;
+            }
+          }
+
+          h4 {
+            margin-top: 0.5rem;
+
+            color: $light-tertiary;
+            font-family: Poppins;
+            font-size: 18px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: normal;
+          }
+        }
+
+        .flex {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          margin-top: 0.5rem;
+
+          .figures {
+            color: $light-tertiary;
+            font-family: Poppins;
+            font-size: 18px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: normal;
+          }
+
+          .figures.Up {
+            color: $light-percentageUP;
+          }
+
+          .figures.Down {
+            color: $light-percentageDown;
+          }
+
+          .percentage {
+            background-color: $light-tertiary;
+            color: $light-box-bg;
+            font-family: Poppins;
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: normal;
+            padding: 0.5rem 1rem;
+            border-radius: 15px;
+          }
+
+          .percentage.Up {
+            background-color: $light-percentageUP;
+          }
+
+          .percentage.Down {
+            background-color: $light-percentageDown;
+          }
+        }
+      }
+
+      .seprator {
+        width: 100%;
+      }
+
+      .dataRow {
+        margin: 1rem 0;
+        padding: 0.7rem 1.2rem;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        row-gap: 2rem;
+        align-items: center;
+        column-gap: 4rem;
+      }
+
+      .dataPart {
+        h3 {
+          color: $light-primary;
+          font-family: Poppins;
+          font-size: 18px;
+          font-style: normal;
+          font-weight: 500;
+          line-height: normal;
+
+          &.delete_Btn {
+            color: #e63f66;
+            cursor: pointer;
+          }
+        }
+
+        h4 {
+          color: $light-tertiary;
+          font-family: Poppins;
+          font-size: 16px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: normal;
+        }
+      }
+
+      .dataPart:nth-child(even) {
+        justify-self: auto;
+      }
+    }
+
+    &.dark {
+      .header {
+        .statusChanger {
+          button {
+            color: $dark-primary;
+          }
+
+          button.active {
+            background-color: $dark-secondary;
+            color: $dark-primary;
+          }
+        }
+      }
+
+      .position {
+        background-color: $dark-box-bg;
+
+        .tokens {
+          .token {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+
+            img {
+            }
+
+            p {
+              color: $dark-primary;
+            }
+          }
+
+          svg {
+            fill: $dark-primary;
+          }
+        }
+
+        .detailsBox {
+          border: 1px solid #3a4151;
+          background: #0c101c;
+
+          .flex {
+            .figures {
+              color: $dark-tertiary;
+            }
+
+            .figures.Up {
+              color: $dark-percentageUP;
+            }
+
+            .figures.Down {
+              color: $dark-percentageDown;
+            }
+
+            .percentage {
+              background-color: $dark-tertiary;
+              color: $dark-box-bg;
+            }
+
+            .percentage.Up {
+              background-color: $dark-percentageUP;
+            }
+
+            .percentage.Down {
+              background-color: $dark-percentageDown;
+            }
+          }
+        }
+
+        .seprator {
+          width: 100%;
+          fill: #1a222f;
+        }
+
+        .dataRow {
+        }
+
+        .dataPart {
+          h3 {
+            color: $dark-primary;
+
+            &.delete_Btn {
+              color: #e63f66;
+            }
+          }
+
+          h4 {
+            color: $dark-tertiary;
+          }
+        }
+      }
+    }
+  }
+}
+
+.addTokenModal {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  .topSection {
+    display: grid;
+    grid-template-columns: 0.5fr 1fr 0.5fr;
+    width: 100%;
+    .backBTN {
+      background: none;
+      color: $light-primary;
+      cursor: pointer;
+
+      svg {
+        fill: none;
+        width: 16px;
+        height: 16px;
+      }
+    }
+    .closeBTN {
+      background: none;
+      color: $light-primary;
+      svg {
+        fill: none;
+        width: 16px;
+        height: 16px;
+      }
+    }
+    .title {
+      text-align: center;
+      font-weight: 700;
+      color: $light-primary;
+      font-size: 1.5rem;
+    }
+  }
+  .searchContainer {
+    margin-top: 1rem;
+    border: 1px solid $light-border;
+    width: 90%;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    border-radius: $border-radius;
+    background-color: $light-box-bg;
+    gap: 1rem;
+    .searchIcon {
+      fill: $light-secondary;
+    }
+    input {
+      color: $light-primary;
+      font-size: 1.2rem;
+      background: none;
+      width: 100%;
+      outline: none;
+      &::placeholder {
+        color: $light-placeholder;
+        font-size: 1.2rem;
+      }
+    }
+  }
+  .seprator {
+    width: 100%;
+    height: 2px !important;
+    background-color: $light-border;
+    margin: 1rem 0;
+    margin-bottom: 2rem;
+  }
+  .tokens {
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    overflow-y: scroll;
+
+    .token {
+      cursor: pointer;
+      display: flex;
+
+      gap: 1.2rem;
+      justify-content: space-between;
+      align-items: center;
+      background-color: $light-box-bg;
+      border-radius: $border-radius;
+      padding: 0.7rem 1.6rem;
+      .token_info {
+        display: flex;
+        align-items: center;
+        gap: 1.2rem;
+        .token_logo {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        .token_details {
+          .token_name {
+            color: $light-primary;
+            font-size: 1.2rem;
+          }
+          .token_symbol {
+            color: $light-secondary;
+            font-size: 1rem;
+          }
+        }
+      }
+
+      .token_balance {
+        font-size: 1.2rem;
+      }
+    }
+    &::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background-color: #e4e4e4;
+      border-radius: 20px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-image: $default-gradientToBottom;
+      box-shadow: inset 2px 2px 5px 0 rgba(#fff, 0.5);
+      border-radius: 20px;
+    }
+  }
+
+  &.dark {
+    .topSection {
+      .backBTN {
+        color: $dark-primary;
+
+        svg {
+        }
+      }
+      .closeBTN {
+        color: $dark-primary;
+        svg {
+        }
+      }
+      .title {
+        color: $dark-primary;
+      }
+    }
+    .seprator {
+      background-color: $dark-tertiary;
+    }
+  }
+}
+@media screen and (min-width: 1024px) {
+  .addTokenModal {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    overflow-y: hidden;
+    .topSection {
+      display: grid;
+      grid-template-columns: 0.5fr 1fr 0.5fr;
+      width: 100%;
+      .backBTN {
+        background: none;
+        color: $light-primary;
+        cursor: pointer;
+
+        svg {
+          fill: none;
+          width: 20px;
+          height: 20px;
+        }
+      }
+      .closeBTN {
+        background: none;
+        cursor: pointer;
+        color: $light-primary;
+        svg {
+          fill: none;
+          width: 20px;
+          height: 20px;
+        }
+      }
+      .title {
+        text-align: center;
+        font-weight: 700;
+        color: $light-primary;
+        font-size: 1.7rem;
+      }
+    }
+    .searchContainer {
+      margin-top: 1rem;
+      border: 1px solid $light-border;
+      width: 90%;
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      border-radius: $border-radius;
+      background-color: $light-box-bg;
+      gap: 1rem;
+      .searchIcon {
+        width: 25px;
+        height: 25px;
+        fill: $light-secondary;
+      }
+      input {
+        color: $light-primary;
+        font-size: 1.5rem;
+        background: none;
+        width: 100%;
+        outline: none;
+        &::placeholder {
+          color: $light-placeholder;
+          font-size: 1.5rem;
+        }
+      }
+    }
+    .seprator {
+      width: 100%;
+      height: 2px !important;
+      background-color: $light-tertiary;
+      margin: 1rem 0;
+      margin-bottom: 2rem;
+    }
+    .tokens {
+      width: 90%;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      overflow-y: scroll;
+
+      .token {
+        cursor: pointer;
+        display: flex;
+        gap: 1.2rem;
+        align-items: center;
+        justify-content: space-between;
+        background-color: $light-box-bg;
+        border-radius: $border-radius;
+        padding: 0.7rem 1.6rem;
+        .token_info {
+          display: flex;
+          align-items: center;
+          gap: 1.2rem;
+          .token_logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+          }
+          .token_details {
+            .token_name {
+              color: $light-primary;
+              font-size: 1.3rem;
+            }
+            .token_symbol {
+              color: $light-secondary;
+              font-size: 1.1rem;
+            }
+          }
+        }
+
+        .token_balance {
+          font-size: 1.3rem;
+        }
+      }
+
+      &::-webkit-scrollbar {
+        width: 10px;
+      }
+
+      &::-webkit-scrollbar-track {
+        background-color: #e4e4e4;
+        border-radius: 20px;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background-image: $default-gradientToBottom;
+        box-shadow: inset 2px 2px 5px 0 rgba(#fff, 0.5);
+        border-radius: 20px;
+      }
+    }
+
+    &.dark {
+      .topSection {
+        .backBTN {
+          color: $dark-primary;
+          svg {
+          }
+        }
+        .closeBTN {
+          color: $dark-primary;
+          svg {
+          }
+        }
+        .title {
+          color: $dark-primary;
+        }
+      }
+      .seprator {
+        background-color: $dark-tertiary;
+      }
+    }
+  }
+}
+
+.dca__page {
+  .titleAndHeader {
+    .header {
+      width: unset !important;
+    }
+  }
+
+  .headerSwitcher {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+    width: 100%;
+
+    .statusChanger {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+
+      button {
+        background: none;
+        cursor: pointer;
+        font-family: Poppins;
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: normal;
+        color: $dark-bg;
+        padding: 1rem;
+      }
+
+      button.active {
+        background-color: $light-secondary;
+        color: $light-primary;
+        border-radius: $border-radius;
+      }
+    }
+  }
+  &.dark {
+    .headerSwitcher {
+      .statusChanger {
+        button {
+          color: $dark-primary;
+        }
+        button.active {
+          background-color: $dark-secondary;
+          color: $dark-bg;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .dca__page {
+    .titleAndHeader {
+      .header {
+        width: unset !important;
+      }
+    }
+
+    .headerSwitcher {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 2rem;
+      width: 100%;
+
+      .statusChanger {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1.5rem;
+
+        button {
+          background: none;
+          cursor: pointer;
+          font-family: Poppins;
+          font-size: 1.5rem;
+          font-style: normal;
+          font-weight: 600;
+          line-height: normal;
+          color: $light-primary;
+          padding: 1rem 1.5rem;
+        }
+
+        button.active {
+          background-color: $light-secondary;
+          color: $dark-primary;
+          border-radius: $border-radius;
+        }
+      }
+    }
+    &.dark {
+      .headerSwitcher {
+        .statusChanger {
+          button {
+            color: $dark-primary;
+          }
+          button.active {
+            background-color: $dark-secondary;
+            color: $dark-primary;
+          }
+        }
+      }
+    }
+  }
+}
+

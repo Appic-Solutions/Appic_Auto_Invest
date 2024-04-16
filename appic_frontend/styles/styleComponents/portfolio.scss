@@ -1,0 +1,645 @@
+.portfolio {
+  padding-top: 0;
+
+  .portfolio__box {
+    position: relative;
+    background-color: $light-box-bg;
+    border: 1px solid $light-border;
+    border-radius: $border-radius;
+    padding: 1.5rem 1rem;
+
+    .refreshButton {
+      display: none;
+    }
+
+    .collapseContainer {
+      width: 100%;
+      .titleContainer {
+        display: none;
+      }
+      .chartContainer {
+        display: none;
+      }
+    }
+    .addressActions {
+      margin: 1rem 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+
+      .avatarImage {
+        width: 25px;
+        height: 25px;
+        background: $default-gradient45;
+        border-radius: 50%;
+      }
+
+      .addressContainer {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: flex-start;
+        gap: 1rem;
+        width: 100%;
+        .addressWithCopy {
+          display: flex;
+          gap: 1rem;
+
+          .address {
+            font-size: 1rem;
+            font-weight: 600;
+            color: $light-primary;
+          }
+          span {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: $light-primary;
+          }
+          .copyAddress {
+            img {
+              width: 13px;
+              height: 13px;
+            }
+          }
+        }
+      }
+    }
+    .upperContainer {
+      display: none;
+      .walletActions {
+        .actions {
+          display: grid;
+          grid-template-columns: 1fr 1fr 1fr 1fr;
+          width: 100%;
+          justify-content: space-between;
+          margin: 1.5rem 0;
+
+          .action {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+
+            // @include button-responsive(mobile);
+            .imgContainer {
+              padding: 0.5rem;
+              border-radius: 50%;
+              border: 1px solid $light-secondary;
+
+              svg {
+                fill: $light-secondary;
+                height: 15px;
+                width: 15px;
+              }
+            }
+
+            p {
+              font-size: 1.2rem;
+              font-weight: 700;
+              color: $light-primary;
+            }
+          }
+        }
+      }
+
+      .portfolio__totalBalance {
+        margin-top: 1.5rem;
+        width: 100%;
+
+        .totalbalance__container {
+          display: grid;
+          grid-template-columns: auto auto auto;
+          justify-content: space-around;
+
+          // display: flex;
+
+          .description {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            margin-top: 0.5rem;
+
+            p {
+              font-weight: 500;
+              font-size: 1rem;
+              color: $light-primary;
+            }
+
+            .chainIMG {
+              width: 12px;
+              height: 12px;
+            }
+          }
+
+          .balance {
+            display: flex;
+
+            h1 {
+              font-size: 1.2rem;
+              font-weight: 700;
+              color: $light-primary;
+            }
+
+            span {
+              font-size: 1rem;
+              font-weight: 700;
+              margin-right: 0.2rem;
+              margin-top: 0.1rem;
+              color: $light-primary;
+            }
+          }
+        }
+        .chart_container {
+          width: 100%;
+          display: none;
+          justify-content: center;
+          align-items: center;
+          margin-top: 5rem;
+          margin-bottom: 1rem;
+          .chart {
+            width: 100%;
+            height: 100%;
+          }
+        }
+      }
+    }
+
+    .collapseCard {
+      display: none;
+    }
+  }
+
+  &.dark {
+    .portfolio__box {
+      background-color: $dark-box-bg;
+      border: 1px solid $dark-border;
+
+      .refreshButton {
+      }
+
+      .upperContainer {
+        .walletActions {
+          .addressActions {
+            .avatarImage {
+              width: 36px;
+              height: 36px;
+              background: $default-gradient45;
+              border-radius: 50%;
+            }
+
+            .addressContainer {
+              .address {
+                color: $dark-primary;
+              }
+
+              .copyAddress {
+                img {
+                }
+              }
+            }
+          }
+
+          .actions {
+            .action {
+              // @include button-responsive(mobile);
+              .imgContainer {
+                border: 1px solid $dark-secondary;
+
+                svg {
+                  fill: $dark-secondary;
+                }
+              }
+
+              p {
+                color: $dark-primary;
+              }
+
+              .action:nth-child(3) {
+              }
+            }
+          }
+        }
+
+        .portfolio__totalBalance {
+          .description {
+            abbr {
+              color: $dark-primary;
+            }
+
+            color: $dark-primary;
+
+            p {
+              color: $dark-primary;
+            }
+
+            .chainIMG {
+            }
+          }
+
+          .balance {
+            h1 {
+              color: $dark-primary;
+            }
+
+            span {
+              color: $dark-primary;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .portfolio {
+    padding-top: 2rem;
+
+    .portfolio__box {
+      position: relative;
+      background-color: $light-box-bg;
+      border: 1px solid $light-border;
+      border-radius: $border-radius;
+      padding: 3rem 5rem 3rem 5rem;
+      // margin-top: 1rem;
+
+      .refreshButton {
+        position: absolute;
+        top: 1.5rem;
+        right: 1.5rem;
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+      }
+      .addressActions {
+        width: auto;
+        margin: 0 0;
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+        justify-content: flex-start;
+
+        .avatarImage {
+          width: 50px;
+          height: 50px;
+          background: $default-gradient45;
+          border-radius: 50%;
+        }
+
+        .addressContainer {
+          width: auto;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          justify-content: flex-start;
+          gap: 1rem;
+          .addressWithCopy {
+            display: flex;
+            gap: 1rem;
+
+            .address {
+              font-size: 1.6rem;
+              font-weight: 600;
+              color: $light-primary;
+            }
+            span {
+              font-size: 1.4rem;
+              font-weight: 500;
+              color: $light-primary;
+            }
+            .copyAddress {
+              img {
+                width: 15px;
+                height: 15px;
+              }
+            }
+          }
+        }
+      }
+      .collapseContainer {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        // gap: 2rem;
+        // .totalbalance__container {
+        //     width: 30%;
+        //     display: grid;
+        //     grid-template-columns: 1fr;
+        //     align-content: flex-start;
+        .titleContainer {
+          display: block;
+        }
+        .chartContainer {
+          display: block;
+        }
+        .description {
+          display: flex;
+          align-items: center;
+          margin-bottom: 0rem;
+          height: 25px;
+          p {
+            font-weight: 500;
+            font-size: 1.4rem;
+            color: $light-primary;
+            padding-right: 0.5rem;
+          }
+
+          .chainIMG {
+            width: 20px;
+            height: 20px;
+          }
+        }
+
+        .balance {
+          display: flex;
+          margin-bottom: 1rem;
+
+          h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: $light-primary;
+          }
+
+          span {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-right: 0.2rem;
+            margin-top: 0.1rem;
+            color: $light-primary;
+          }
+        }
+        img {
+          width: 20px;
+          height: 20px;
+        }
+      }
+      .upperContainer {
+        display: none;
+        justify-content: space-between;
+
+        .walletActions {
+          width: 35%;
+
+          .actions {
+            // width: 80%;
+            display: grid;
+            grid-template-columns: 22% 22% 22% 22%;
+
+            justify-content: flex-start;
+            margin-top: 2rem;
+
+            .action {
+              display: flex;
+              flex-direction: column;
+              align-items: flex-start;
+
+              gap: 0.5rem;
+              cursor: pointer;
+
+              // @include button-responsive(mobile);
+              .imgContainer {
+                padding: 1rem;
+                border-radius: 50%;
+                border: 1px solid $light-secondary;
+
+                svg {
+                  fill: $light-secondary;
+                  height: 18px;
+                  width: 18px;
+                }
+              }
+
+              p {
+                font-size: 1.3rem;
+                font-weight: 700;
+                color: $light-primary;
+              }
+
+              &:hover {
+                .imgContainer {
+                  padding: 1rem;
+                  border-radius: 50%;
+                  border: 1px solid $light-secondary;
+                  background-color: $light-bg;
+
+                  svg {
+                    fill: $light-secondary;
+                    height: 18px;
+                    width: 18px;
+                  }
+                }
+              }
+            }
+
+            .action:nth-child(3) {
+            }
+          }
+        }
+
+        .portfolio__totalBalance {
+          width: 65%;
+          padding: 0rem 2rem 0rem 0rem;
+          margin-top: 0rem;
+          display: flex;
+
+          .totalbalance__container {
+            width: 30%;
+            display: grid;
+            grid-template-columns: 1fr;
+            align-content: flex-start;
+
+            .description {
+              display: flex;
+              align-items: center;
+              margin-bottom: 0rem;
+
+              p {
+                font-weight: 500;
+                font-size: 1.4rem;
+                color: $light-primary;
+                padding-right: 0.5rem;
+              }
+
+              .chainIMG {
+                width: 15px;
+                height: 15px;
+              }
+            }
+
+            .balance {
+              display: flex;
+              margin-bottom: 1rem;
+
+              h1 {
+                font-size: 1.5rem;
+                font-weight: 700;
+                color: $light-primary;
+              }
+
+              span {
+                font-size: 1.1rem;
+                font-weight: 700;
+                margin-right: 0.2rem;
+                margin-top: 0.1rem;
+                color: $light-primary;
+              }
+            }
+          }
+          .chart_container {
+            display: block;
+            margin-top: 0rem;
+          }
+        }
+      }
+
+      .collapseCard {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 2rem;
+        margin: auto;
+        margin-top: 1rem;
+
+        cursor: pointer;
+        span {
+          font-size: 1.5rem;
+          color: $light-primary;
+          font-weight: 700;
+        }
+        svg {
+          width: 20px;
+          height: 20px;
+        }
+      }
+      // Keep hideItem below chain and upperContainer to override the styles
+      .hideItem {
+        display: none;
+      }
+    }
+
+    &.dark {
+      .portfolio__box {
+        background-color: $dark-box-bg;
+        border: 1px solid $dark-border;
+
+        .refreshButton {
+        }
+        .addressActions {
+          .addressContainer {
+            .addressWithCopy {
+              .address {
+                color: $dark-primary;
+              }
+              span {
+                color: $dark-primary;
+              }
+              .copyAddress {
+                img {
+                }
+              }
+            }
+          }
+        }
+        .collapseContainer {
+          .description {
+            p {
+              color: $dark-primary;
+            }
+          }
+          .balance {
+            h1 {
+              color: $dark-primary;
+            }
+            span {
+              color: $dark-primary;
+            }
+          }
+        }
+        .collapseCard {
+          span {
+            color: $dark-primary;
+          }
+          svg {
+            fill: $dark-primary;
+          }
+        }
+        .upperContainer {
+          .walletActions {
+            .addressActions {
+              .avatarImage {
+                background: $default-gradient45;
+                border-radius: 50%;
+              }
+
+              .addressContainer {
+                .address {
+                  color: $dark-primary;
+                }
+
+                .copyAddress {
+                  img {
+                  }
+                }
+              }
+            }
+
+            .actions {
+              .action {
+                // @include button-responsive(mobile);
+                .imgContainer {
+                  border: 1px solid $dark-secondary;
+
+                  svg {
+                    fill: $dark-secondary;
+                  }
+                }
+
+                p {
+                  color: $dark-primary;
+                }
+
+                &:hover {
+                  .imgContainer {
+                    border: 1px solid $light-secondary;
+                    background-color: $dark-bg;
+
+                    svg {
+                      fill: $light-secondary;
+                    }
+                  }
+                }
+              }
+            }
+          }
+
+          .portfolio__totalBalance {
+            .totalbalance__container {
+              .description {
+                p {
+                  color: $dark-primary;
+                }
+
+                .chainIMG {
+                }
+              }
+
+              .balance {
+                h1 {
+                  color: $dark-primary;
+                }
+
+                span {
+                  color: $dark-primary;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+

@@ -1,0 +1,61 @@
+// variables.scss
+
+// Light Mode Colors
+$light-bg: #f5f6fa;
+$light-box-bg: #ffffff;
+$light-primary: #141414;
+$light-secondary: #843ea1;
+$light-tertiary: rgba(0, 0, 0, 0.05);
+$light-buttons: #843ea1;
+$light-percentageUP: #00de3b;
+$light-percentageDown: #e63f66;
+$light-border: rgba(0, 0, 0, 0.05);
+$light-placeholder: #707070;
+$light-skeleton: #747474;
+
+// Dark Mode Colors
+$dark-bg: #0c101c;
+$dark-box-bg: rgba(255, 255, 255, 0.02);
+$dark-primary: #e4e7e7;
+$dark-secondary: #843ea1;
+$dark-tertiary: rgba(255, 255, 255, 0.05);
+$dark-buttons: #843ea1;
+$dark-percentageUP: #00de3b;
+$dark-percentageDown: #e63f66;
+$dark-border: rgba(255, 255, 255, 0.05);
+$dark-placeholder: #d9d9d9;
+$dark-skeleton: hsla(0, 0%, 100%, 0.7);
+
+$border-radius: clamp(0px, calc(4px * 9), 44px);
+$default-gradient: linear-gradient(
+  90deg,
+  rgba(76, 188, 188, 1) 6%,
+  rgba(56, 164, 228, 1) 16%,
+  rgba(84, 76, 220, 1) 28%,
+  rgba(148, 68, 244, 1) 41%,
+  rgba(156, 52, 228, 1) 54%,
+  rgba(171, 0, 142, 1) 68%,
+  rgba(236, 36, 116, 1) 82%,
+  rgba(244, 132, 76, 1) 95%
+);
+
+$default-gradient45: linear-gradient(
+  45deg,
+  rgba(76, 188, 188, 1) 20%,
+  rgba(84, 76, 220, 1) 30%,
+  rgba(171, 0, 142, 1) 50%,
+  rgba(236, 36, 116, 1) 70%,
+  rgba(244, 132, 76, 1) 80%
+);
+$default-gradientToBottom: linear-gradient(
+  to bottom,
+  rgba(76, 188, 188, 1) 6%,
+  rgba(56, 164, 228, 1) 16%,
+  rgba(84, 76, 220, 1) 28%,
+  rgba(148, 68, 244, 1) 41%,
+  rgba(156, 52, 228, 1) 54%,
+  rgba(171, 0, 142, 1) 68%,
+  rgba(236, 36, 116, 1) 82%,
+  rgba(244, 132, 76, 1) 95%
+);
+

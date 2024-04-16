@@ -1,0 +1,120 @@
+// mixins.scss
+
+//background's mixin
+@mixin mode-styles-bg($mode) {
+  @if $mode == light {
+    background-color: $light-bg;
+  } @else if $mode == dark {
+    background-color: $dark-bg;
+  }
+}
+
+//buttons mixin
+@mixin mode-styles-btns($mode) {
+  @if $mode == light {
+    background-color: $light-buttons-bg;
+    color: $light-buttons-text;
+    filter: drop-shadow(0px 3px 6px rgba(0, 0, 0, 0.16));
+  } @else if $mode == dark {
+    background-color: $dark-buttons-bg;
+    color: $dark-buttons-text;
+    filter: drop-shadow(0px 3px 6px rgba(0, 0, 0, 0.16));
+  }
+}
+
+//H2 sizes mixins
+@mixin primary-titles-responsive($mode) {
+  @if $mode == mobile {
+    font-family: Poppins;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+  } @else if $mode == laptop {
+    font-family: Poppins;
+    font-size: 1.8rem;
+    font-style: normal;
+    font-weight: 700;
+  }
+}
+
+//H3 sizes mixins
+@mixin secondary-titles-responsive($mode) {
+  @if $mode == mobile {
+    font-family: Poppins;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 700;
+  } @else if $mode == laptop {
+    font-family: Poppins;
+    font-size: 17px;
+    font-style: normal;
+    font-weight: 500;
+  }
+}
+
+@mixin text($mode) {
+  @if $mode == mobile {
+    font-family: Poppins;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 400;
+  } @else if $mode == laptop {
+    font-family: Poppins;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+  }
+}
+//button mixins
+@mixin button-responsive($mode) {
+  @if $mode == mobile {
+    color: #fff;
+    font-family: 'Poppins';
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    background-color: $light-buttons;
+    border-radius: 20px;
+    padding: 0.5rem 2rem;
+    cursor: pointer;
+  } @else if $mode == laptop {
+    color: #fff;
+    font-family: 'Poppins';
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    background-color: $light-buttons;
+    border-radius: 15px;
+    padding: 0.7rem 3rem;
+    cursor: pointer;
+  }
+  &:disabled {
+    cursor: unset;
+    background-color: #8c6c91;
+  }
+}
+
+//layout mixins
+@mixin layout-centered($mode) {
+  @if $mode == mobile {
+    width: 90%;
+    margin: auto;
+  } @else if $mode == laptop {
+    width: 86vw;
+    margin-right: 0;
+    padding: 0 calc(12px + 2vw);
+
+    // width: 40%;
+    // margin: auto;
+  }
+}
+
+//alpha secondary button
+@mixin alpha-button($mode) {
+  @if $mode == mobile {
+  } @else if $mode == laptop {
+  }
+}
+

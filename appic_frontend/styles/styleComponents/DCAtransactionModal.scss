@@ -1,0 +1,311 @@
+.transactionModal {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  .topSection {
+    display: grid;
+    grid-template-columns: 0.5fr 1fr 0.5fr;
+    width: 100%;
+    .backBTN {
+      background: none;
+      color: $light-primary;
+      cursor: pointer;
+
+      svg {
+        fill: none;
+        width: 16px;
+        height: 16px;
+      }
+    }
+    .closeBTN {
+      background: none;
+      color: $light-primary;
+      cursor: pointer;
+      svg {
+        fill: none;
+        width: 16px;
+        height: 16px;
+      }
+    }
+    .title {
+      text-align: center;
+      font-weight: 700;
+      color: $light-primary;
+      font-size: 1.5rem;
+    }
+  }
+
+  .seprator {
+    width: 100%;
+    height: 2px;
+    background-color: $light-border;
+    margin: 2rem;
+  }
+  .stepContainer {
+    width: 100%;
+    height: auto;
+    width: 90%;
+    h1 {
+      font-size: 1.5rem;
+    }
+    .imagesContainer {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      .iconLoading {
+        display: none;
+        position: absolute;
+        width: 73px;
+        height: 73px;
+        // border-top: 4px solid;
+        // border-left: 4px solid;
+        // border-image-slice: 1;
+        // border-image-source: linear-gradient(to left, #743ad5, #d53a9d);
+        border-radius: 50%;
+        .coverBG {
+          border-radius: inherit;
+          position: absolute;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          left: 0;
+          z-index: 2;
+          background: $light-bg;
+        }
+        .rotator {
+          position: absolute;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          left: 0;
+          z-index: 0;
+          border-radius: inherit;
+          transform: scale(1.07);
+          background: $default-gradient;
+          animation: loader 1.2s linear infinite;
+        }
+        @keyframes loader {
+          0% {
+            transform: rotate(0deg) scale(1.07);
+          }
+          100% {
+            transform: rotate(-720deg) scale(1.07);
+          }
+        }
+      }
+
+      svg {
+        fill: $light-skeleton;
+        width: 65px;
+        height: 65px;
+        z-index: 3;
+      }
+
+      &.active {
+        .iconLoading {
+          display: block;
+        }
+        svg {
+          fill: $light-secondary;
+        }
+      }
+      &.Failed {
+        svg {
+          fill: $light-percentageDown;
+        }
+      }
+      &.Successful {
+        svg {
+          fill: $light-percentageUP !important;
+        }
+      }
+    }
+    .transactionDetail {
+      font-size: 1.3rem;
+      text-align: center;
+      margin-top: 1.5rem;
+      margin-bottom: 3rem;
+    }
+  }
+  &.dark {
+    .topSection {
+      .backBTN {
+        color: $dark-primary;
+
+        svg {
+        }
+      }
+      .closeBTN {
+        color: $dark-primary;
+        svg {
+        }
+      }
+      .title {
+        color: $dark-primary;
+      }
+    }
+    .seprator {
+      background-color: $dark-tertiary;
+    }
+  }
+}
+@media screen and (min-width: 1024px) {
+  .transactionModal {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    overflow-y: hidden;
+    .topSection {
+      display: grid;
+      grid-template-columns: 0.5fr 1fr 0.5fr;
+      width: 100%;
+      .backBTN {
+        background: none;
+        color: $light-primary;
+        cursor: pointer;
+
+        svg {
+          fill: none;
+          width: 20px;
+          height: 20px;
+        }
+      }
+      .closeBTN {
+        background: none;
+        cursor: pointer;
+        color: $light-primary;
+        svg {
+          fill: none;
+          width: 20px;
+          height: 20px;
+        }
+      }
+      .title {
+        text-align: center;
+        font-weight: 700;
+        color: $light-primary;
+        font-size: 1.7rem;
+      }
+    }
+
+    .seprator {
+      width: 100%;
+      height: 2px;
+      background-color: $light-tertiary;
+      margin: 2rem 0;
+    }
+    .stepContainer {
+      width: 100%;
+      height: auto;
+      width: 90%;
+      h1 {
+        font-size: 1.5rem;
+      }
+      .imagesContainer {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .iconLoading {
+          display: none;
+          position: absolute;
+          width: 65px;
+          height: 65px;
+          // border-top: 4px solid;
+          // border-left: 4px solid;
+          // border-image-slice: 1;
+          // border-image-source: linear-gradient(to left, #743ad5, #d53a9d);
+          border-radius: 50%;
+          .coverBG {
+            border-radius: inherit;
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 2;
+            background: $light-bg;
+          }
+          .rotator {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 0;
+            border-radius: inherit;
+            transform: scale(1.07);
+            background: $default-gradient;
+            animation: loader 1.2s linear infinite;
+          }
+          @keyframes loader {
+            0% {
+              transform: rotate(0deg) scale(1.07);
+            }
+            100% {
+              transform: rotate(-720deg) scale(1.07);
+            }
+          }
+        }
+
+        svg {
+          fill: $light-skeleton;
+          width: 56px;
+          height: 56px;
+          z-index: 3;
+        }
+        &.active {
+          .iconLoading {
+            display: block;
+          }
+          svg {
+            fill: $light-secondary;
+          }
+        }
+        &.Failed {
+          svg {
+            fill: $light-percentageDown;
+          }
+        }
+        &.Successful {
+          svg {
+            fill: $light-percentageUP !important;
+          }
+        }
+      }
+      .transactionDetail {
+        font-size: 1.3rem;
+        text-align: center;
+        margin-top: 1.5rem;
+        margin-bottom: 3rem;
+      }
+    }
+
+    &.dark {
+      .topSection {
+        .backBTN {
+          color: $dark-primary;
+          svg {
+          }
+        }
+        .closeBTN {
+          color: $dark-primary;
+          svg {
+          }
+        }
+        .title {
+          color: $dark-primary;
+        }
+      }
+      .seprator {
+        background-color: $dark-tertiary;
+      }
+    }
+  }
+}
+
