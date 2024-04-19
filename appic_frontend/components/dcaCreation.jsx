@@ -752,7 +752,7 @@ export default function DcaCreation({ setPositionStatus }) {
                     </div>
                   </div>
                   <p className="explanation">
-                    Please make sure before each swap yopu will have at least{' '}
+                    Please make sure before each swap you have at least{' '}
                     <span>
                       {DCAData.amoutPerSwap != '' ? <span>{DCAData.amoutPerSwap}</span> : <span className="skeleton">4</span>}{' '}
                       {DCAData.sellToken != null ? <span>{DCAData.sellToken.symbol}</span> : <span className="skeleton">ICP</span>}
