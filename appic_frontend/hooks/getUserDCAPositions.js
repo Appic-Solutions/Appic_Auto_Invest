@@ -65,7 +65,7 @@ function _formatPositions(positions, supportedTokens) {
     const buyToken = supportedTokens.find((token) => token.id == position.tokens.buyToken.toString());
 
     // Get Position Interval
-    const interval = getIntervalType(new Date(swaps[0].transactionTime), new Date(swaps[1].transactionTime), new Date(swaps[2].transactionTime));
+    const interval = getIntervalType(new Date(swaps[0].transactionTime), new Date(swaps[1]?.transactionTime));
 
     // Parse Position object
     return {
@@ -84,14 +84,14 @@ function _formatPositions(positions, supportedTokens) {
   });
 }
 
-function getIntervalType(date1, date2, date3) {
-  const diffInDays1 = Math.abs((date1 - date2) / (1000 * 60 * 60 * 24));
-  const diffInDays2 = Math.abs((date2 - date3) / (1000 * 60 * 60 * 24));
-  if (diffInDays1 === 1 && diffInDays2 === 1) {
+function getIntervalType(date1, date2) {
+  if (date2 == null || date2 == undefined || typeof date2 == 'undefined') return custom;
+  const diffInDays = Math.abs((date1 - date2) / (1000 * 60 * 60 * 24));
+  if (diffInDays === 1) {
     return 'Daily';
-  } else if (diffInDays1 === 7 && diffInDays2 === 7) {
+  } else if (diffInDays === 7) {
     return 'Weekly';
-  } else if (date2.getMonth() === date1.getMonth() + 1 && date3.getMonth() === date2.getMonth() + 1) {
+  } else if (date2.getMonth() === date1.getMonth() + 1) {
     return 'Monthly';
   } else {
     return 'Custom';
