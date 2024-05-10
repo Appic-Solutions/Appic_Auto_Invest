@@ -425,7 +425,6 @@ actor AlphavaultRoot {
     let buyTokenFee : Nat = await buyTokenCanister.icrc1_fee();
 
     var transactionStatus : TransactionStatus = #Pending;
-    var sonicBalanceOfBuyTokenBeforeTrade : Nat = await sonicCanister.balanceOf(Principal.toText(userPosition.tokens.buyToken), userPosition.managerCanister);
     var sonicBalanceOfBuyTokenAfterTrade : Nat = 0;
     var amountOfBoughtToken : Nat = 0;
     var step1 : ?Text = null;
@@ -527,6 +526,7 @@ actor AlphavaultRoot {
     // Step4: Trigger the swap
     switch (transactionStatus) {
       case (#Pending) {
+        var sonicBalanceOfBuyTokenBeforeTrade : Nat = await sonicCanister.balanceOf(Principal.toText(userPosition.tokens.buyToken), userPosition.managerCanister);
         let swapResult = await _SwapExactTokensForTokens(userPosition, sonicCanister, amountOfSellTokenAfterStep3);
         switch (swapResult) {
           case (#ok successId) {
