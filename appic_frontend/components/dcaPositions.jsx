@@ -14,7 +14,7 @@ export default function DcaPositions({ positionStatus }) {
   const completedPositions = useSelector((state) => state.userPositionsReducer.completed);
   const principalID = useSelector((state) => state.wallet.items.principalID);
   const supportedTokens = useSelector((state) => state.supportedTokens.tokens);
-
+  console.log(completedPositions, activePositions);
   // Custom hooks
   const {} = useUserDcaPositions(principalID, supportedTokens);
   const formatTransactionStatus = (status) => {
@@ -122,7 +122,7 @@ export default function DcaPositions({ positionStatus }) {
                 <li>TimeLine</li>
                 <li></li>
               </ul>
-              {activePositions.map((position, index) => {
+              {completedPositions.map((position, index) => {
                 let amountPerSwap = 0;
 
                 return (
