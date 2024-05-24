@@ -757,7 +757,7 @@ export default function DcaCreation({ setPositionStatus }) {
                       {DCAData.amoutPerSwap != '' ? <span>{DCAData.amoutPerSwap}</span> : <span className="skeleton">4</span>}{' '}
                       {DCAData.sellToken != null ? <span>{DCAData.sellToken.symbol}</span> : <span className="skeleton">ICP</span>}
                     </span>{' '}
-                    in your wallet. After swap is completed, fuds will be transfered to your wallet imidietly.
+                    in your wallet. After the swap is completed, funds will be transfered to your wallet immediately.
                   </p>
                 </div>
 
