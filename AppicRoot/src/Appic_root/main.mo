@@ -601,14 +601,14 @@ actor AlphavaultRoot {
     };
 
     // Save new user positions with updated transaction
-    // Since the time difference between each swap of a transaction is at least one hour the wont be any conflict on saving data here
+    // Since the time difference between each swap of a transaction is at least one hour there wont be any conflict on saving data here
     let newTransactionsArray = Buffer.fromArray<Transaction>(userPosition.swaps);
     newTransactionsArray.put(transactionId, newTransaction);
 
     // Generate new Position
     let newPosition : Position = {
       initialAllowance = userPosition.initialAllowance;
-      leftAllowance = userPosition.leftAllowance;
+      leftAllowance = userPosition.leftAllowance - newTransactionForPending.sellingAmount;
       destination = userPosition.destination;
       positionId = userPosition.positionId;
       // TODO : Write the logic for changing the position status to successful or faild
